@@ -39,12 +39,26 @@ export const options = {
     nextCookies(),
     username(),
     customSession(async ({ user, session }) => {
-      const papeis = (
-        await prismaAuth.userPapeis.findMany({
-          where: { userId: user.id },
-          select: { Papeis: { select: { descPapel: true } } },
-        })
-      ).map((p) => p.Papeis.descPapel);
+      //falta o apelido
+      const dadosUser = await prismaAuth.user.findUnique({
+        where: { id: user.id },
+        select: {
+          apelido: true,
+          userPapeis: {
+            select: { Papeis: { select: { descPapel: true } } },
+            orderBy: {
+              Papeis: {
+                descPapel: "asc",
+              },
+            },
+          },
+        },
+      });
+
+      const result = {
+        apelido: dadosUser?.apelido ?? "",
+        papeis: dadosUser?.userPapeis.map((p) => p.Papeis.descPapel) ?? [],
+      };
       return {
         session: {
           expiresAt: session.expiresAt,
@@ -54,11 +68,12 @@ export const options = {
         user: {
           id: user.id,
           name: user.name,
+          apelido: result.apelido,
           email: user.email,
           image: user.image,
           createdAt: user.createdAt,
         },
-        papeis,
+        papeis: result.papeis,
       };
     }),
   ],
