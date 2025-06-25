@@ -6,18 +6,21 @@ export default async function middleware(
 ): Promise<NextResponse> {
   const { pathname } = req.nextUrl;
 
-  //Rota publica
+  // Public route
   const isPublicRoute = pathname === "/";
   if (isPublicRoute) {
     return NextResponse.next();
   }
 
   const sessionCookie = getSessionCookie(req);
-
   const isLoginPath = pathname.startsWith("/auth/login");
 
+  if (sessionCookie && isLoginPath) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
   if (!sessionCookie && !isLoginPath) {
-    return buildLoginRedirect(req, pathname);
+    return redirectToLoginWithCallback(req);
   }
 
   return NextResponse.next();
@@ -29,22 +32,10 @@ export const config = {
   ],
 };
 
-function buildLoginRedirect(request: NextRequest, path: string) {
-  let callbackUrl = path;
-  if (request.nextUrl.search) {
-    callbackUrl += request.nextUrl.search;
-  }
-  const encoded = encodeURIComponent(callbackUrl);
-  console.log("Censa e coisa: ", encoded);
-  return NextResponse.redirect(
-    new URL(`/auth/login?callbackUrl=${encoded}`, request.url)
-  );
+function redirectToLoginWithCallback(request: NextRequest): NextResponse {
+  const fullPath = request.nextUrl.pathname + request.nextUrl.search;
+  const encoded = encodeURIComponent(fullPath);
+  const loginUrl = new URL(`/auth/login?callbackUrl=${encoded}`, request.url);
+
+  return NextResponse.redirect(loginUrl);
 }
-
-/*
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
-  ],
-
-*/
