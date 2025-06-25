@@ -1,0 +1,16 @@
+{
+  "name": "@repo/tipos",
+  "exports": {
+    "./user": "./dist/user/user.schemas.js"
+  },
+  "scripts": {
+    "dev": "tsc --watch --preserveWatchOutput",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*"
+  },
+  "dependencies": {
+    "zod": "^3.25.67"
+  }
+}

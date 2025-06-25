@@ -1,0 +1,26 @@
+{
+  "name": "@repo/db",
+  "version": "0.0.0",
+  "exports": {
+    "./auth": "./dist/prisma-servicos/auth/auth.js",
+    "./user": "./dist/user/user.js"
+  },
+  "scripts": {
+    "push:auth": "prisma db push --schema=prisma/schema.auth.prisma",
+    "pull:auth": "prisma db pull --schema=prisma/schema.auth.prisma",
+    "generate:auth": "prisma generate --schema=prisma/schema.auth.prisma",
+    "pull:envios": "prisma db pull --schema=prisma/schema.envios.prisma",
+    "generate:envios": "prisma generate --schema=prisma/schema.envios.prisma",
+    "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "postbuild": "cp -r src/generated dist/"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "prisma": "^6.10.1",
+    "tsc-alias": "^1.8.16"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.10.1"
+  }
+}

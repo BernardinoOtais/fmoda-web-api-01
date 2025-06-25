@@ -1,0 +1,88 @@
+generator authClient {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma/auth"
+}
+
+datasource authDb {
+  provider = "sqlserver"
+  url      = env("AUTH_URL")
+}
+
+model account {
+  id                    String    @id @authDb.VarChar(64)
+  accountId             String
+  providerId            String
+  userId                String    @authDb.VarChar(64)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+  user                  user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Papeis {
+  idPapel    String       @id(map: "PK_Papeis") @default(dbgenerated("newid()"), map: "DF_Papeis_idPapel") @authDb.UniqueIdentifier
+  descPapel  String       @authDb.NVarChar(100)
+  userPapeis userPapeis[]
+}
+
+model session {
+  id        String   @id @authDb.VarChar(64)
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String   @authDb.VarChar(64)
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model sysdiagrams {
+  name         String @authDb.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK**sysdiagr**C2B05B61C56025A5") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model user {
+  id              String       @id @authDb.VarChar(64)
+  name            String
+  email           String       @unique
+  apelido         String       @authDb.NVarChar(100)
+  emailVerified   Boolean
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  username        String?      @unique
+  displayUsername String?
+  account         account[]
+  session         session[]
+  userPapeis      userPapeis[]
+}
+
+model userPapeis {
+  userId  String @authDb.VarChar(64)
+  idPapel String @authDb.UniqueIdentifier
+  Papeis  Papeis @relation(fields: [idPapel], references: [idPapel], onUpdate: NoAction, map: "FK_userPapeis_Papeis")
+  user    user   @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_userPapeis_user")
+
+  @@id([userId, idPapel], map: "PK_userPapeis")
+}
+
+model verification {
+  id         String    @id @authDb.VarChar(64)
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+}
