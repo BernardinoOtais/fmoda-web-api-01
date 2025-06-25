@@ -12,7 +12,7 @@ export async function authorizePapelOrRedirect(papel: string) {
 
   if (papel === "") return;
 
-  console.log("Papeis: ", papeis, papel, papeis.includes(papel));
+  //console.log("Papeis: ", papeis, papel, papeis.includes(papel));
 
   if (!papeis.includes(papel)) {
     redirect("/dashboard");
