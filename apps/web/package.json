@@ -41,6 +41,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@repo/db": "*",
     "@repo/tipos": "*",
+    "@repo/trpc": "*",
     "@tailwindcss/postcss": "^4.1.10",
     "better-auth": "^1.2.10",
     "class-variance-authority": "^0.7.1",

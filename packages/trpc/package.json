@@ -1,0 +1,27 @@
+{
+  "name": "@repo/trpc",
+  "version": "0.0.0",
+  "exports": {
+    "./init": "./dist/init.js",
+    "./_app": "./dist/routers/_app.js",
+    "./query-client": "./dist/query-client.js",
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
+  },
+  "dependencies": {
+    "@repo/db": "*",
+    "@repo/tipos": "*",
+    "@tanstack/react-query": "^5.81.2",
+    "@trpc/client": "^11.4.2",
+    "@trpc/server": "^11.4.2",
+    "@trpc/tanstack-react-query": "^11.4.2",
+    "superjson": "^2.2.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "tsc-alias": "^1.8.16"
+  }
+}
