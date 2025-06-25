@@ -1,9 +1,9 @@
 "use client";
 // ^-- to make sure we can mount the Provider from a server component
-import type { QueryClient } from "@repo/trpc/";
-import { QueryClientProvider } from "@repo/trpc/";
-import { createTRPCClient, httpBatchLink } from "@repo/trpc/";
-import { createTRPCContext } from "@repo/trpc/";
+import type { QueryClient } from "@repo/trpc";
+import { QueryClientProvider } from "@repo/trpc";
+import { createTRPCClient, httpBatchLink } from "@repo/trpc";
+import { createTRPCContext } from "@repo/trpc";
 import { useState } from "react";
 import { makeQueryClient } from "@repo/trpc/query-client";
 import type { AppRouter } from "@repo/trpc/_app";
