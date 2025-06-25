@@ -6,6 +6,7 @@ export default async function middleware(
 ): Promise<NextResponse> {
   const { pathname } = req.nextUrl;
 
+  //console.log("Tais middleware pathname: ", pathname);
   // Public route
   const isPublicRoute = pathname === "/";
   if (isPublicRoute) {
@@ -28,10 +29,28 @@ export default async function middleware(
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    // Match all routes except static files, _next, assets, API routes
+    "/((?!_next/|assets/|api/|trpc/|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:js|css|jpg|jpeg|png|svg|webp|gif|woff2?|ttf|ico|eot|otf|txt|pdf|csv|docx?|xlsx?|zip|webmanifest)).*)",
   ],
 };
+/*
 
+//a funcionar cookies
+  matcher: [
+    // Match all routes except static files, _next, assets, API routes
+    "/((?!_next/|assets/|api/|trpc/|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:js|css|jpg|jpeg|png|svg|webp|gif|woff2?|ttf|ico|eot|otf|txt|pdf|csv|docx?|xlsx?|zip|webmanifest)).*)",
+  ],
+
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+  ],
+
+original 
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
+*/
 function redirectToLoginWithCallback(request: NextRequest): NextResponse {
   const fullPath = request.nextUrl.pathname + request.nextUrl.search;
   const encoded = encodeURIComponent(fullPath);
