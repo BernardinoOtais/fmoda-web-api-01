@@ -1,6 +1,8 @@
 import { baseProcedure, createTRPCRouter } from "@/init";
 import { z } from "zod";
 
+import { embarques } from "@/modules/server/embarques";
+
 export const appRouter = createTRPCRouter({
   hello: baseProcedure
     .input(
@@ -13,6 +15,7 @@ export const appRouter = createTRPCRouter({
         greeting: `hello ${opts.input.text}`,
       };
     }),
+  getEnviosAcessorios: embarques.getEnviosAcessoriosDb,
 });
-// export type definition of API
+
 export type AppRouter = typeof appRouter;

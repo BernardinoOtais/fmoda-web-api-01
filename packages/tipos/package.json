@@ -1,14 +1,18 @@
 {
   "name": "@repo/tipos",
   "exports": {
-    "./user": "./dist/user/user.schemas.js"
+    "./user": "./dist/user/user.schemas.js",
+    "./embarques": "./dist/embarques/raiz/index.js",
+    "./comuns": "./dist/index.js"
   },
   "scripts": {
-    "dev": "tsc --watch --preserveWatchOutput",
-    "build": "tsc"
+    "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*"
+    "@repo/typescript-config": "*",
+    "concurrently": "^9.2.0",
+    "tsc-alias": "^1.8.16"
   },
   "dependencies": {
     "zod": "^3.25.67"

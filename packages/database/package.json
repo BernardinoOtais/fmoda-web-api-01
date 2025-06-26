@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "exports": {
     "./auth": "./dist/prisma-servicos/auth/auth.js",
-    "./user": "./dist/user/user.js"
+    "./user": "./dist/user/user.js",
+    "./embarques": "./dist/embarques/raiz/index.js"
   },
   "scripts": {
     "push:auth": "prisma db push --schema=prisma/schema.auth.prisma",
