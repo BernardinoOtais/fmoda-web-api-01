@@ -19,7 +19,7 @@ import {
   SidebarMenuSubItem,
 } from "../sidebar-modificada";
 import { Menu, MenusExistentes, MenusTodos } from "./menus-e-seus-tipos";
-import { getSession } from "@/better-auth/session";
+import { getSession } from "@repo/authweb/session";
 
 export async function NavMain() {
   const utilizadorActual = await getSession();

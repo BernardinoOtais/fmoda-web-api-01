@@ -20,7 +20,7 @@ import { LoginDto, LoginSchema } from "@repo/tipos/user";
 
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { OctagonAlertIcon } from "lucide-react";
-import { authClient } from "@/better-auth/auth-client";
+import { authClient } from "@repo/authweb/authClient";
 
 const Login = () => {
   const router = useRouter();

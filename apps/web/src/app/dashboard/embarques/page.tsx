@@ -4,7 +4,7 @@ import React, { Suspense } from "react";
 import { validadoValorNumeroItensPorPagina } from "@/lib/my-utils";
 import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
 import EmbarquesConteudo from "./embarques-conteudo";
-import { authorizePapelOrRedirect } from "@/better-auth/autorizado";
+import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import LoadingState from "@/components/ui-personalizado/states/loading-state";
