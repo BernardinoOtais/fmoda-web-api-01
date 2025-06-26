@@ -6,7 +6,7 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { authClient } from "@/better-auth/auth-client";
+import { authClient } from "@repo/authweb/authClient";
 
 const LogOutBotao = () => {
   const [isPending, setIsPending] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { authClient } from "@/better-auth/auth-client";
+import { authClient } from "@repo/authweb/authClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 

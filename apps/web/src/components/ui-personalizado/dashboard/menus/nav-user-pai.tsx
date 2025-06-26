@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import React from "react";
 
-import { getSession } from "@/better-auth/session";
+import { getSession } from "@repo/authweb/session";
 import { NavUser } from "./nav-user-modificado";
 
 const NavUserPai = async () => {

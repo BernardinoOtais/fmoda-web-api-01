@@ -1,0 +1,14 @@
+{
+  "name": "@repo/encryption",
+  "version": "0.0.0",
+  "exports": {
+    "./argon2": "./dist/argon2.js"
+  },
+  "scripts": {
+    "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.0.2"
+  }
+}

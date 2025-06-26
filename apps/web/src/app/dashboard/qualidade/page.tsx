@@ -1,6 +1,8 @@
+import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
 import React from "react";
 
-const Qualidade = () => {
+const Qualidade = async () => {
+  await authorizePapelOrRedirect("Qualidade");
   return <div>Qualidade</div>;
 };
 

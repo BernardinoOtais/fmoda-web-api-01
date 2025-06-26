@@ -7,7 +7,7 @@ import { prismaAuth } from "@repo/db/auth";
 import { PrismaClient } from "@repo/db/auth";
 import { customSession, username } from "better-auth/plugins";
 
-import { hashPassword, verifyPassword } from "./argon2";
+import { hashPassword, verifyPassword } from "@repo/encryption/argon2";
 
 const prisma = new PrismaClient();
 
