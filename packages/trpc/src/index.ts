@@ -8,7 +8,16 @@ import {
 } from "@tanstack/react-query";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useQuery,
+  useSuspenseQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+
+import superjson from "superjson";
+
+import { TRPCError } from "@trpc/server";
 
 export {
   createTRPCClient,
@@ -22,4 +31,8 @@ export {
   HydrationBoundary,
   dehydrate,
   useSuspenseQuery,
+  useMutation,
+  useQueryClient,
+  superjson,
+  TRPCError,
 };

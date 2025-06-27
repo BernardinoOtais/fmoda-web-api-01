@@ -16,6 +16,9 @@ export const appRouter = createTRPCRouter({
       };
     }),
   getEnviosAcessorios: embarques.getEnviosAcessoriosDb,
+  getDestinosDisponiveis: embarques.getDestinosDisponiveisBd,
+  posPatchEnvio: embarques.posPatchEnvioBd,
+  deleteEnvio: embarques.deleteEnvioDb,
 });
 
 export type AppRouter = typeof appRouter;

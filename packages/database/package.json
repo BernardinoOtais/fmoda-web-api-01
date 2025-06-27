@@ -22,6 +22,8 @@
     "tsc-alias": "^1.8.16"
   },
   "dependencies": {
-    "@prisma/client": "^6.10.1"
+    "@prisma/client": "^6.10.1",
+    "@repo/encryption": "*",
+    "@repo/tipos": "*"
   }
 }

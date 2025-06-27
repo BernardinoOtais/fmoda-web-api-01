@@ -53,9 +53,12 @@ const EmbarquesWrapper = async ({ searchParams }: PageProps) => {
   };
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
-  );
+  Promise.all([
+    queryClient.prefetchQuery(
+      trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
+    ),
+    queryClient.prefetchQuery(trpc.getDestinosDisponiveis.queryOptions()),
+  ]);
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense
