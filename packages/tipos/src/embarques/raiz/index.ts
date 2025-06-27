@@ -123,7 +123,12 @@ export const EnvioSchema = z.object({
   nomeEnvio: StringComTamanhoSchema(50),
   Destinos: DestinoEnvioSchema,
   fechado: z.boolean().default(false),
-  createdAt: z.coerce.date().default(new Date()),
+  createdAt: z.coerce.date().default(new Date()) /*z.preprocess((val) => {
+    if (typeof val === "string" || val instanceof Date) {
+      return new Date(val);
+    }
+    return val;
+  }, z.date()),*/,
   endDate: z.coerce
     .date()
     .nullable()
@@ -142,9 +147,26 @@ export const EnvioSchema = z.object({
   DestinosDisponiveis: DestinosPossiveisSchema.optional(),
 });
 
+export type EnvioDto = z.infer<typeof EnvioSchema>;
+
 export const EnviosListSchema = z.object({
   lista: z.array(EnvioSchema),
   tamanhoLista: InteiroNaoNegativoSchema,
 });
 
 export type EnviosListDto = z.infer<typeof EnviosListSchema>;
+
+// PostNovoEnvioSchema e PostNovoEnvioSchemaDto
+export const PostNovoEnvioSchema = z.object({
+  idEnvio: InteiroNaoNegativoSchema.optional(),
+  nomeEnvio: StringComTamanhoSchema(50, 3),
+  idDestino: ChavePhcSchema,
+  obs: z.string().optional(),
+  nomeUser: z.string().optional(),
+});
+export type PostNovoEnvioSchemaDto = z.infer<typeof PostNovoEnvioSchema>;
+// PostNovoEnvioSchema e PostNovoEnvioSchemaDto
+
+export const IdEnvioSchema = z.object({
+  idEnvio: InteiroNaoNegativoSchema,
+});

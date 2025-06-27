@@ -12,6 +12,7 @@
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
   },
   "dependencies": {
+    "@repo/authweb": "*",
     "@repo/db": "*",
     "@repo/tipos": "*",
     "@tanstack/react-query": "^5.81.2",

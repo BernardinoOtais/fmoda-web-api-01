@@ -1,7 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -23,7 +23,7 @@ import { OctagonAlertIcon } from "lucide-react";
 import { authClient } from "@repo/authweb/authClient";
 
 const Login = () => {
-  const router = useRouter();
+  //const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
@@ -37,11 +37,7 @@ const Login = () => {
     },
   });
 
-  const {
-    formState: { errors, isSubmitting },
-  } = useForm<LoginDto>({
-    resolver: zodResolver(LoginSchema),
-  });
+  const { errors, isSubmitting } = form.formState;
 
   const onSubmit = async (data: LoginDto) => {
     setError(null);
@@ -52,7 +48,9 @@ const Login = () => {
       },
       {
         onSuccess: () => {
-          router.push(callbackUrl || "/");
+          console.log("Login", callbackUrl || "/dashboard");
+          //router.push(callbackUrl || "/dashboard");
+          window.location.href = callbackUrl || "/dashboard";
         },
         onError: ({ error }) => {
           console.log("O tais error :", error.message);

@@ -1,1 +1,3 @@
 # Tipos comuns
+
+# no build apagar os dist ....

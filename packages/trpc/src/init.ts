@@ -1,5 +1,7 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import { cache } from "react";
+import { getSession } from "@repo/authweb/session";
+import superjson from "superjson";
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -14,9 +16,30 @@ const t = initTRPC.create({
   /**
    * @see https://trpc.io/docs/server/data-transformers
    */
-  // transformer: superjson,
+  transformer: superjson,
 });
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
+
+export const roleProtectedProcedure = (requiredPapel: string) =>
+  baseProcedure.use(async ({ ctx, next }) => {
+    const session = await getSession();
+
+    if (!session) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Proibido...",
+      });
+    }
+
+    if (!session.papeis.includes(requiredPapel)) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: `Sem acesso ao papel: ${requiredPapel}`,
+      });
+    }
+
+    return next({ ctx: { ...ctx, auth: session } });
+  });
