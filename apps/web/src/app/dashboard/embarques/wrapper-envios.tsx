@@ -1,10 +1,10 @@
 "use client";
 
+import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
+import { EnvioDto } from "@repo/tipos/embarques";
 import React, { useState } from "react";
 
-import { EnvioDto } from "@repo/tipos/embarques";
 import EnvioCard from "./envio-card";
-import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
 
 type WrapperEnviosProps = {
   envios: EnvioDto[];

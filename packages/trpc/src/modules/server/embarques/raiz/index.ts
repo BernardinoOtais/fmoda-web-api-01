@@ -13,8 +13,9 @@ import {
 } from "@repo/db/embarques";
 import { TRPCError } from "@trpc/server";
 import { IdEnvioSchema, PostNovoEnvioSchema } from "@repo/tipos/embarques";
+import { PAPEL_ROTA_EMBARQUES } from "@repo/tipos/consts";
 
-const PAPEL_ROTA = "Embarques";
+const PAPEL_ROTA = PAPEL_ROTA_EMBARQUES;
 export const embarques = createTRPCRouter({
   getEnviosAcessoriosDb: roleProtectedProcedure(PAPEL_ROTA)
     .input(DadosParaPesquisaComPaginacaoEOrdemSchema)

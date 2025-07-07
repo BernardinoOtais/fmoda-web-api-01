@@ -1,9 +1,9 @@
+import { useSuspenseQuery } from "@repo/trpc";
 import React from "react";
 import { FieldValues, UseFormReturn, Path } from "react-hook-form";
-import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@repo/trpc";
 
 import { AutoCompleteFormFieldString } from "@/components/ui-personalizado/meus-components/AutoCompleteFormFieldString";
+import { useTRPC } from "@/trpc/client";
 
 type WrapperEscolheDestinoProps<T extends FieldValues> = {
   form: UseFormReturn<T>;

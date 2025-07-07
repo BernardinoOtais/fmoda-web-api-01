@@ -3,12 +3,9 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import turboPlugin from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
 import onlyWarn from "eslint-plugin-only-warn";
+import importPlugin from "eslint-plugin-import";
 
-/**
- * A shared ESLint configuration for the repository.
- *
- * @type {import("eslint").Linter.Config[]}
- * */
+/** @type {import("eslint").Linter.Config[]} */
 export const config = [
   js.configs.recommended,
   eslintConfigPrettier,
@@ -23,7 +20,30 @@ export const config = [
   },
   {
     plugins: {
-      onlyWarn,
+      "only-warn": onlyWarn,
+    },
+  },
+  {
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      "import/order": [
+        "warn",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            ["parent", "sibling", "index"],
+            "object",
+            "type",
+          ],
+          "newlines-between": "always",
+          alphabetize: { order: "asc", caseInsensitive: true },
+        },
+      ],
+      "import/newline-after-import": "warn",
     },
   },
   {

@@ -1,15 +1,16 @@
+import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
+import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
+import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
-
-import { validadoValorNumeroItensPorPagina } from "@/lib/my-utils";
-import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
-import EmbarquesConteudo from "./embarques-conteudo";
-import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
-import { getQueryClient, trpc } from "@/trpc/server";
-import { dehydrate, HydrationBoundary } from "@repo/trpc";
-import LoadingState from "@/components/ui-personalizado/states/loading-state";
 import { ErrorBoundary } from "react-error-boundary";
+
+import EmbarquesConteudo from "./embarques-conteudo";
+
 import ErrorState from "@/components/ui-personalizado/states/error-state";
+import LoadingState from "@/components/ui-personalizado/states/loading-state";
+import { validadoValorNumeroItensPorPagina } from "@/lib/my-utils";
+import { getQueryClient, trpc } from "@/trpc/server";
 
 export const metadata: Metadata = {
   title: "Embarques",
@@ -53,12 +54,20 @@ const EmbarquesWrapper = async ({ searchParams }: PageProps) => {
   };
 
   const queryClient = getQueryClient();
-  Promise.all([
-    queryClient.prefetchQuery(
-      trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
-    ),
-    queryClient.prefetchQuery(trpc.getDestinosDisponiveis.queryOptions()),
-  ]);
+
+  void queryClient.prefetchQuery(
+    trpc.getEnviosAcessorios.queryOptions(dadosIniciais, {
+      refetchOnWindowFocus: "always",
+      refetchOnMount: "always",
+      staleTime: 0, // force data to go stale immediately
+    })
+  );
+  void queryClient.prefetchQuery(
+    trpc.getDestinosDisponiveis.queryOptions(undefined, {
+      staleTime: 1000 * 60 * 20,
+    })
+  );
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense

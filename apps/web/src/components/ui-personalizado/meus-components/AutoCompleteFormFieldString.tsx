@@ -1,5 +1,6 @@
 "use client";
 
+import { AutocompleteStringDto } from "@repo/tipos/comuns";
 import { ChevronsUpDown, Check } from "lucide-react";
 import { useState } from "react";
 import {
@@ -32,7 +33,6 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { AutocompleteStringDto } from "@repo/tipos/comuns";
 
 type AutoCompleteFormFieldStringProps<T extends FieldValues> = {
   form: UseFormReturn<T>;

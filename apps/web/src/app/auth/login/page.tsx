@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 
 import Login from "./login";
+
 import { ModeToggle } from "@/components/utils/mode-toggle";
 
 const Signup = () => {

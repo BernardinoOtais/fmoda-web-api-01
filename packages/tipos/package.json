@@ -3,6 +3,8 @@
   "exports": {
     "./user": "./dist/user/user.schemas.js",
     "./embarques": "./dist/embarques/raiz/index.js",
+    "./embarques_idenvio": "./dist/embarques/id-envio/index.js",
+    "./consts": "./dist/consts/index.js",
     "./comuns": "./dist/index.js"
   },
   "scripts": {

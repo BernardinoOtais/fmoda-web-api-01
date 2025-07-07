@@ -17,3 +17,12 @@ export function validadoValorNumeroItensPorPagina(
       : 10;
   return validadoValorNumeroItensPorPagina;
 }
+
+export const parsePositiveInt = (str: string): number | false => {
+  const trimmed = str.trim();
+  if (/^\d+$/.test(trimmed)) {
+    const num = parseInt(trimmed, 10);
+    return num > 0 ? num : false;
+  }
+  return false;
+};

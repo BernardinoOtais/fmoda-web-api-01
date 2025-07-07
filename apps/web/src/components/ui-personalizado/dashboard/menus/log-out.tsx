@@ -1,12 +1,11 @@
 "use client";
+import { authClient } from "@repo/authweb/authClient";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { authClient } from "@repo/authweb/authClient";
 
 const LogOutBotao = () => {
   const [isPending, setIsPending] = useState(false);

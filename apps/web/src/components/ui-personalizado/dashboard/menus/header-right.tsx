@@ -2,9 +2,9 @@
 import React from "react";
 
 import { useSidebar } from "../sidebar-modificada";
+import FmodaIcon from "./fmoda-icon";
 
 import { ModeToggle } from "@/components/utils/mode-toggle";
-import FmodaIcon from "./fmoda-icon";
 
 const HeaderRight = () => {
   const { openMobile } = useSidebar();

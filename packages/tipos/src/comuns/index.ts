@@ -49,3 +49,21 @@ export const FloatZeroSchema = z.preprocess(
     message: "O valor tem de ser maior ou igual a 0",
   })
 ) as z.ZodType<number, z.ZodTypeDef, number>;
+
+export const FloatSchema = z.preprocess(
+  (val) => {
+    if (typeof val === "string") {
+      const trimmed = val.trim();
+      if (trimmed === "") return undefined;
+      const parsed = parseFloat(trimmed.replace(",", "."));
+      return isNaN(parsed) ? undefined : parsed;
+    }
+
+    if (typeof val === "number") return val;
+
+    return undefined;
+  },
+  z.coerce.number().refine((val) => val > 0, {
+    message: "O valor tem de ser maior ou igual a 0",
+  })
+);

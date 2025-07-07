@@ -1,10 +1,10 @@
 "use client";
 
 import { authClient } from "@repo/authweb/authClient";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { useState } from "react";
 
 export default function Home() {
   const [name, setName] = useState("");

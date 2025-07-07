@@ -6,6 +6,13 @@ import {
 } from "@/comuns";
 import { z } from "zod";
 
+export type EmbarqueBreadCrumbContainers = {
+  id: number;
+  nome: string;
+  badge: number;
+  numero: number;
+};
+
 const ItemTraduzidoSchema = z.array(
   z.object({ descItem: StringComTamanhoSchema(100) })
 );
@@ -170,3 +177,26 @@ export type PostNovoEnvioSchemaDto = z.infer<typeof PostNovoEnvioSchema>;
 export const IdEnvioSchema = z.object({
   idEnvio: InteiroNaoNegativoSchema,
 });
+
+export const PostContainerSchema = z.object({
+  idEnvio: InteiroNaoNegativoSchema,
+  idContainerPai: InteiroNaoNegativoSchema.nullable(),
+  idTipoContainer: InteiroNaoNegativoSchema,
+});
+export type PostContainerSchemaDto = z.infer<typeof PostContainerSchema>;
+
+export type ListaDeContainersEnvioDto = z.infer<
+  typeof ListaDeContainersEnvioSchema
+>;
+
+export const IdOrdemSchema = z.object({
+  idEnvio: InteiroNaoNegativoSchema,
+  idOrdem: z.array(
+    z.object({
+      id: InteiroNaoNegativoSchema,
+      ordem: InteiroNaoNegativoSchema,
+    })
+  ),
+});
+
+export type IdOrdemDto = z.infer<typeof IdOrdemSchema>;
