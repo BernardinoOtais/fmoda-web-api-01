@@ -1,6 +1,14 @@
 "use client";
 import { ChevronsUpDown } from "lucide-react";
 
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "../sidebar-modificada";
+import LogOutBotao from "./log-out";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -9,14 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "../sidebar-modificada";
-import LogOutBotao from "./log-out";
 
 type UserRecebido = {
   name: string;

@@ -4,7 +4,8 @@
   "exports": {
     "./auth": "./dist/prisma-servicos/auth/auth.js",
     "./user": "./dist/user/user.js",
-    "./embarques": "./dist/embarques/raiz/index.js"
+    "./embarques": "./dist/embarques/raiz/index.js",
+    "./embarques_idenvio": "./dist/embarques/id-envio/index.js"
   },
   "scripts": {
     "push:auth": "prisma db push --schema=prisma/schema.auth.prisma",
@@ -22,8 +23,9 @@
     "tsc-alias": "^1.8.16"
   },
   "dependencies": {
-    "@prisma/client": "^6.10.1",
     "@repo/encryption": "*",
-    "@repo/tipos": "*"
+    "@repo/tipos": "*",
+    "@prisma/client": "^6.10.1",
+    "sql-template-tag": "^5.2.1"
   }
 }

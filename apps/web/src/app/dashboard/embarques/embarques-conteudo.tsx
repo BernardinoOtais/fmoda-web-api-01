@@ -1,14 +1,16 @@
 "use client";
-import NItensPorPagina from "@/components/ui-personalizado/meus-components/n-itens-por-pagina";
-import Paginacao from "@/components/ui-personalizado/meus-components/paginacao";
-import { useTRPC } from "@/trpc/client";
 import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
 import { EnvioDto } from "@repo/tipos/embarques";
 import { useSuspenseQuery } from "@repo/trpc";
 import React from "react";
-import WrapperEnvios from "./wrapper-envios";
-import SwitchFechado from "./switch-fechado";
+
 import NovoEnvio from "./novo-envio";
+import SwitchFechado from "./switch-fechado";
+import WrapperEnvios from "./wrapper-envios";
+
+import NItensPorPagina from "@/components/ui-personalizado/meus-components/n-itens-por-pagina";
+import Paginacao from "@/components/ui-personalizado/meus-components/paginacao";
+import { useTRPC } from "@/trpc/client";
 
 type EmbarquesConteudoFinalProps = {
   dadosIniciais: DadosParaPesquisaComPaginacaoEOrdemDto;
@@ -39,7 +41,7 @@ const EmbarquesConteudoFinal = ({
           <SwitchFechado fechado={valorFechado} />
           {valorFechado !== true && (
             <div className="mx-auto">
-              <NovoEnvio dadosIniciais={dadosIniciais} />
+              <NovoEnvio />
             </div>
           )}
           {data.tamanhoLista > 10 && (

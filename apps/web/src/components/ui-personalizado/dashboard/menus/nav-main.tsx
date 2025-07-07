@@ -1,11 +1,6 @@
+import { getSession } from "@repo/authweb/session";
 import { ChevronRight } from "lucide-react";
 import { redirect } from "next/navigation";
-
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 import {
   SidebarGroup,
@@ -19,7 +14,12 @@ import {
   SidebarMenuSubItem,
 } from "../sidebar-modificada";
 import { Menu, MenusExistentes, MenusTodos } from "./menus-e-seus-tipos";
-import { getSession } from "@repo/authweb/session";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 export async function NavMain() {
   const utilizadorActual = await getSession();

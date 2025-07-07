@@ -1,10 +1,13 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { authClient } from "@repo/authweb/authClient";
+import { LoginDto, LoginSchema } from "@repo/tipos/user";
+import { OctagonAlertIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,12 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import { LoginDto, LoginSchema } from "@repo/tipos/user";
-
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import { OctagonAlertIcon } from "lucide-react";
-import { authClient } from "@repo/authweb/authClient";
 
 const Login = () => {
   //const router = useRouter();

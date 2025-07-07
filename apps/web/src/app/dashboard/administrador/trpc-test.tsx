@@ -1,7 +1,8 @@
 "use client";
-import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@repo/trpc";
 import React from "react";
+
+import { useTRPC } from "@/trpc/client";
 
 export const TrpcTest = () => {
   const trpc = useTRPC();

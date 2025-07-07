@@ -1,9 +1,11 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
 import {
   PostNovoEnvioSchema,
   PostNovoEnvioSchemaDto,
 } from "@repo/tipos/embarques";
+import { useMutation, useQueryClient } from "@repo/trpc";
 import { ClipboardPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -30,28 +32,43 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-import { cn } from "@/lib/utils";
 import WrapperEscolheDestino from "@/components/ui-personalizado/embarques/wrapper-escolhe-destino";
+import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useQueryClient } from "@repo/trpc";
-import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
 
 type NovoEnvioProps = {
   aberto?: boolean;
-  dadosIniciais: DadosParaPesquisaComPaginacaoEOrdemDto;
 };
 
-const NovoEnvio = ({ aberto, dadosIniciais }: NovoEnvioProps) => {
+const NovoEnvio = ({ aberto }: NovoEnvioProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
   const novoEnvioOuPatch = useMutation(
     trpc.posPatchEnvio.mutationOptions({
       onSuccess: (data) => {
-        queryClient.invalidateQueries(
-          trpc.getEnviosAcessorios.queryOptions({ ...dadosIniciais })
-        );
+        queryClient
+          .getQueryCache()
+          .findAll()
+          .forEach((query) => {
+            const queryKey = query.queryKey;
+            if (
+              Array.isArray(queryKey) &&
+              Array.isArray(queryKey[0]) &&
+              queryKey[0][0] === "getEnviosAcessorios" &&
+              typeof queryKey[1] === "object" &&
+              queryKey[1] !== null &&
+              "input" in queryKey[1]
+            ) {
+              const input = queryKey[1]
+                .input as DadosParaPesquisaComPaginacaoEOrdemDto;
+
+              queryClient.resetQueries(
+                trpc.getEnviosAcessorios.queryOptions(input)
+              );
+            }
+          });
+
         if (data === "Erro ao validar Nome do utilizador")
           return toast.error(data);
         const idEnvio = data.idEnvio;
