@@ -24,7 +24,7 @@ const EmbarquesConteudoFinal = ({
 }: EmbarquesConteudoFinalProps) => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
-    trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
+    trpc.embarques.getEnviosAcessorios.queryOptions(dadosIniciais)
   );
 
   const { fechado: valorFechado } = dadosIniciais;

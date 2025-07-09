@@ -18,7 +18,9 @@ const WrapperInsereConteudo = ({
 }: WrapperInsereConteudoProps) => {
   const trpc = useTRPC();
   const { data, isLoading, isError } = useQuery(
-    trpc.getUnidadesEItensEOps.queryOptions({ id: idContainer })
+    trpc.embarquesIdEnvio.getUnidadesEItensEOps.queryOptions({
+      id: idContainer,
+    })
   );
 
   if (isLoading) return <p>Loading...</p>;

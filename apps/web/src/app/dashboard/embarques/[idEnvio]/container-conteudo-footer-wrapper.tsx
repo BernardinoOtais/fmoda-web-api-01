@@ -37,7 +37,7 @@ const ContainerConteudoFooterWrapper = ({
   const trpc = useTRPC();
 
   const { data: containers } = useSuspenseQuery(
-    trpc.getContainers.queryOptions({ id: idEnvio, idd: pai })
+    trpc.embarquesIdEnvio.getContainers.queryOptions({ id: idEnvio, idd: pai })
   );
 
   const numeroCOntainersNesteNovel = containers.containers.length;

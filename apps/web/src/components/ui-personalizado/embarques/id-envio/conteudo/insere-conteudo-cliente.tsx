@@ -136,26 +136,28 @@ const InserConteudoCliente = ({
   const idItem = watch("conteudo.idItem");
 
   const postConteudo = useMutation(
-    trpc.postConteudo.mutationOptions({
+    trpc.embarquesIdEnvio.postConteudo.mutationOptions({
       onSuccess: () => {
         toast.info(`Conteudo inserido correctament...`, {
           description: "Sucesso",
         });
+
+        reset();
       },
       onError: (error) => {
         console.error("Erro inesperado ao inserir conteudo:", error);
       },
       onSettled: () => {
+        setValue("conteudo.op", 0);
+
         setDadosOp({
           modelo: "",
           cor: "",
           pedido: "",
         });
 
-        reset();
-
         queryClient.invalidateQueries(
-          trpc.getConteudo.queryOptions({ id: idContainer })
+          trpc.embarquesIdEnvio.getConteudo.queryOptions({ id: idContainer })
         );
 
         setEstadoBoataoSubmitDisabled(false);

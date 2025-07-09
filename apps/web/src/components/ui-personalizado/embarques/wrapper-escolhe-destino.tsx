@@ -21,7 +21,9 @@ export function WrapperEscolheDestino<T extends FieldValues>({
   label,
 }: WrapperEscolheDestinoProps<T>) {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.getDestinosDisponiveis.queryOptions());
+  const { data } = useSuspenseQuery(
+    trpc.embarques.getDestinosDisponiveis.queryOptions()
+  );
 
   return (
     <AutoCompleteFormFieldString

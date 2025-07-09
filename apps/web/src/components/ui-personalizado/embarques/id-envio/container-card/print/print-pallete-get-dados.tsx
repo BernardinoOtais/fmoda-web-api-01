@@ -19,10 +19,13 @@ const PrintPalletGetDados = ({
   const queryClient = useQueryClient();
 
   const envioData = queryClient.getQueryData(
-    trpc.getEnvio.queryKey({ id: idEnvio })
+    trpc.embarquesIdEnvio.getEnvio.queryKey({ id: idEnvio })
   );
   const { data, isLoading, isError } = useQuery({
-    ...trpc.getContainersConteudoToPrint.queryOptions({ idEnvio, idContainer }),
+    ...trpc.embarquesIdEnvio.getContainersConteudoToPrint.queryOptions({
+      idEnvio,
+      idContainer,
+    }),
     staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,

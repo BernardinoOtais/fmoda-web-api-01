@@ -74,13 +74,17 @@ const EnvioLoader = async ({ params, searchParams }: EnvioPorIdProps) => {
   const pai = niveis.at(-1);
   const idEnvioPai = { id: idEnvio, idd: pai };
   Promise.all([
-    queryClient.prefetchQuery(trpc.getEnvio.queryOptions({ id: idEnvio })),
     queryClient.prefetchQuery(
-      trpc.getSelectedContainers.queryOptions(idEnvioPai)
+      trpc.embarquesIdEnvio.getEnvio.queryOptions({ id: idEnvio })
     ),
-    queryClient.prefetchQuery(trpc.getContainers.queryOptions(idEnvioPai)),
     queryClient.prefetchQuery(
-      trpc.getDestinosDisponiveis.queryOptions(undefined, {
+      trpc.embarquesIdEnvio.getSelectedContainers.queryOptions(idEnvioPai)
+    ),
+    queryClient.prefetchQuery(
+      trpc.embarquesIdEnvio.getContainers.queryOptions(idEnvioPai)
+    ),
+    queryClient.prefetchQuery(
+      trpc.embarques.getDestinosDisponiveis.queryOptions(undefined, {
         staleTime: 1000 * 60 * 20,
       })
     ),

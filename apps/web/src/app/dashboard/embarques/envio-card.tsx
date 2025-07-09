@@ -52,20 +52,20 @@ const EnvioCard = ({
   const queryClient = useQueryClient();
 
   const novoEnvioOuPatch = useMutation(
-    trpc.posPatchEnvio.mutationOptions({
+    trpc.embarques.posPatchEnvio.mutationOptions({
       onMutate: async (updatedEnvio) => {
         await queryClient.cancelQueries(
-          trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
+          trpc.embarques.getEnviosAcessorios.queryOptions(dadosIniciais)
         );
 
         const previousData = queryClient.getQueryData<EnviosListDto>(
-          trpc.getEnviosAcessorios.queryKey(dadosIniciais)
+          trpc.embarques.getEnviosAcessorios.queryKey(dadosIniciais)
         );
 
         if (!previousData) return { previousData: null };
 
         queryClient.setQueryData(
-          trpc.getEnviosAcessorios.queryKey(dadosIniciais),
+          trpc.embarques.getEnviosAcessorios.queryKey(dadosIniciais),
           {
             ...previousData,
             lista: previousData.lista.map((envio) =>
@@ -82,7 +82,7 @@ const EnvioCard = ({
       onError: (_error, _updatedEnvio, context) => {
         if (context?.previousData) {
           queryClient.setQueryData(
-            trpc.getEnviosAcessorios.queryKey(dadosIniciais),
+            trpc.embarques.getEnviosAcessorios.queryKey(dadosIniciais),
             context.previousData
           );
         }
@@ -90,7 +90,7 @@ const EnvioCard = ({
 
       onSettled: () => {
         queryClient.invalidateQueries(
-          trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
+          trpc.embarques.getEnviosAcessorios.queryOptions(dadosIniciais)
         );
       },
     })

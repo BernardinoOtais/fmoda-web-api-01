@@ -17,7 +17,7 @@ import { PAPEL_ROTA_EMBARQUES } from "@repo/tipos/consts";
 
 const PAPEL_ROTA = PAPEL_ROTA_EMBARQUES;
 export const embarques = createTRPCRouter({
-  getEnviosAcessoriosDb: roleProtectedProcedure(PAPEL_ROTA)
+  getEnviosAcessorios: roleProtectedProcedure(PAPEL_ROTA)
     .input(DadosParaPesquisaComPaginacaoEOrdemSchema)
     .query(async ({ input }) => {
       try {
@@ -30,20 +30,18 @@ export const embarques = createTRPCRouter({
         });
       }
     }),
-  getDestinosDisponiveisBd: roleProtectedProcedure(PAPEL_ROTA).query(
-    async () => {
-      try {
-        return await getDestinosDisponiveisBd();
-      } catch (err) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Erro ao obter destinos.",
-          cause: err, // optional, for logging/debugging
-        });
-      }
+  getDestinosDisponiveis: roleProtectedProcedure(PAPEL_ROTA).query(async () => {
+    try {
+      return await getDestinosDisponiveisBd();
+    } catch (err) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Erro ao obter destinos.",
+        cause: err, // optional, for logging/debugging
+      });
     }
-  ),
-  posPatchEnvioBd: roleProtectedProcedure(PAPEL_ROTA)
+  }),
+  posPatchEnvio: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostNovoEnvioSchema)
     .mutation(async ({ input, ctx }) => {
       try {
@@ -57,7 +55,7 @@ export const embarques = createTRPCRouter({
         });
       }
     }),
-  deleteEnvioDb: roleProtectedProcedure(PAPEL_ROTA)
+  deleteEnvio: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdEnvioSchema)
     .mutation(async ({ input }) => {
       const { idEnvio } = input;

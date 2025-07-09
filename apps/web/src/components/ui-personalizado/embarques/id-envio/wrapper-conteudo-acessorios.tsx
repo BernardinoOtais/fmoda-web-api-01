@@ -20,7 +20,9 @@ const WrapperConteudoAcessorios = ({
     data: conteudo,
     isLoading,
     isError,
-  } = useQuery(trpc.getConteudo.queryOptions({ id: idContainer }));
+  } = useQuery(
+    trpc.embarquesIdEnvio.getConteudo.queryOptions({ id: idContainer })
+  );
 
   if (isError) return <div>erro..</div>;
   if (isLoading) return <div>Loading..</div>;

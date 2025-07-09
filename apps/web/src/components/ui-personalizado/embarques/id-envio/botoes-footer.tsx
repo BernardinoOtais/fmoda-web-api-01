@@ -39,11 +39,11 @@ const BoatoesFooter = ({
   const queryClient = useQueryClient();
   const [disable, setDisable] = useState(false);
   const postNovoContainer = useMutation(
-    trpc.postNovoContainer.mutationOptions({
+    trpc.embarquesIdEnvio.postNovoContainer.mutationOptions({
       onSuccess: (data) => {
         if (data) {
           queryClient.resetQueries(
-            trpc.getContainers.queryOptions({
+            trpc.embarquesIdEnvio.getContainers.queryOptions({
               id: idEnvio,
               idd: idContainerPai,
             })
