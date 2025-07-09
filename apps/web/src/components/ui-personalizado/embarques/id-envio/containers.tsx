@@ -47,10 +47,10 @@ const Containers = ({
   const queryClient = useQueryClient();
 
   const lista = queryClient.getQueryData(
-    trpc.getContainers.queryKey(chave)
+    trpc.embarquesIdEnvio.getContainers.queryKey(chave)
   )?.containers;
 
-  const codigoTRPC = trpc.getContainers.queryKey(chave);
+  const codigoTRPC = trpc.embarquesIdEnvio.getContainers.queryKey(chave);
 
   const [items, setItems] = useState(lista ?? []);
 

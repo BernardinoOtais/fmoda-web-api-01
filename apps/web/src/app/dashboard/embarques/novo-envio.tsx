@@ -45,7 +45,7 @@ const NovoEnvio = ({ aberto }: NovoEnvioProps) => {
   const queryClient = useQueryClient();
 
   const novoEnvioOuPatch = useMutation(
-    trpc.posPatchEnvio.mutationOptions({
+    trpc.embarques.posPatchEnvio.mutationOptions({
       onSuccess: (data) => {
         queryClient
           .getQueryCache()
@@ -64,7 +64,7 @@ const NovoEnvio = ({ aberto }: NovoEnvioProps) => {
                 .input as DadosParaPesquisaComPaginacaoEOrdemDto;
 
               queryClient.resetQueries(
-                trpc.getEnviosAcessorios.queryOptions(input)
+                trpc.embarques.getEnviosAcessorios.queryOptions(input)
               );
             }
           });

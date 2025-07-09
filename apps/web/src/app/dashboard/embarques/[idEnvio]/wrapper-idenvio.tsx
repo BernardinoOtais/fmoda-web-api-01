@@ -20,7 +20,7 @@ const WrapperIdEnvio = ({ idEnvio, niveis, chave }: WrapperIdEnvioProps) => {
   const trpc = useTRPC();
 
   const { data: envioData } = useSuspenseQuery(
-    trpc.getEnvio.queryOptions({ id: idEnvio })
+    trpc.embarquesIdEnvio.getEnvio.queryOptions({ id: idEnvio })
   );
 
   if (!envioData) {

@@ -33,12 +33,14 @@ const BotaoApagaContainer = ({
     idd: idPai || undefined,
   };
   const apagaContainer = useMutation(
-    trpc.apagoContainer.mutationOptions({
+    trpc.embarquesIdEnvio.apagoContainer.mutationOptions({
       onSuccess: () => {
         toast.success(`Apagado correctament o ${nomeContainer.trim()}...`, {
           description: "Sucesso",
         });
-        queryClient.invalidateQueries(trpc.getContainers.queryOptions(chave));
+        queryClient.invalidateQueries(
+          trpc.embarquesIdEnvio.getContainers.queryOptions(chave)
+        );
       },
       onError: (error) => {
         toast.error(error.message || "Erro ao apagar container...");

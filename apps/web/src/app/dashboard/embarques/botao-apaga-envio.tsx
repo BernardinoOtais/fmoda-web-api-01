@@ -25,7 +25,7 @@ const BotaoApagaEnvio = ({
   const queryClient = useQueryClient();
 
   const apagaEnvio = useMutation(
-    trpc.deleteEnvio.mutationOptions({
+    trpc.embarques.deleteEnvio.mutationOptions({
       onSuccess: (data) => {
         toast.success(`Envio ${data.data.idEnvio} apagado`, {
           description: data.message || "Sucesso",
@@ -33,17 +33,17 @@ const BotaoApagaEnvio = ({
       },
       onMutate: async (updatedEnvio) => {
         await queryClient.cancelQueries(
-          trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
+          trpc.embarques.getEnviosAcessorios.queryOptions(dadosIniciais)
         );
 
         const previousData = queryClient.getQueryData<EnviosListDto>(
-          trpc.getEnviosAcessorios.queryKey(dadosIniciais)
+          trpc.embarques.getEnviosAcessorios.queryKey(dadosIniciais)
         );
 
         if (!previousData) return { previousData: null };
 
         queryClient.setQueryData(
-          trpc.getEnviosAcessorios.queryKey(dadosIniciais),
+          trpc.embarques.getEnviosAcessorios.queryKey(dadosIniciais),
           {
             ...previousData,
             lista: previousData.lista.filter(
@@ -75,7 +75,7 @@ const BotaoApagaEnvio = ({
       onSettled: () => {
         setDisabledBotao(false);
         queryClient.invalidateQueries(
-          trpc.getEnviosAcessorios.queryOptions(dadosIniciais)
+          trpc.embarques.getEnviosAcessorios.queryOptions(dadosIniciais)
         );
       },
     })

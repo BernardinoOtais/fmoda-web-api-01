@@ -30,10 +30,12 @@ const InputOp = ({ idEnvio, container, setScroll }: InputOpProps) => {
   const debounced = useDebounce(raw, 1250);
 
   const insiroOp = useMutation(
-    trpc.insiroOpEmContainer.mutationOptions({
+    trpc.embarquesIdEnvio.insiroOpEmContainer.mutationOptions({
       onSuccess: () => {
         toast.success(`OP inserida com sucesso...`);
-        queryClient.invalidateQueries(trpc.getContainers.queryOptions(chave));
+        queryClient.invalidateQueries(
+          trpc.embarquesIdEnvio.getContainers.queryOptions(chave)
+        );
       },
       onSettled: () => {
         setRaw("");

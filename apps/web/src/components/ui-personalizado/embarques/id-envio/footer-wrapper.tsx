@@ -21,7 +21,10 @@ const FooterWrapper = ({
   const trpc = useTRPC();
 
   const { data: migalhas } = useSuspenseQuery({
-    ...trpc.getSelectedContainers.queryOptions({ id: idEnvio, idd: pai }),
+    ...trpc.embarquesIdEnvio.getSelectedContainers.queryOptions({
+      id: idEnvio,
+      idd: pai,
+    }),
     staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,

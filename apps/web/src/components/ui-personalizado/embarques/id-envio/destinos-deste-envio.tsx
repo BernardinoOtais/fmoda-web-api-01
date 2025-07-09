@@ -40,18 +40,18 @@ const DestinosDesteEnvio = ({
   });
 
   const alteraDestino = useMutation(
-    trpc.patchFornecedor.mutationOptions({
+    trpc.embarquesIdEnvio.patchFornecedor.mutationOptions({
       onMutate: async (updatedDestino) => {
         await queryClient.cancelQueries(
-          trpc.getEnvio.queryOptions({ id: idEnvio })
+          trpc.embarquesIdEnvio.getEnvio.queryOptions({ id: idEnvio })
         );
 
         const previousData = queryClient.getQueryData(
-          trpc.getEnvio.queryKey({ id: idEnvio })
+          trpc.embarquesIdEnvio.getEnvio.queryKey({ id: idEnvio })
         );
 
         queryClient.setQueryData(
-          trpc.getEnvio.queryKey({ id: idEnvio }),
+          trpc.embarquesIdEnvio.getEnvio.queryKey({ id: idEnvio }),
           (
             old:
               | {
@@ -88,7 +88,7 @@ const DestinosDesteEnvio = ({
       onError: (_error, _updatedEnvio, context) => {
         if (context?.previousData) {
           queryClient.setQueryData(
-            trpc.getEnvio.queryKey({ id: idEnvio }),
+            trpc.embarquesIdEnvio.getEnvio.queryKey({ id: idEnvio }),
             context.previousData
           );
         }
@@ -96,7 +96,7 @@ const DestinosDesteEnvio = ({
 
       onSettled: () => {
         queryClient.invalidateQueries(
-          trpc.getEnvio.queryOptions({ id: idEnvio })
+          trpc.embarquesIdEnvio.getEnvio.queryOptions({ id: idEnvio })
         );
       },
       onSuccess: (_data, updatedDestino) => {
@@ -118,7 +118,7 @@ const DestinosDesteEnvio = ({
                 .input as DadosParaPesquisaComPaginacaoEOrdemDto;
 
               const cachedData = queryClient.getQueryData(
-                trpc.getEnviosAcessorios.queryKey(input)
+                trpc.embarques.getEnviosAcessorios.queryKey(input)
               );
 
               const devoFazerReset = cachedData?.lista.some(
@@ -128,7 +128,7 @@ const DestinosDesteEnvio = ({
               );
               if (devoFazerReset)
                 queryClient.resetQueries(
-                  trpc.getEnviosAcessorios.queryOptions(input)
+                  trpc.embarques.getEnviosAcessorios.queryOptions(input)
                 );
             }
           });

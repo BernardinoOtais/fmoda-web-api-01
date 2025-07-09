@@ -49,7 +49,7 @@ const ConteudoExistente = ({
   const totalPeso = conteudos?.reduce((acc, item) => acc + item.peso, 0) || 0;
 
   const apagaoConsteudos = useMutation(
-    trpc.deleteConteudos.mutationOptions({
+    trpc.embarquesIdEnvio.deleteConteudos.mutationOptions({
       onSuccess: () => {
         toast.info(`Apagados correctament...`, {
           description: "Sucesso",
@@ -64,7 +64,7 @@ const ConteudoExistente = ({
       onSettled: () => {
         setItensSelecionados([]);
         queryClient.invalidateQueries(
-          trpc.getConteudo.queryOptions({ id: idContainer })
+          trpc.embarquesIdEnvio.getConteudo.queryOptions({ id: idContainer })
         );
         setDisabledApaga(false);
       },

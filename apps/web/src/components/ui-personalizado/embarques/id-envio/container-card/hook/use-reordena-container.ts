@@ -7,18 +7,22 @@ export function useReordenaContainer(chave: IdNumeroInteiroNaoNegativoDto) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const codigoTRPC = trpc.getContainers.queryKey(chave);
+  const codigoTRPC = trpc.embarquesIdEnvio.getContainers.queryKey(chave);
   return useMutation(
-    trpc.postOrdenaContainer.mutationOptions({
+    trpc.embarquesIdEnvio.postOrdenaContainer.mutationOptions({
       onMutate: async () => {
-        await queryClient.cancelQueries(trpc.getContainers.queryOptions(chave));
+        await queryClient.cancelQueries(
+          trpc.embarquesIdEnvio.getContainers.queryOptions(chave)
+        );
 
         const previousContainers = queryClient.getQueryData(codigoTRPC);
 
         return { previousContainers };
       },
       onSettled() {
-        queryClient.invalidateQueries(trpc.getContainers.queryOptions(chave));
+        queryClient.invalidateQueries(
+          trpc.embarquesIdEnvio.getContainers.queryOptions(chave)
+        );
       },
     })
   );

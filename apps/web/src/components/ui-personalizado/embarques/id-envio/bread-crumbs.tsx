@@ -22,7 +22,10 @@ const BreadCrumbs = ({ idEnvio, ultimoNivel }: BreadCrumbsProps) => {
   const trpc = useTRPC();
 
   const { data: crumbs } = useSuspenseQuery(
-    trpc.getSelectedContainers.queryOptions({ id: idEnvio, idd: ultimoNivel })
+    trpc.embarquesIdEnvio.getSelectedContainers.queryOptions({
+      id: idEnvio,
+      idd: ultimoNivel,
+    })
   );
   const caminho = `/dashboard/embarques/${idEnvio}`;
 

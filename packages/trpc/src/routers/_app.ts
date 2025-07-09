@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { embarques } from "@/modules/server/embarques/raiz";
 import { embarques_idEnvio } from "@/modules/server/embarques/id-envio";
+import { embarques_configorar } from "@/modules/server/embarques/configurar";
 
 export const appRouter = createTRPCRouter({
   hello: baseProcedure
@@ -16,29 +17,12 @@ export const appRouter = createTRPCRouter({
         greeting: `hello ${opts.input.text}`,
       };
     }),
-  getEnviosAcessorios: embarques.getEnviosAcessoriosDb,
-  getDestinosDisponiveis: embarques.getDestinosDisponiveisBd,
-  posPatchEnvio: embarques.posPatchEnvioBd,
-  deleteEnvio: embarques.deleteEnvioDb,
 
-  getEnvio: embarques_idEnvio.getEnvioDb,
-  getSelectedContainers: embarques_idEnvio.getSelectedContainersDb,
-  getContainers: embarques_idEnvio.getContainersDb,
+  embarques: embarques,
 
-  patchFornecedor: embarques_idEnvio.patchFornecedorDb,
-  postNovoContainer: embarques_idEnvio.postNovoContainerDb,
-  postAlturaContrainer: embarques_idEnvio.postAlturaContrainerDb,
+  embarquesIdEnvio: embarques_idEnvio,
 
-  insiroOpEmContainer: embarques_idEnvio.insiroOpEmContainerDb,
-  apagoOpContainer: embarques_idEnvio.apagoOpContainerDb,
-  postOrdenaContainer: embarques_idEnvio.postOrdenaContainerDb,
-  apagoContainer: embarques_idEnvio.apagoContainerDb,
-  getContainersConteudoToPrint:
-    embarques_idEnvio.getContainersConteudoToPrintDb,
-  getConteudo: embarques_idEnvio.getConteudoDb,
-  getUnidadesEItensEOps: embarques_idEnvio.getUnidadesEItensEOpsDb,
-  postConteudo: embarques_idEnvio.postConteudoDb,
-  deleteConteudos: embarques_idEnvio.deleteConteudosDb,
+  embarquesConfigurar: embarques_configorar,
 });
 
 export type AppRouter = typeof appRouter;

@@ -17,7 +17,7 @@ export const getUnidadesEItensEOpsDb = async ({
   const [unidades, itens, ops, containerOp] = await Promise.all([
     prismaEnvios.$queryRaw<AutocompleteDto[]>`
       SELECT
-        a.idItem as value,
+        a.idUnidades as value,
         a.descricaoUnidade as label
       FROM 
         Unidades a

@@ -23,7 +23,7 @@ const InputAltura = ({ idEnvio, container, setScroll }: InputAlturaProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const codigoTRPC = trpc.getContainers.queryKey(chave);
+  const codigoTRPC = trpc.embarquesIdEnvio.getContainers.queryKey(chave);
   const data = queryClient.getQueryData(codigoTRPC);
 
   const alturaOriginal = data?.containers.find(
@@ -37,9 +37,11 @@ const InputAltura = ({ idEnvio, container, setScroll }: InputAlturaProps) => {
   const [erro, setErro] = useState(false);
 
   const insiroAltura = useMutation(
-    trpc.postAlturaContrainer.mutationOptions({
+    trpc.embarquesIdEnvio.postAlturaContrainer.mutationOptions({
       onMutate: async (data) => {
-        await queryClient.cancelQueries(trpc.getContainers.queryOptions(chave));
+        await queryClient.cancelQueries(
+          trpc.embarquesIdEnvio.getContainers.queryOptions(chave)
+        );
 
         const previousData = queryClient.getQueryData(codigoTRPC);
 
@@ -75,7 +77,9 @@ const InputAltura = ({ idEnvio, container, setScroll }: InputAlturaProps) => {
       },
 
       onSettled: () => {
-        queryClient.invalidateQueries(trpc.getContainers.queryOptions(chave));
+        queryClient.invalidateQueries(
+          trpc.embarquesIdEnvio.getContainers.queryOptions(chave)
+        );
       },
       onSuccess: (data) => {
         if (data.altura === 0 && raw !== "0") setRaw(data.altura.toString());

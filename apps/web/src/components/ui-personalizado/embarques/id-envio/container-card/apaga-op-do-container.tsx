@@ -33,10 +33,12 @@ const ApagaOpDoContainer = ({
   const queryClient = useQueryClient();
   //apagoOpContainer
   const apagaOp = useMutation(
-    trpc.apagoOpContainer.mutationOptions({
+    trpc.embarquesIdEnvio.apagoOpContainer.mutationOptions({
       onSuccess: () => {
         toast.success(`OP ${op} apagada com sucesso.`);
-        queryClient.invalidateQueries(trpc.getContainers.queryOptions(chave));
+        queryClient.invalidateQueries(
+          trpc.embarquesIdEnvio.getContainers.queryOptions(chave)
+        );
       },
       onError: (error) => {
         toast.error(error.message || "Erro ao apagar OP.");

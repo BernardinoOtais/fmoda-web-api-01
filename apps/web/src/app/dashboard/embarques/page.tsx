@@ -56,14 +56,14 @@ const EmbarquesWrapper = async ({ searchParams }: PageProps) => {
   const queryClient = getQueryClient();
 
   void queryClient.prefetchQuery(
-    trpc.getEnviosAcessorios.queryOptions(dadosIniciais, {
+    trpc.embarques.getEnviosAcessorios.queryOptions(dadosIniciais, {
       refetchOnWindowFocus: "always",
       refetchOnMount: "always",
       staleTime: 0, // force data to go stale immediately
     })
   );
   void queryClient.prefetchQuery(
-    trpc.getDestinosDisponiveis.queryOptions(undefined, {
+    trpc.embarques.getDestinosDisponiveis.queryOptions(undefined, {
       staleTime: 1000 * 60 * 20,
     })
   );

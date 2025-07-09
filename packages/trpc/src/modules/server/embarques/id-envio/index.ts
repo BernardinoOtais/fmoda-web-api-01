@@ -57,7 +57,7 @@ import {
 const PAPEL_ROTA = PAPEL_ROTA_EMBARQUES;
 
 export const embarques_idEnvio = createTRPCRouter({
-  getEnvioDb: roleProtectedProcedure(PAPEL_ROTA)
+  getEnvio: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdNumeroInteiroNaoNegativoSchema)
     .query(async ({ input }) => {
       try {
@@ -70,7 +70,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  getSelectedContainersDb: roleProtectedProcedure(PAPEL_ROTA)
+  getSelectedContainers: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdNumeroInteiroNaoNegativoSchema)
     .query(async (input) => {
       const dados: IdNumeroInteiroNaoNegativoDto = input.input;
@@ -85,7 +85,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  getContainersDb: roleProtectedProcedure(PAPEL_ROTA)
+  getContainers: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdNumeroInteiroNaoNegativoSchema)
     .query(async (input) => {
       const dados: IdNumeroInteiroNaoNegativoDto = input.input;
@@ -100,7 +100,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  getContainersConteudoToPrintDb: roleProtectedProcedure(PAPEL_ROTA)
+  getContainersConteudoToPrint: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdEnvioIdContainerSchema)
     .query(async ({ input }) => {
       try {
@@ -116,7 +116,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  patchFornecedorDb: roleProtectedProcedure(PAPEL_ROTA)
+  patchFornecedor: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostDestinoSchema)
     .mutation(async (input) => {
       try {
@@ -148,7 +148,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  postNovoContainerDb: roleProtectedProcedure(PAPEL_ROTA)
+  postNovoContainer: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostContainerSchema)
     .mutation(async (input) => {
       try {
@@ -209,7 +209,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  postAlturaContrainerDb: roleProtectedProcedure(PAPEL_ROTA)
+  postAlturaContrainer: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostAlturaSchema)
     .mutation(async (input) => {
       try {
@@ -223,7 +223,7 @@ export const embarques_idEnvio = createTRPCRouter({
       }
     }),
 
-  insiroOpEmContainerDb: roleProtectedProcedure(PAPEL_ROTA)
+  insiroOpEmContainer: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostOpSchema)
     .mutation(async (input) => {
       try {
@@ -267,7 +267,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  apagoOpContainerDb: roleProtectedProcedure(PAPEL_ROTA)
+  apagoOpContainer: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdOpSchema)
     .mutation(async (input) => {
       try {
@@ -299,7 +299,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  postOrdenaContainerDb: roleProtectedProcedure(PAPEL_ROTA)
+  postOrdenaContainer: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdOrdemSchema)
     .mutation(async (input) => {
       try {
@@ -321,7 +321,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  apagoContainerDb: roleProtectedProcedure(PAPEL_ROTA)
+  apagoContainer: roleProtectedProcedure(PAPEL_ROTA)
     .input(InteiroNaoNegativoSchema)
     .mutation(async (input) => {
       try {
@@ -350,7 +350,7 @@ export const embarques_idEnvio = createTRPCRouter({
         });
       }
     }),
-  getConteudoDb: roleProtectedProcedure(PAPEL_ROTA)
+  getConteudo: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdNumeroInteiroNaoNegativoSchema)
     .query(async ({ input }) => {
       try {
@@ -364,7 +364,7 @@ export const embarques_idEnvio = createTRPCRouter({
       }
     }),
 
-  getUnidadesEItensEOpsDb: roleProtectedProcedure(PAPEL_ROTA)
+  getUnidadesEItensEOps: roleProtectedProcedure(PAPEL_ROTA)
     .input(IdNumeroInteiroNaoNegativoSchema)
     .query(async ({ input }) => {
       try {
@@ -378,12 +378,14 @@ export const embarques_idEnvio = createTRPCRouter({
       }
     }),
   //postConteudoDb
-  postConteudoDb: roleProtectedProcedure(PAPEL_ROTA)
+  postConteudo: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostConteudoSchema)
     .mutation(async ({ input }) => {
       try {
+        console.log("roleProtectedProcedure :", { input });
         await postConteudoDb(input);
       } catch (err) {
+        console.log("postConteudoDb err: ", err);
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Erro ao inserir conteudo...",
@@ -393,7 +395,7 @@ export const embarques_idEnvio = createTRPCRouter({
     }),
 
   //deleteConteudosDb
-  deleteConteudosDb: roleProtectedProcedure(PAPEL_ROTA)
+  deleteConteudos: roleProtectedProcedure(PAPEL_ROTA)
     .input(ListaIdsSchema)
     .mutation(async ({ input }) => {
       try {
