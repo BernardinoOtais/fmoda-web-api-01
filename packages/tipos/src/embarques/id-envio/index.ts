@@ -245,3 +245,5 @@ export const ListaIdsSchema = z.object({
 });
 
 export type ListaIdsSchemaDto = z.infer<typeof ListaIdsSchema>;
+
+export type ConteudoDto = z.infer<typeof ConteudoSchema>;

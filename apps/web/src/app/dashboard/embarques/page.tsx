@@ -1,5 +1,6 @@
 import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
 import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
+import { PAPEL_ROTA_EMBARQUES } from "@repo/tipos/consts";
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
@@ -31,8 +32,8 @@ const Embarques = ({ searchParams }: PageProps) => {
 export default Embarques;
 
 const EmbarquesWrapper = async ({ searchParams }: PageProps) => {
+  await authorizePapelOrRedirect(PAPEL_ROTA_EMBARQUES);
   const { fechado, envpp, page } = await searchParams;
-  await authorizePapelOrRedirect("Embarques");
   const valorFechado = fechado === "true";
   const valorPageActual = page ? parseInt(page as string) : 1;
   const intensPorPagina = validadoValorNumeroItensPorPagina(envpp);

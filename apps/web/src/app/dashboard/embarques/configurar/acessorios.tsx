@@ -1,9 +1,8 @@
 "use client";
+import { PatchItemSchemaDto } from "@repo/tipos/embarques_configurar";
 import { useSuspenseQuery } from "@repo/trpc";
 import Link from "next/link";
 import React from "react";
-
-import SwitchItemInactivo from "./switch-item-inactivo";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import FormAlteraItemExistent from "@/components/ui-personalizado/embarques/configurar/form-altera-item-existente";
+import FormCriaItens from "@/components/ui-personalizado/embarques/configurar/form-cria-Itens";
+import SwitchItemInactivo from "@/components/ui-personalizado/embarques/configurar/switch-item-inactivo";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 
@@ -25,6 +27,33 @@ const Acessorios = ({ idRecebido }: AcessoriosProps) => {
   const { data } = useSuspenseQuery(
     trpc.embarquesConfigurar.getDestinosDisponiveis.queryOptions()
   );
+
+  const dadosFormAlterar = (idItem: number): PatchItemSchemaDto | null => {
+    const dadosParaAlterar = data.itemsSchema.find((c) => c.idItem === idItem);
+    if (!dadosParaAlterar) {
+      return null;
+    }
+    const idIdioma = data.idiomasSchema[0]?.idIdioma;
+    if (!idIdioma) {
+      return null;
+    }
+    return {
+      idItem: dadosParaAlterar.idItem,
+      idIdioma,
+      Descricao: dadosParaAlterar.Descricao,
+      descItem: dadosParaAlterar.ItemTraduzido?.[0]?.descItem.trim() || "",
+    };
+  };
+
+  const formAApresentar = () => {
+    const dadosParaAlterar = idRecebido ? dadosFormAlterar(idRecebido) : null;
+    const idiomas = data.idiomasSchema;
+    return dadosParaAlterar ? (
+      <FormAlteraItemExistent dados={dadosParaAlterar} />
+    ) : (
+      <FormCriaItens idiomas={idiomas} />
+    );
+  };
   return (
     <main className="relative grow">
       <div className="absolute top-0 bottom-0 flex w-full flex-col">
@@ -99,7 +128,7 @@ const Acessorios = ({ idRecebido }: AcessoriosProps) => {
               ))}
             </TableBody>
           </Table>
-          {/*formAApresentar()*/}
+          {formAApresentar()}
         </div>
       </div>
     </main>

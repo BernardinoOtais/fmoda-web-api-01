@@ -4,5 +4,6 @@ export const patchEstadoItemDb = async (idItem: number, inativo: boolean) => {
     where: { idItem },
     data: { inativo },
   });
-  console.log("patchEstadoItemDb : ", idItem, inativo, resutltado);
+  return resutltado;
+  //console.log("patchEstadoItemDb : ", idItem, inativo, resutltado);
 };

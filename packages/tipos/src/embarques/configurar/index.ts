@@ -39,3 +39,23 @@ export const PatchItemSchema = z.object({
 export type PatchItemSchemaDto = z.infer<typeof PatchItemSchema>;
 
 export type ItensAcessoriosDto = z.infer<typeof ItensAcessoriosSchema>;
+
+export const PostItensAcessoriosSchema = z.object({
+  itens: z.array(
+    z.object({
+      Descricao: StringComTamanhoSchema(100, 5).optional(),
+      idiomas: z
+        .array(
+          z.object({
+            idIdioma: InteiroNaoNegativoSchema,
+            descItem: StringComTamanhoSchema(100, 5),
+          })
+        )
+        .optional(),
+    })
+  ),
+});
+
+export type PostItensAcessoriosSchemaDto = z.infer<
+  typeof PostItensAcessoriosSchema
+>;

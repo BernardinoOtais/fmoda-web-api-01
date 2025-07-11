@@ -4,6 +4,7 @@
   "exports": {
     "./auth": "./dist/prisma-servicos/auth/auth.js",
     "./user": "./dist/user/user.js",
+    "./administrador_user": "./dist/administrador/user/index.js",
     "./embarques": "./dist/embarques/raiz/index.js",
     "./embarques_idenvio": "./dist/embarques/id-envio/index.js",
     "./embarques_configurar": "./dist/embarques/configurar/index.js"
