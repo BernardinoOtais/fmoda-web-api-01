@@ -15,6 +15,7 @@ export const options = {
   database: prismaAdapter(prisma, {
     provider: "sqlite",
   }),
+
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 6,

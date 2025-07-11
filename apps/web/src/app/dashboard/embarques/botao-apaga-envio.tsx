@@ -58,7 +58,7 @@ const BotaoApagaEnvio = ({
       onError: (_error, _updatedEnvio, context) => {
         if (context?.previousData) {
           queryClient.setQueryData(
-            trpc.getEnviosAcessorios.queryKey(dadosIniciais),
+            trpc.embarques.getEnviosAcessorios.queryKey(dadosIniciais),
             context.previousData
           );
         }

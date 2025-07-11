@@ -1,4 +1,5 @@
 import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
+import { PAPEL_ROTA_EMBARQUES } from "@repo/tipos/consts";
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
@@ -59,7 +60,7 @@ const loadEnvioData = async ({ params, searchParams }: EnvioPorIdProps) => {
 };
 
 const EnvioLoader = async ({ params, searchParams }: EnvioPorIdProps) => {
-  await authorizePapelOrRedirect("Embarques");
+  await authorizePapelOrRedirect(PAPEL_ROTA_EMBARQUES);
   const { idEnvio, niveis } = await loadEnvioData({
     params,
     searchParams,

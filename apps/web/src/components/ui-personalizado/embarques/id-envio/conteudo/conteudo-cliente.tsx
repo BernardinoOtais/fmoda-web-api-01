@@ -1,5 +1,6 @@
 "use client";
 
+import { ConteudoDto } from "@repo/tipos/embarques_idenvio";
 import React, { Fragment } from "react";
 
 import ApagaConteudo from "./apaga-conteudo";
