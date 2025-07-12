@@ -1,6 +1,7 @@
 {
   "name": "@repo/trpc",
   "version": "0.0.0",
+  "type": "module",
   "exports": {
     "./init": "./dist/init.js",
     "./_app": "./dist/routers/_app.js",
@@ -9,7 +10,8 @@
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "@repo/authweb": "*",
@@ -23,6 +25,8 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
-    "tsc-alias": "^1.8.16"
+    "tsc-alias": "^1.8.16",
+    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "*"
   }
 }

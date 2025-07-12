@@ -1,5 +1,6 @@
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 import { PostNovoEnvioSchemaDto } from "@repo/tipos/embarques";
+
+import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 
 export const posPatchEnvioBd = async (dados: PostNovoEnvioSchemaDto) => {
   const { idEnvio, nomeEnvio, idDestino, obs, nomeUser } = dados;

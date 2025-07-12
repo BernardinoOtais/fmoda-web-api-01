@@ -1,7 +1,8 @@
+import { getSession } from "@repo/authweb/session";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { cache } from "react";
-import { getSession } from "@repo/authweb/session";
 import superjson from "superjson";
+
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context

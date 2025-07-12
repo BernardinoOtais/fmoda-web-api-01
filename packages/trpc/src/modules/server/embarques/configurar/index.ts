@@ -1,4 +1,3 @@
-import { createTRPCRouter, roleProtectedProcedure } from "@/init";
 import {
   dadosPartesAndroid,
   deleteItemDb,
@@ -17,6 +16,8 @@ import {
   PostItensAcessoriosSchema,
 } from "@repo/tipos/embarques_configurar";
 import { TRPCError } from "@trpc/server";
+
+import { createTRPCRouter, roleProtectedProcedure } from "@/init";
 
 const PAPEL_ROTA = PAPEL_ROTA_EMBARQUES;
 

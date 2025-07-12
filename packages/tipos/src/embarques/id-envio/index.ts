@@ -1,10 +1,11 @@
+import { z } from "zod";
+
 import {
   ChavePhcSchema,
   FloatZeroSchema,
   InteiroNaoNegativoSchema,
   StringComTamanhoSchema,
 } from "@/comuns";
-import { z } from "zod";
 
 const tamanhosQttPeso = z.object({
   tam: z.string().max(25, { message: "Máximo 25 caracteres" }),
@@ -107,7 +108,8 @@ export type DestinoEnvioDto = z.infer<typeof DestinoEnvioSchema>;
 
 //Mais destinos container-conteudo-footer-wrapper
 
-const ListaContainersSchema = z.array(ContainerSchema);
+export const ListaContainersSchema = z.array(ContainerSchema);
+
 export type ListaContainersDto = z.infer<typeof ListaContainersSchema>;
 
 const ItemTraduzidoSchema = z.array(

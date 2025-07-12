@@ -1,7 +1,9 @@
 import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
 import { EnviosListDto } from "@repo/tipos/embarques";
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
+
 import { getNumeroEnviosEstadoDb } from "./get-numero-envios-estado";
+
+import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 
 export const getEnviosAcessoriosDb = async (
   dadosRecebidos: DadosParaPesquisaComPaginacaoEOrdemDto

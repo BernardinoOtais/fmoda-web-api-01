@@ -1,0 +1,585 @@
+generator qaulidadeClient {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma/qualidade"
+}
+
+datasource qualidadeDb {
+  provider = "sqlserver"
+  url      = env("QUALIDADE_URL")
+}
+
+model Bm {
+  idBm       String     @id(map: "PK_Bm") @default(dbgenerated("newid()"), map: "DF_Bm_idBm") @qualidadeDb.UniqueIdentifier
+  composicao String     @qualidadeDb.VarChar(250)
+  fechado    Boolean    @default(false, map: "DF_Bm_estado")
+  CreatedAt  DateTime   @default(dbgenerated("sysdatetime()"), map: "DF__Bm__CreatedAt__5D80D6A1")
+  BmMalhas   BmMalhas[]
+  BmOp       BmOp[]
+  BmTc       BmTc[]
+}
+
+model BmFioComposicao {
+  idBm                  String                @qualidadeDb.UniqueIdentifier
+  ref                   String                @qualidadeDb.Char(18)
+  refOrigem             String                @qualidadeDb.Char(18)
+  idComposicao          Int
+  qtt                   Decimal               @qualidadeDb.Decimal(14, 4)
+  BmMalhasFio           BmMalhasFio           @relation(fields: [idBm, ref, refOrigem], references: [idBm, ref, refOrigem], onUpdate: NoAction, map: "FK_BmFioComposicao_BmMalhasFio")
+  BmMateriaisComposicao BmMateriaisComposicao @relation(fields: [idComposicao], references: [idComposicao], onUpdate: NoAction, map: "FK_BmFioComposicao_BmMateriaisComposicao")
+
+  @@id([idBm, ref, refOrigem, idComposicao], map: "PK_BmFioComposicao")
+}
+
+model BmIdBmComposicao {
+  idBm                  String                @qualidadeDb.UniqueIdentifier
+  ref                   String                @qualidadeDb.Char(18)
+  idComposicao          Int
+  qtt                   Decimal               @qualidadeDb.Decimal(14, 4)
+  BmMalhas              BmMalhas              @relation(fields: [idBm, ref], references: [idBm, ref], onUpdate: NoAction, map: "FK_BmIdBmComposicao_BmMalhas")
+  BmMateriaisComposicao BmMateriaisComposicao @relation(fields: [idComposicao], references: [idComposicao], onUpdate: NoAction, map: "FK_BmIdBmComposicao_BmMateriaisComposicao")
+
+  @@id([idBm, ref, idComposicao], map: "PK_BmIdBmComposicao")
+}
+
+model BmMalhas {
+  idBm                 String             @qualidadeDb.UniqueIdentifier
+  ref                  String             @qualidadeDb.Char(18)
+  malha                String             @qualidadeDb.VarChar(60)
+  grupo                String             @qualidadeDb.VarChar(3)
+  subGrupo             String             @qualidadeDb.VarChar(3)
+  qtdePedida           Decimal            @qualidadeDb.Decimal(14, 4)
+  qtdeEntrada          Decimal            @qualidadeDb.Decimal(14, 4)
+  qtdeEntradaSeUnidade Decimal?           @qualidadeDb.Decimal(14, 4)
+  defeitosStock        Decimal            @qualidadeDb.Decimal(14, 4)
+  sobras               Decimal            @qualidadeDb.Decimal(14, 4)
+  unidade              String             @qualidadeDb.VarChar(4)
+  lote                 String             @qualidadeDb.NVarChar(4000)
+  BmIdBmComposicao     BmIdBmComposicao[]
+  Bm                   Bm                 @relation(fields: [idBm], references: [idBm], onUpdate: NoAction, map: "FK_BmMalhas_Bm")
+  BmMateriais          BmMateriais        @relation(fields: [grupo, subGrupo], references: [grupo, subGrupo], onUpdate: NoAction, map: "FK_BmMalhas_BmMateriais")
+  BmMalhasFio          BmMalhasFio[]
+  BmOpsPorMalha        BmOpsPorMalha[]
+
+  @@id([idBm, ref], map: "PK_BmMalhas")
+}
+
+model BmMalhasFio {
+  idBm             String             @qualidadeDb.UniqueIdentifier
+  ref              String             @qualidadeDb.Char(18)
+  refOrigem        String             @qualidadeDb.Char(18)
+  fio              String             @qualidadeDb.VarChar(60)
+  grupo            String             @qualidadeDb.VarChar(3)
+  subGrupo         String             @qualidadeDb.VarChar(3)
+  qtdePedida       Decimal            @qualidadeDb.Decimal(14, 4)
+  qtdeEntrada      Decimal            @qualidadeDb.Decimal(14, 4)
+  defeitosStock    Decimal            @qualidadeDb.Decimal(14, 4)
+  sobras           Decimal            @qualidadeDb.Decimal(14, 4)
+  unidade          String             @qualidadeDb.VarChar(4)
+  lote             String             @qualidadeDb.NVarChar(4000)
+  BmFioComposicao  BmFioComposicao[]
+  BmMalhas         BmMalhas           @relation(fields: [idBm, ref], references: [idBm, ref], onUpdate: NoAction, map: "FK_BmMalhasFio_BmMalhas")
+  BmMateriaisFio   BmMateriaisFio     @relation(fields: [grupo, subGrupo], references: [grupo, subGrupo], onUpdate: NoAction, map: "FK_BmMalhasFio_BmMateriaisFio")
+  BmOpsPorMalhaFio BmOpsPorMalhaFio[]
+
+  @@id([idBm, ref, refOrigem], map: "PK_BmMalhasFio")
+}
+
+model BmMalhasFioMovimentos {
+  idBm               String           @qualidadeDb.UniqueIdentifier
+  ref                String           @qualidadeDb.Char(18)
+  refOrigem          String           @qualidadeDb.Char(18)
+  op                 Int
+  idBmMovimentosLote String           @default(dbgenerated("newid()"), map: "DF_BmMalhasFioMovimentos_idBmMovimentosLote") @qualidadeDb.UniqueIdentifier
+  idMovimento        String           @qualidadeDb.Char(25)
+  nMovimento         Int
+  nome               String           @qualidadeDb.Char(55)
+  idTipo             Decimal          @qualidadeDb.Decimal(3, 0)
+  tipo               String           @qualidadeDb.VarChar(50)
+  qtt                Decimal          @qualidadeDb.Decimal(14, 4)
+  unidade            String           @qualidadeDb.VarChar(4)
+  lote               String           @qualidadeDb.VarChar(30)
+  BmOpsPorMalhaFio   BmOpsPorMalhaFio @relation(fields: [idBm, ref, refOrigem, op], references: [idBm, ref, refOrigem, op], onUpdate: NoAction, map: "FK_BmMalhasFioMovimentos_BmOpsPorMalhaFio")
+
+  @@id([idBm, ref, refOrigem, op, idBmMovimentosLote], map: "PK_BmMalhasFioMovimentos")
+}
+
+model BmMateriais {
+  grupo              String             @qualidadeDb.VarChar(3)
+  subGrupo           String             @qualidadeDb.VarChar(3)
+  BmMalhas           BmMalhas[]
+  BmMaterialGrupo    BmMaterialGrupo    @relation(fields: [grupo], references: [grupo], onUpdate: NoAction, map: "FK_BmMateriais_BmMaterialGrupo")
+  BmMaterialSubGrupo BmMaterialSubGrupo @relation(fields: [subGrupo], references: [subGrupo], onUpdate: NoAction, map: "FK_BmMateriais_BmMaterialSubGrupo")
+
+  @@id([grupo, subGrupo], map: "PK_BmMateriais")
+}
+
+model BmMateriaisComposicao {
+  idComposicao          Int                @id(map: "PK_BmMateriaisComposicao") @default(autoincrement())
+  composicao            String             @qualidadeDb.VarChar(150)
+  composicaoAbreviatura String             @qualidadeDb.VarChar(25)
+  ordem                 Int
+  inactivo              Boolean
+  BmFioComposicao       BmFioComposicao[]
+  BmIdBmComposicao      BmIdBmComposicao[]
+}
+
+model BmMateriaisFio {
+  grupo                 String                @qualidadeDb.VarChar(3)
+  subGrupo              String                @qualidadeDb.VarChar(3)
+  BmMalhasFio           BmMalhasFio[]
+  BmMaterialGrupoFio    BmMaterialGrupoFio    @relation(fields: [grupo], references: [grupo], onUpdate: NoAction, map: "FK_BmMateriaisFio_BmMaterialGrupoFio")
+  BmMaterialSubGrupoFio BmMaterialSubGrupoFio @relation(fields: [subGrupo], references: [subGrupo], onUpdate: NoAction, map: "FK_BmMateriaisFio_BmMaterialSubGrupoFio")
+
+  @@id([grupo, subGrupo], map: "PK_BmMateriaisFio")
+}
+
+model BmMaterialGrupo {
+  grupo          String        @id(map: "PK_BmMaterialGrupo") @qualidadeDb.VarChar(3)
+  grupoDescricao String        @qualidadeDb.VarChar(100)
+  BmMateriais    BmMateriais[]
+}
+
+model BmMaterialGrupoFio {
+  grupo          String           @id(map: "PK_BmMaterialGrupoFio") @qualidadeDb.VarChar(3)
+  grupoDescricao String           @qualidadeDb.VarChar(100)
+  BmMateriaisFio BmMateriaisFio[]
+}
+
+model BmMaterialSubGrupo {
+  subGrupo          String        @id(map: "PK_BmMaterialSubGrupo") @qualidadeDb.VarChar(3)
+  subGrupoDescricao String        @qualidadeDb.VarChar(100)
+  BmMateriais       BmMateriais[]
+}
+
+model BmMaterialSubGrupoFio {
+  subGrupo          String           @id(map: "PK_BmMaterialSubGrupoFio") @qualidadeDb.VarChar(3)
+  subGrupoDescricao String           @qualidadeDb.VarChar(100)
+  BmMateriaisFio    BmMateriaisFio[]
+}
+
+model BmMovimentosLotes {
+  idBm               String        @qualidadeDb.UniqueIdentifier
+  ref                String        @qualidadeDb.Char(18)
+  op                 Int
+  idBmMovimentosLote String        @default(dbgenerated("newid()"), map: "DF_BmMovimentosLotes_idBmMovimentosLote") @qualidadeDb.UniqueIdentifier
+  idMovimento        String        @qualidadeDb.Char(25)
+  nMovimento         Int
+  nome               String        @qualidadeDb.Char(55)
+  idTipo             Decimal       @qualidadeDb.Decimal(3, 0)
+  tipo               String        @qualidadeDb.VarChar(50)
+  qtt                Decimal       @qualidadeDb.Decimal(14, 4)
+  unidade            String        @qualidadeDb.VarChar(4)
+  lote               String        @qualidadeDb.VarChar(30)
+  BmOpsPorMalha      BmOpsPorMalha @relation(fields: [idBm, ref, op], references: [idBm, ref, op], onUpdate: NoAction, map: "FK_BmMovimentosLotes_BmOpsPorMalha")
+
+  @@id([idBm, ref, op, idBmMovimentosLote], map: "PK_BmMovimentosLotes")
+}
+
+model BmOp {
+  idBm          String          @qualidadeDb.UniqueIdentifier
+  op            Int             @unique(map: "UQ_BmOp_op")
+  CreatedAt     DateTime        @default(dbgenerated("sysdatetime()"), map: "DF__BmOp__CreatedAt__45A94D10")
+  foto          String          @default("", map: "DF__BmOp__foto__4E3E9311") @qualidadeDb.NVarChar(400)
+  Bm            Bm              @relation(fields: [idBm], references: [idBm], onUpdate: NoAction, map: "FK_BmOp_Bm")
+  BmOpFaturado  BmOpFaturado[]
+  BmOpsPorMalha BmOpsPorMalha[]
+
+  @@id([idBm, op], map: "PK_BmOp")
+}
+
+model BmOpFaturado {
+  idBm        String   @qualidadeDb.UniqueIdentifier
+  op          Int
+  nFatutura   Int
+  fData       DateTime @qualidadeDb.DateTime
+  dataFatura  String   @qualidadeDb.NVarChar(10)
+  refModelo   String   @qualidadeDb.VarChar(50)
+  pedido      String   @qualidadeDb.VarChar(150)
+  qtt         Decimal  @qualidadeDb.Decimal(12, 3)
+  pesoLiquido Decimal  @qualidadeDb.Decimal(12, 3)
+  pesoBruto   Decimal  @qualidadeDb.Decimal(12, 3)
+  cmr         String   @qualidadeDb.VarChar(150)
+  local       String   @qualidadeDb.VarChar(150)
+  obs         String?  @qualidadeDb.Text
+  BmOp        BmOp     @relation(fields: [idBm, op], references: [idBm, op], onUpdate: NoAction, map: "FK_BmOpFaturado_BmOp")
+
+  @@id([idBm, op, nFatutura], map: "PK_BmOpFaturado")
+}
+
+model BmOpsPorMalha {
+  idBm              String              @qualidadeDb.UniqueIdentifier
+  ref               String              @qualidadeDb.Char(18)
+  op                Int
+  BmMovimentosLotes BmMovimentosLotes[]
+  BmMalhas          BmMalhas            @relation(fields: [idBm, ref], references: [idBm, ref], onUpdate: NoAction, map: "FK_BmOpsPorMalha_BmMalhas")
+  BmOp              BmOp                @relation(fields: [idBm, op], references: [idBm, op], onUpdate: NoAction, map: "FK_BmOpsPorMalha_BmOp")
+  BmOpsPorMalhaFio  BmOpsPorMalhaFio[]
+
+  @@id([idBm, ref, op], map: "PK_BmOpsPorMalha")
+}
+
+model BmOpsPorMalhaFio {
+  idBm                  String                  @qualidadeDb.UniqueIdentifier
+  ref                   String                  @qualidadeDb.Char(18)
+  refOrigem             String                  @qualidadeDb.Char(18)
+  op                    Int
+  BmMalhasFioMovimentos BmMalhasFioMovimentos[]
+  BmMalhasFio           BmMalhasFio             @relation(fields: [idBm, ref, refOrigem], references: [idBm, ref, refOrigem], onUpdate: NoAction, map: "FK_BmOpsPorMalhaFio_BmMalhasFio")
+  BmOpsPorMalha         BmOpsPorMalha           @relation(fields: [idBm, ref, op], references: [idBm, ref, op], onUpdate: NoAction, map: "FK_BmOpsPorMalhaFio_BmOpsPorMalha")
+
+  @@id([idBm, ref, refOrigem, op], map: "PK_BmOpsPorMalhaFio")
+}
+
+model BmTc {
+  idBm   String @qualidadeDb.UniqueIdentifier
+  nomeTc String @qualidadeDb.NVarChar(100)
+  Bm     Bm     @relation(fields: [idBm], references: [idBm], onUpdate: NoAction, map: "FK_BmTc_Bm")
+
+  @@id([idBm, nomeTc], map: "PK_BmTc")
+}
+
+model DataCamiao {
+  idPlaneamento String      @qualidadeDb.UniqueIdentifier
+  IdCamiao      String      @id(map: "PK_DataCamiao") @default(dbgenerated("newid()"), map: "DF_DataCamiao_IdCamiao") @qualidadeDb.UniqueIdentifier
+  nomeUser      String      @qualidadeDb.NVarChar(100)
+  dataCamiao    DateTime    @qualidadeDb.Date
+  quantidade    Int
+  percentagem   Float
+  obs           String      @qualidadeDb.Text
+  Planeamento   Planeamento @relation(fields: [idPlaneamento], references: [idPlaneamento], onUpdate: NoAction, map: "FK_DataCamiao_Planeamento")
+  User          User        @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_DataCamiao_User")
+}
+
+model DataEnvio {
+  idPlaneamento String      @qualidadeDb.UniqueIdentifier
+  idEnvio       String      @id(map: "PK_DataEnvio") @default(dbgenerated("newid()"), map: "DF_DataEnvio_idEnvio") @qualidadeDb.UniqueIdentifier
+  nomeUser      String      @qualidadeDb.NVarChar(100)
+  dataEnvio     DateTime    @qualidadeDb.Date
+  quantidade    Int
+  percentagem   Float
+  obs           String      @qualidadeDb.Text
+  Planeamento   Planeamento @relation(fields: [idPlaneamento], references: [idPlaneamento], onUpdate: NoAction, map: "FK_DataEnvio_Planeamento")
+  User          User        @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_DataEnvio_User")
+}
+
+model Fornecedor {
+  idFornecedor   String        @id(map: "PK_Fornecedor_1") @qualidadeDb.Char(25)
+  nomeFornecedor String        @qualidadeDb.NVarChar(60)
+  Planeamento    Planeamento[]
+}
+
+model Livre {
+  idPlaneamento           String                    @qualidadeDb.UniqueIdentifier
+  idLivre                 String                    @default(dbgenerated("newid()"), map: "DF_Livre_idLivre") @qualidadeDb.UniqueIdentifier
+  nomeUser                String                    @qualidadeDb.NVarChar(100)
+  Op                      String?                   @qualidadeDb.Char(25)
+  nOp                     Int?
+  orcamentoStamp          String?                   @qualidadeDb.Char(25)
+  nOrcamento              Int?
+  anoOrcamento            Int?
+  desenho                 String?                   @qualidadeDb.NChar(20)
+  modelo                  String                    @qualidadeDb.VarChar(100)
+  cor                     String                    @qualidadeDb.Char(50)
+  pedidoCliente           String                    @qualidadeDb.VarChar(30)
+  imagem                  String                    @qualidadeDb.VarChar(300)
+  cortaPt                 Boolean
+  Planeamento             Planeamento               @relation(fields: [idPlaneamento], references: [idPlaneamento], onUpdate: NoAction, map: "FK_Livre_Planeamento")
+  User                    User                      @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_Livre_User")
+  OrcamentoLivre          OrcamentoLivre?
+  ServicosEscolhidosLivre ServicosEscolhidosLivre[]
+
+  @@id([idPlaneamento, idLivre], map: "PK_Livre")
+}
+
+model Op {
+  idPlaneamento                                                  String                 @qualidadeDb.UniqueIdentifier
+  Op                                                             String                 @qualidadeDb.Char(25)
+  nomeUser                                                       String                 @qualidadeDb.NVarChar(100)
+  nOp                                                            Int
+  modelo                                                         String                 @qualidadeDb.VarChar(100)
+  cor                                                            String                 @qualidadeDb.Char(50)
+  pedidoCliente                                                  String                 @qualidadeDb.VarChar(30)
+  imagem                                                         String                 @qualidadeDb.VarChar(300)
+  cortaPt                                                        Boolean
+  Planeamento                                                    Planeamento            @relation(fields: [idPlaneamento], references: [idPlaneamento], onUpdate: NoAction, map: "FK_Op_Planeamento")
+  User                                                           User                   @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_Op_User")
+  OrcamentoOp_OrcamentoOp_idPlaneamento_OpToOp                   OrcamentoOp?           @relation("OrcamentoOp_idPlaneamento_OpToOp")
+  ServicosEscolhidosOp_ServicosEscolhidosOp_idPlaneamento_OpToOp ServicosEscolhidosOp[] @relation("ServicosEscolhidosOp_idPlaneamento_OpToOp")
+
+  @@id([idPlaneamento, Op], map: "PK_Op")
+}
+
+model OrcamentoLivre {
+  idPlaneamento        String                 @qualidadeDb.UniqueIdentifier
+  idLivre              String                 @qualidadeDb.UniqueIdentifier
+  orcamentoStamp       String                 @qualidadeDb.Char(25)
+  orcamentoNumero      Int
+  ano                  Int
+  Livre                Livre                  @relation(fields: [idPlaneamento, idLivre], references: [idPlaneamento, idLivre], onUpdate: NoAction, map: "FK_OrcamentoLivre_Livre")
+  OrcamentoLivreLinhas OrcamentoLivreLinhas[]
+
+  @@id([idPlaneamento, idLivre, orcamentoStamp], map: "PK_OrcamentoLivre")
+  @@unique([idPlaneamento, idLivre, orcamentoStamp], map: "UC_idPlaneamento_idLivre")
+  @@unique([idPlaneamento, idLivre], map: "UC_IdPlaneamento_Op_orcamentoStamp")
+}
+
+model OrcamentoLivreLinhas {
+  idPlaneamento                 String                          @qualidadeDb.UniqueIdentifier
+  idLivre                       String                          @qualidadeDb.UniqueIdentifier
+  orcamentoStamp                String                          @qualidadeDb.Char(25)
+  orcamentoLinhasStamp          String                          @unique(map: "orcamentoLinhasStamp_idLivr") @default(dbgenerated("newid()"), map: "DF_OrcamentoLivreLinhas_orcamentoLinhasStamp") @qualidadeDb.UniqueIdentifier
+  orcamentoLinhasStampRecebido  String                          @qualidadeDb.Char(25)
+  ordem                         Int
+  design                        String                          @qualidadeDb.VarChar(100)
+  custoPeca                     Float
+  edebito                       Float
+  qtt                           Float
+  unidade                       String                          @qualidadeDb.Char(10)
+  OrcamentoLivre                OrcamentoLivre                  @relation(fields: [idPlaneamento, idLivre, orcamentoStamp], references: [idPlaneamento, idLivre, orcamentoStamp], onUpdate: NoAction, map: "FK_OrcamentoLivreLinhas_OrcamentoLivre")
+  ServicosEscolhidosLivreOrigem ServicosEscolhidosLivreOrigem[]
+
+  @@id([idPlaneamento, idLivre, orcamentoStamp, orcamentoLinhasStamp], map: "PK_OrcamentoLivreLinhas")
+}
+
+model OrcamentoOp {
+  idPlaneamento                       String              @qualidadeDb.UniqueIdentifier
+  Op                                  String              @qualidadeDb.Char(25)
+  orcamentoStamp                      String              @qualidadeDb.Char(25)
+  orcamentoNumero                     Int
+  ano                                 Int
+  Op_OrcamentoOp_idPlaneamento_OpToOp Op                  @relation("OrcamentoOp_idPlaneamento_OpToOp", fields: [idPlaneamento, Op], references: [idPlaneamento, Op], onUpdate: NoAction, map: "FK_OrcamentoOp_Op")
+  OrcamentoOpLinhas                   OrcamentoOpLinhas[]
+
+  @@id([idPlaneamento, Op, orcamentoStamp], map: "PK_OrcamentoOp")
+  @@unique([idPlaneamento, Op, orcamentoStamp], map: "UC_IdPlaneamento_Op")
+  @@unique([idPlaneamento, Op], map: "UC_OrcamentoOp")
+}
+
+model OrcamentoOpLinhas {
+  idPlaneamento                String                       @qualidadeDb.UniqueIdentifier
+  Op                           String                       @qualidadeDb.Char(25)
+  orcamentoStamp               String                       @qualidadeDb.Char(25)
+  orcamentoLinhasStamp         String                       @unique(map: "orcamentoLinhasStamp_id") @default(dbgenerated("newid()"), map: "DF_OrcamentoOpLinhas_orcamentoLinhasStamp") @qualidadeDb.UniqueIdentifier
+  orcamentoLinhasStampRecebido String                       @qualidadeDb.Char(25)
+  ordem                        Int
+  design                       String                       @qualidadeDb.VarChar(100)
+  custoPeca                    Float
+  edebito                      Float
+  qtt                          Float
+  unidade                      String                       @qualidadeDb.Char(10)
+  OrcamentoOp                  OrcamentoOp                  @relation(fields: [idPlaneamento, Op, orcamentoStamp], references: [idPlaneamento, Op, orcamentoStamp], onUpdate: NoAction, map: "FK_OrcamentoOpLinhas_OrcamentoOp")
+  ServicosEscolhidosOpOrigem   ServicosEscolhidosOpOrigem[]
+
+  @@id([idPlaneamento, Op, orcamentoStamp, orcamentoLinhasStamp], map: "PK_OrcamentoOpLinhas")
+}
+
+model Papeis {
+  idPapeis   String       @id(map: "PK_Papeis") @default(dbgenerated("newid()"), map: "DF_Papeis_idPapeis") @qualidadeDb.UniqueIdentifier
+  descPapel  String       @unique(map: "UQ_Papeis_descPapel") @qualidadeDb.NVarChar(100)
+  UserPapeis UserPapeis[]
+}
+
+model Planeamento {
+  idPlaneamento       String       @id(map: "PK_Planeamento") @default(dbgenerated("newid()"), map: "DF_Planeamento_idPlaneamento") @qualidadeDb.UniqueIdentifier
+  nomeUser            String       @qualidadeDb.NVarChar(100)
+  pais                String       @qualidadeDb.VarChar(50)
+  idFornecedor        String       @qualidadeDb.Char(25)
+  numeroPecas         Int
+  modelo              String       @qualidadeDb.VarChar(100)
+  obs                 String       @qualidadeDb.Text
+  cliente             String       @qualidadeDb.VarChar(100)
+  dataPrimeiroCamiao  DateTime?    @qualidadeDb.DateTime
+  dataPrimeiroEnvio   DateTime?    @qualidadeDb.DateTime
+  dataCriacao         DateTime     @default(now(), map: "DF_Planeamento_dataCriacao") @qualidadeDb.DateTime
+  dataUltimaAlteracao DateTime     @default(now(), map: "DF_Planeamento_dataUltimaAlteracao") @qualidadeDb.DateTime
+  envioEnviado        Boolean
+  DataCamiao          DataCamiao[]
+  DataEnvio           DataEnvio[]
+  Livre               Livre[]
+  Op                  Op[]
+  Fornecedor          Fornecedor   @relation(fields: [idFornecedor], references: [idFornecedor], onUpdate: NoAction, map: "FK_Planeamento_Fornecedor")
+  User                User         @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_Planeamento_User")
+}
+
+model ServicosEscolhidosLivre {
+  idPlaneamento                 String                          @qualidadeDb.UniqueIdentifier
+  idLivre                       String                          @qualidadeDb.UniqueIdentifier
+  idServicoEscolhido            String                          @default(dbgenerated("newid()"), map: "DF_ServicosEscolhidosLivre_idServicoEscolhido") @qualidadeDb.UniqueIdentifier
+  nome                          String                          @qualidadeDb.VarChar(100)
+  qtt                           Float
+  preco                         Float
+  valor                         Float
+  unidade                       String                          @qualidadeDb.Char(10)
+  obs                           String                          @qualidadeDb.Text
+  Livre                         Livre                           @relation(fields: [idPlaneamento, idLivre], references: [idPlaneamento, idLivre], onUpdate: NoAction, map: "FK_ServicosEscolhidosLivre_Livre")
+  ServicosEscolhidosLivreOrigem ServicosEscolhidosLivreOrigem[]
+
+  @@id([idPlaneamento, idLivre, idServicoEscolhido], map: "PK_ServicosEscolhidosLivre")
+}
+
+model ServicosEscolhidosLivreOrigem {
+  idPlaneamento           String                  @qualidadeDb.UniqueIdentifier
+  idLivre                 String                  @qualidadeDb.UniqueIdentifier
+  idServicoEscolhido      String                  @qualidadeDb.UniqueIdentifier
+  orcamentoLinhasStamp    String                  @qualidadeDb.UniqueIdentifier
+  OrcamentoLivreLinhas    OrcamentoLivreLinhas    @relation(fields: [orcamentoLinhasStamp], references: [orcamentoLinhasStamp], onUpdate: NoAction, map: "FK_ServicosEscolhidosLivreOrigem_OrcamentoLivreLinhas")
+  ServicosEscolhidosLivre ServicosEscolhidosLivre @relation(fields: [idPlaneamento, idLivre, idServicoEscolhido], references: [idPlaneamento, idLivre, idServicoEscolhido], onUpdate: NoAction, map: "FK_ServicosEscolhidosLivreOrigem_ServicosEscolhidosLivre1")
+
+  @@id([idPlaneamento, idLivre, idServicoEscolhido, orcamentoLinhasStamp], map: "PK_ServicosEscolhidosLivreOrigem")
+}
+
+model ServicosEscolhidosOp {
+  idPlaneamento                                String                       @qualidadeDb.UniqueIdentifier
+  Op                                           String                       @qualidadeDb.Char(25)
+  idServicoEscolhido                           String                       @default(dbgenerated("newid()"), map: "DF_ServicosEscolhidosOp_idServicoEscolhido") @qualidadeDb.UniqueIdentifier
+  nome                                         String                       @qualidadeDb.VarChar(100)
+  qtt                                          Float
+  preco                                        Float
+  valor                                        Float
+  unidade                                      String                       @qualidadeDb.Char(10)
+  obs                                          String                       @qualidadeDb.Text
+  Op_ServicosEscolhidosOp_idPlaneamento_OpToOp Op                           @relation("ServicosEscolhidosOp_idPlaneamento_OpToOp", fields: [idPlaneamento, Op], references: [idPlaneamento, Op], onUpdate: NoAction, map: "FK_ServicosEscolhidosOp_Op")
+  ServicosEscolhidosOpOrigem                   ServicosEscolhidosOpOrigem[]
+
+  @@id([idPlaneamento, Op, idServicoEscolhido], map: "PK_ServicosEscolhidosOp")
+}
+
+model ServicosEscolhidosOpOrigem {
+  idPlaneamento        String               @qualidadeDb.UniqueIdentifier
+  Op                   String               @qualidadeDb.Char(25)
+  idServicoEscolhido   String               @qualidadeDb.UniqueIdentifier
+  orcamentoLinhasStamp String               @qualidadeDb.UniqueIdentifier
+  OrcamentoOpLinhas    OrcamentoOpLinhas    @relation(fields: [orcamentoLinhasStamp], references: [orcamentoLinhasStamp], onUpdate: NoAction, map: "FK_ServicosEscolhidosOpOrigem_OrcamentoOpLinhas")
+  ServicosEscolhidosOp ServicosEscolhidosOp @relation(fields: [idPlaneamento, Op, idServicoEscolhido], references: [idPlaneamento, Op, idServicoEscolhido], onUpdate: NoAction, map: "FK_ServicosEscolhidosOpOrigem_ServicosEscolhidosOp")
+
+  @@id([idPlaneamento, Op, idServicoEscolhido, orcamentoLinhasStamp], map: "PK_ServicosEscolhidosOpOrigem_1")
+}
+
+model sysdiagrams {
+  name         String @qualidadeDb.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B612F2894FA") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model Tc {
+  idTc      String   @id(map: "PK_Tc") @default(dbgenerated("newid()"), map: "DF_Tc_idTc") @qualidadeDb.UniqueIdentifier
+  fechado   Boolean  @default(false, map: "DF_Tc_estado")
+  createdAt DateTime @default(dbgenerated("sysdatetime()"), map: "DF__Tc__createdAt__15C52FC4")
+  TcOp      TcOp[]
+}
+
+model TcCompraConteudo {
+  idCompra                String                    @qualidadeDb.UniqueIdentifier
+  idConteudoCompraPhc     String                    @unique(map: "UQ_TcCompraConteudo_idConteudoCompraPhc") @qualidadeDb.Char(25)
+  refTipo                 String                    @qualidadeDb.Char(2)
+  ref                     String                    @qualidadeDb.Char(18)
+  design                  String                    @qualidadeDb.VarChar(60)
+  qtt                     Decimal                   @qualidadeDb.Decimal(14, 4)
+  cor                     String                    @qualidadeDb.Char(25)
+  tam                     String                    @qualidadeDb.Char(25)
+  unidade                 String                    @qualidadeDb.VarChar(4)
+  largura                 Decimal                   @qualidadeDb.Decimal(13, 3)
+  gramagem                Decimal                   @qualidadeDb.Decimal(16, 4)
+  op                      Int
+  TcOp                    TcOp                      @relation(fields: [op], references: [op], onUpdate: NoAction, map: "FK_TcCompraConteudo_TcOp")
+  TcOpCompra              TcOpCompra                @relation(fields: [idCompra], references: [idCompra], onUpdate: NoAction, map: "FK_TcCompraConteudo_TcOpCompra")
+  TcCompraConteudoEntrada TcCompraConteudoEntrada[]
+
+  @@id([idCompra, idConteudoCompraPhc, op], map: "PK_TcCompraConteudo")
+}
+
+model TcCompraConteudoEntrada {
+  idConteudoEntradaPhc            String                            @unique(map: "UQ_TcCompraConteudoEntrada_idConteudoEntradaPhc") @qualidadeDb.Char(25)
+  idConteudoCompraPhc             String                            @qualidadeDb.Char(25)
+  nEntrada                        Int
+  Nguia                           String                            @qualidadeDb.VarChar(20)
+  dataEntrada                     DateTime
+  dataEntradaString               String                            @qualidadeDb.NVarChar(10)
+  qtt                             Decimal                           @qualidadeDb.Decimal(14, 4)
+  cor                             String                            @qualidadeDb.Char(25)
+  tam                             String                            @qualidadeDb.Char(25)
+  unidade                         String                            @qualidadeDb.VarChar(4)
+  largura                         Decimal                           @qualidadeDb.Decimal(13, 3)
+  gramagem                        Decimal                           @qualidadeDb.Decimal(16, 4)
+  lote                            String                            @qualidadeDb.VarChar(30)
+  op                              Int
+  TcCompraConteudo                TcCompraConteudo                  @relation(fields: [idConteudoCompraPhc], references: [idConteudoCompraPhc], onUpdate: NoAction, map: "FK_TcCompraConteudoEntrada_TcCompraConteudo")
+  TcOp                            TcOp                              @relation(fields: [op], references: [op], onUpdate: NoAction, map: "FK_TcCompraConteudoEntrada_TcOp")
+  TcCompraConteudoEntradaFaturada TcCompraConteudoEntradaFaturada[]
+
+  @@id([idConteudoEntradaPhc, idConteudoCompraPhc, op], map: "PK_TcCompraConteudoEntrada")
+}
+
+model TcCompraConteudoEntradaFaturada {
+  idFaturaPhc             String                  @unique(map: "UQ_TcCompraConteudoEntradaFaturada_idFaturaPhc") @qualidadeDb.Char(25)
+  idConteudoEntradaPhc    String                  @qualidadeDb.Char(25)
+  nGuiaPhc                Int
+  nFatura                 String                  @qualidadeDb.VarChar(20)
+  dataFatura              DateTime
+  dataFaturaString        String                  @qualidadeDb.NVarChar(10)
+  qtt                     Decimal                 @qualidadeDb.Decimal(14, 4)
+  unidade                 String                  @qualidadeDb.VarChar(4)
+  lote                    String                  @qualidadeDb.VarChar(30)
+  op                      Int
+  TcCompraConteudoEntrada TcCompraConteudoEntrada @relation(fields: [idConteudoEntradaPhc], references: [idConteudoEntradaPhc], onUpdate: NoAction, map: "FK_TcCompraConteudoEntradaFaturada_TcCompraConteudoEntrada")
+  TcOp                    TcOp                    @relation(fields: [op], references: [op], onUpdate: NoAction, map: "FK_TcCompraConteudoEntradaFaturada_TcOp")
+
+  @@id([idFaturaPhc, idConteudoEntradaPhc, op], map: "PK_TcCompraConteudoEntradaFaturada")
+}
+
+model TcOp {
+  idTc                            String                            @qualidadeDb.UniqueIdentifier
+  op                              Int                               @unique(map: "UQ_TcOp_op")
+  foto                            String                            @qualidadeDb.NVarChar(400)
+  createdAt                       DateTime                          @default(dbgenerated("sysdatetime()"), map: "DF__TcOp__createdAt__16B953FD")
+  TcCompraConteudo                TcCompraConteudo[]
+  TcCompraConteudoEntrada         TcCompraConteudoEntrada[]
+  TcCompraConteudoEntradaFaturada TcCompraConteudoEntradaFaturada[]
+  Tc                              Tc                                @relation(fields: [idTc], references: [idTc], onUpdate: NoAction, map: "FK_TcOp_Tc")
+  TcOpCompra                      TcOpCompra[]
+
+  @@id([idTc, op], map: "PK_TcOp")
+}
+
+model TcOpCompra {
+  idCompra         String             @unique(map: "UQ_TcOpCompra_idCompra") @default(dbgenerated("newid()"), map: "DF_TcOpCompra_idCompra") @qualidadeDb.UniqueIdentifier
+  idCompraPhc      String             @qualidadeDb.Char(25)
+  nCompra          Int
+  nome             String             @qualidadeDb.Char(55)
+  dataCompra       DateTime
+  dataCompraString String             @qualidadeDb.NVarChar(10)
+  op               Int
+  TcCompraConteudo TcCompraConteudo[]
+  TcOp             TcOp               @relation(fields: [op], references: [op], onUpdate: NoAction, map: "FK_TcOpCompra_TcOp")
+
+  @@id([idCompra, idCompraPhc, op], map: "PK_TcOpCompra")
+}
+
+model User {
+  nomeUser    String        @id(map: "PK_User") @unique @qualidadeDb.NVarChar(100)
+  pHashed     String
+  nome        String
+  apelido     String
+  email       String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime
+  DataCamiao  DataCamiao[]
+  DataEnvio   DataEnvio[]
+  Livre       Livre[]
+  Op          Op[]
+  Planeamento Planeamento[]
+  UserPapeis  UserPapeis[]
+}
+
+model UserPapeis {
+  idPapel  String @qualidadeDb.UniqueIdentifier
+  nomeUser String @qualidadeDb.NVarChar(100)
+  Papeis   Papeis @relation(fields: [idPapel], references: [idPapeis], onUpdate: NoAction, map: "FK_UserPapeis_Papeis")
+  User     User   @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_UserPapeis_User")
+
+  @@id([idPapel, nomeUser], map: "PK_UserPapeis")
+}

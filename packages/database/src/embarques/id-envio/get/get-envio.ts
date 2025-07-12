@@ -1,5 +1,6 @@
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 import { IdNumeroInteiroNaoNegativoDto } from "@repo/tipos/comuns";
+
+import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 
 export const getEnvioDb = async ({ id }: IdNumeroInteiroNaoNegativoDto) => {
   return prismaEnvios.envio.findUnique({

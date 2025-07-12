@@ -1,8 +1,9 @@
-import { createTRPCRouter, roleProtectedProcedure } from "@/init";
 import { getPapeisDb, postPapeisDb } from "@repo/db/administrador_user";
 import { PAPEL_ROTA_ADMINISTRADOR } from "@repo/tipos/consts";
 import { PostPapeisSchema } from "@repo/tipos/user";
 import { TRPCError } from "@trpc/server";
+
+import { createTRPCRouter, roleProtectedProcedure } from "@/init";
 
 const PAPEL_ROTA = PAPEL_ROTA_ADMINISTRADOR;
 
@@ -21,8 +22,8 @@ export const administrador = createTRPCRouter({
   postPapeis: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostPapeisSchema)
     .mutation(async ({ input }) => {
-      await postPapeisDb(input.userId, input.papeis);
       try {
+        await postPapeisDb(input.userId, input.papeis);
       } catch (err) {
         throw new TRPCError({
           code: "BAD_REQUEST",

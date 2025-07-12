@@ -1,18 +1,22 @@
 {
   "name": "@repo/tipos",
+  "type": "module",
   "exports": {
     "./user": "./dist/user/user.schemas.js",
     "./embarques": "./dist/embarques/raiz/index.js",
     "./embarques_idenvio": "./dist/embarques/id-envio/index.js",
     "./embarques_configurar": "./dist/embarques/configurar/index.js",
+    "./qualidade_balancom": "./dist/qualidade/balancom/index.js",
     "./consts": "./dist/consts/index.js",
     "./comuns": "./dist/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {
+    "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "concurrently": "^9.2.0",
     "tsc-alias": "^1.8.16"

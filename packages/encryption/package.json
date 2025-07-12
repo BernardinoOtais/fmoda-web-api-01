@@ -1,14 +1,20 @@
 {
   "name": "@repo/encryption",
   "version": "0.0.0",
+  "type": "module",
   "exports": {
     "./argon2": "./dist/argon2.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json"
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "*"
   }
 }

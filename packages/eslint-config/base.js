@@ -47,6 +47,12 @@ export const config = [
     },
   },
   {
-    ignores: ["dist/**"],
+    ignores: [
+      "dist/**",
+      "prisma/**",
+      "src/generated/**",
+      "**/node_modules/**",
+      "**/.next/**",
+    ],
   },
 ];
