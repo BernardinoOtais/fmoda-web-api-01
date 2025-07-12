@@ -1,10 +1,11 @@
+import { z } from "zod";
+
 import {
   ChavePhcSchema,
   FloatZeroSchema,
   InteiroNaoNegativoSchema,
   StringComTamanhoSchema,
 } from "@/comuns";
-import { z } from "zod";
 
 export type EmbarqueBreadCrumbContainers = {
   id: number;

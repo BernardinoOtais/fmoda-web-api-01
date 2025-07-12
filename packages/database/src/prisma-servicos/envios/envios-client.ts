@@ -1,6 +1,6 @@
-import { Prisma, PrismaClient } from "@/generated/prisma/envios";
-
 import type { DefaultArgs } from "@/generated/prisma/envios/runtime/library";
+
+import { Prisma, PrismaClient } from "@/generated/prisma/envios";
 
 export type EnviosPrismaClient = Omit<
   PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,

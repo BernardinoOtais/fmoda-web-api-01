@@ -1,33 +1,42 @@
 {
   "name": "@repo/db",
   "version": "0.0.0",
+  "type": "module",
   "exports": {
     "./auth": "./dist/prisma-servicos/auth/auth.js",
     "./user": "./dist/user/user.js",
     "./administrador_user": "./dist/administrador/user/index.js",
     "./embarques": "./dist/embarques/raiz/index.js",
     "./embarques_idenvio": "./dist/embarques/id-envio/index.js",
-    "./embarques_configurar": "./dist/embarques/configurar/index.js"
+    "./embarques_configurar": "./dist/embarques/configurar/index.js",
+    "./qualidade_balancom": "./dist/qualidade/balancom/index.js"
   },
   "scripts": {
-    "push:auth": "prisma db push --schema=prisma/schema.auth.prisma",
-    "pull:auth": "prisma db pull --schema=prisma/schema.auth.prisma",
-    "generate:auth": "prisma generate --schema=prisma/schema.auth.prisma",
-    "pull:envios": "prisma db pull --schema=prisma/schema.envios.prisma",
-    "generate:envios": "prisma generate --schema=prisma/schema.envios.prisma",
+    "db:generate": "npm run db:generate:auth && npm run db:generate:envios && npm run db:generate:qualidade",
+    "db:generate:auth": "prisma generate --schema=prisma/schema.auth.prisma",
+    "db:generate:envios": "prisma generate --schema=prisma/schema.envios.prisma",
+    "db:generate:qualidade": "prisma generate --schema=prisma/schema.qualidade.prisma",
+    "db:pull": "npm run db:pull:auth && npm run db:pull:envios && npm run db:pull:qualidade",
+    "db:pull:auth": "prisma db pull --schema=prisma/schema.auth.prisma",
+    "db:pull:envios": "prisma db pull --schema=prisma/schema.envios.prisma",
+    "db:pull:qualidade": "prisma db pull --schema=prisma/schema.qualidade.prisma",
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
-    "postbuild": "cp -r src/generated dist/"
+    "build": "npm run db:generate && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "postbuild": "cp -r src/generated dist/",
+    "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
     "concurrently": "^9.2.0",
-    "prisma": "^6.10.1",
+    "eslint": "^9.30.1",
+    "prisma": "^6.11.1",
     "tsc-alias": "^1.8.16"
   },
   "dependencies": {
+    "@prisma/client": "^6.11.1",
     "@repo/encryption": "*",
     "@repo/tipos": "*",
-    "@prisma/client": "^6.10.1",
     "sql-template-tag": "^5.2.1"
   }
 }

@@ -1,5 +1,7 @@
 import { ItensAcessoriosDto } from "@repo/tipos/embarques_configurar";
+
 import { prismaEnvios } from "@/prisma-servicos/envios/envios";
+
 export const getItensAcessoriosDb = async (): Promise<ItensAcessoriosDto> => {
   const [dados, idiomas] = await Promise.all([
     prismaEnvios.item.findMany({

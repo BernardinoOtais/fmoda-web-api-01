@@ -1,13 +1,10 @@
+import { prismaAuth } from "@repo/db/auth";
+import { PrismaClient } from "@repo/db/auth";
+import { hashPassword, verifyPassword } from "@repo/encryption/argon2";
 import { type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-
-import { prismaAuth } from "@repo/db/auth";
-
-import { PrismaClient } from "@repo/db/auth";
 import { customSession, username } from "better-auth/plugins";
-
-import { hashPassword, verifyPassword } from "@repo/encryption/argon2";
 
 const prisma = new PrismaClient();
 
@@ -56,10 +53,8 @@ export const options = {
         },
       });
 
-      const result = {
-        apelido: dadosUser?.apelido ?? "",
-        papeis: dadosUser?.userPapeis.map((p) => p.Papeis.descPapel) ?? [],
-      };
+      const apelido = dadosUser?.apelido ?? "";
+      const papeis = dadosUser?.userPapeis.map((p) => p.Papeis.descPapel) ?? [];
       return {
         session: {
           expiresAt: session.expiresAt,
@@ -69,12 +64,12 @@ export const options = {
         user: {
           id: user.id,
           name: user.name,
-          apelido: result.apelido,
+          apelido,
           email: user.email,
           image: user.image,
           createdAt: user.createdAt,
         },
-        papeis: result.papeis,
+        papeis,
       };
     }),
   ],

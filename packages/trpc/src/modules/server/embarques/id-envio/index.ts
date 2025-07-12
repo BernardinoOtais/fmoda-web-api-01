@@ -1,22 +1,3 @@
-import { createTRPCRouter, roleProtectedProcedure } from "@/init";
-import {
-  IdNumeroInteiroNaoNegativoDto,
-  IdNumeroInteiroNaoNegativoSchema,
-  InteiroNaoNegativoSchema,
-  RespostaRecebidaSchema,
-} from "@repo/tipos/comuns";
-import {
-  deleteConteudosDb,
-  getContainersConteudoToPrintDb,
-  getContainersDb,
-  getConteudoDb,
-  getEnvioDb,
-  getSelectedContainersDb,
-  getUnidadesEItensEOpsDb,
-  patchFornecedorDb,
-  postAlturaContrainerDb,
-  postConteudoDb,
-} from "@repo/db/embarques_idenvio";
 import {
   deleteContainerOpsByOpDb,
   execInsereOpDb,
@@ -36,9 +17,30 @@ import {
   verificoSeContainerTemConteudoDb,
   deleteConatinerDb,
 } from "@repo/db/embarques";
+import {
+  deleteConteudosDb,
+  getContainersConteudoToPrintDb,
+  getContainersDb,
+  getConteudoDb,
+  getEnvioDb,
+  getSelectedContainersDb,
+  getUnidadesEItensEOpsDb,
+  patchFornecedorDb,
+  postAlturaContrainerDb,
+  postConteudoDb,
+} from "@repo/db/embarques_idenvio";
+import {
+  IdNumeroInteiroNaoNegativoDto,
+  IdNumeroInteiroNaoNegativoSchema,
+  InteiroNaoNegativoSchema,
+  RespostaRecebidaSchema,
+} from "@repo/tipos/comuns";
 import { PAPEL_ROTA_EMBARQUES, PermiteSubcontainer } from "@repo/tipos/consts";
-
-import { TRPCError } from "@trpc/server";
+import {
+  IdOrdemSchema,
+  ListaDeContainersEnvioDto,
+  PostContainerSchema,
+} from "@repo/tipos/embarques";
 import {
   IdEnvioIdContainerSchema,
   IdOpSchema,
@@ -48,11 +50,9 @@ import {
   PostDestinoSchema,
   PostOpSchema,
 } from "@repo/tipos/embarques_idenvio";
-import {
-  IdOrdemSchema,
-  ListaDeContainersEnvioDto,
-  PostContainerSchema,
-} from "@repo/tipos/embarques";
+import { TRPCError } from "@trpc/server";
+
+import { createTRPCRouter, roleProtectedProcedure } from "@/init";
 
 const PAPEL_ROTA = PAPEL_ROTA_EMBARQUES;
 

@@ -1,5 +1,6 @@
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 import { PostConteudoDto } from "@repo/tipos/embarques_idenvio";
+
+import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 
 export const postConteudoDb = async (conteudo: PostConteudoDto) => {
   const { op, idContainer, idItem, idUnidades, TamanhosQttPeso } =
@@ -30,7 +31,7 @@ export const postConteudoDb = async (conteudo: PostConteudoDto) => {
                 c.peso
             ),
             qtt:
-              Number(tamanhosSemZeros.find(({ tam }) => tam === c.tam)?.qtt) ??
+              Number(tamanhosSemZeros.find(({ tam }) => tam === c.tam)?.qtt) ||
               c.qtt,
           },
         })

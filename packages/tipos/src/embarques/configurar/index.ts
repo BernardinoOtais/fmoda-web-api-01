@@ -1,5 +1,6 @@
-import { InteiroNaoNegativoSchema, StringComTamanhoSchema } from "@/comuns";
 import { z } from "zod";
+
+import { InteiroNaoNegativoSchema, StringComTamanhoSchema } from "@/comuns";
 
 const IdiomasSchema = z.object({
   idIdioma: InteiroNaoNegativoSchema,

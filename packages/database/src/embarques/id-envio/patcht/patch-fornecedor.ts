@@ -1,5 +1,7 @@
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 import { PostDestinoSchemaDto } from "@repo/tipos/embarques_idenvio";
+
+import { prismaEnvios } from "@/prisma-servicos/envios/envios";
+
 export const patchFornecedorDb = async (
   destinoRecebido: PostDestinoSchemaDto
 ) => {

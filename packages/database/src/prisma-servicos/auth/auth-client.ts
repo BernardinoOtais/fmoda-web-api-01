@@ -1,5 +1,6 @@
-import { Prisma, PrismaClient } from "@/generated/prisma/auth";
 import type { DefaultArgs } from "@/generated/prisma/auth/runtime/library";
+
+import { Prisma, PrismaClient } from "@/generated/prisma/auth";
 
 export type AuthPrismaClient = Omit<
   PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,

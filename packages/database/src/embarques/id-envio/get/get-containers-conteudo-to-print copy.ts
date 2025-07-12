@@ -1,6 +1,7 @@
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 import { ListaParaImprimrirDto } from "@repo/tipos/embarques_idenvio";
 import sql from "sql-template-tag";
+
+import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 
 export const getContainersConteudoToPrintDb = async (
   idEnvio: number,

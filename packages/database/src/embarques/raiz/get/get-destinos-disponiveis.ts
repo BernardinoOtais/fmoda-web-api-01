@@ -1,5 +1,6 @@
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 import { AutocompleteStringDto } from "@repo/tipos/comuns";
+
+import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 
 export const getDestinosDisponiveisBd = async (): Promise<
   AutocompleteStringDto[]
