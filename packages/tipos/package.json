@@ -7,8 +7,10 @@
     "./embarques_idenvio": "./dist/embarques/id-envio/index.js",
     "./embarques_configurar": "./dist/embarques/configurar/index.js",
     "./qualidade_balancom": "./dist/qualidade/balancom/index.js",
+    "./qualidade_balancom_composicao": "./dist/qualidade/balancom/composicao/index.js",
     "./consts": "./dist/consts/index.js",
-    "./comuns": "./dist/index.js"
+    "./comuns": "./dist/index.js",
+    "./foto": "./dist/foto/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
@@ -20,8 +22,5 @@
     "@repo/typescript-config": "*",
     "concurrently": "^9.2.0",
     "tsc-alias": "^1.8.16"
-  },
-  "dependencies": {
-    "zod": "^3.25.67"
   }
 }

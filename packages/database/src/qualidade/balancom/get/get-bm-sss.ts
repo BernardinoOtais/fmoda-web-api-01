@@ -1,4 +1,7 @@
 import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
+import { BmSchemas } from "@repo/tipos/qualidade_balancom";
+
+import { getNumeroBms } from "./get-numero-bss";
 
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
@@ -7,29 +10,41 @@ export const getBmSssBd = async ({
   take,
   fechado,
   ordem,
-}: DadosParaPesquisaComPaginacaoEOrdemDto) =>
-  prismaQualidade.bm.findMany({
-    where: { fechado },
-    include: {
-      BmMalhas: {
+}: DadosParaPesquisaComPaginacaoEOrdemDto) => {
+  const [bms, totalCount] = await Promise.all([
+    prismaQualidade.bm
+      .findMany({
+        where: { fechado },
         include: {
-          BmOpsPorMalha: {
+          BmMalhas: {
             include: {
-              BmMovimentosLotes: true,
+              BmOpsPorMalha: {
+                include: {
+                  BmMovimentosLotes: true,
+                },
+              },
             },
           },
-        },
-      },
-      BmOp: {
-        include: {
-          BmOpFaturado: {
-            orderBy: { fData: "asc" },
+          BmOp: {
+            include: {
+              BmOpFaturado: {
+                orderBy: { fData: "asc" },
+              },
+            },
           },
+          BmTc: true,
         },
-      },
-      BmTc: true,
-    },
-    skip,
-    take,
-    orderBy: { CreatedAt: ordem },
-  });
+        skip,
+        take,
+        orderBy: { CreatedAt: ordem },
+      })
+      .then((raw) => BmSchemas.parse(raw)),
+
+    getNumeroBms(fechado),
+  ]);
+
+  return {
+    lista: bms,
+    tamanhoLista: totalCount,
+  };
+};

@@ -41,7 +41,7 @@ const PrintPalletDialog = ({ idEnvio, idContainer }: PrintPalletDialogProp) => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-xl bg-white sm:bg-red-400 md:bg-blue-300 lg:bg-green-200 xl:bg-pink-600 2xl:bg-gray-600">
+      <DialogContent className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl mx-auto overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>Packing List</DialogTitle>
           <DialogDescription>{`Id: ${idContainer}`}</DialogDescription>

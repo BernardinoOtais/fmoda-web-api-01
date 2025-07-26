@@ -37,7 +37,7 @@ const NItensPorPagina = ({
         value={itensPorPagina.toString()}
         onValueChange={handleValueChange}
       >
-        <SelectTrigger className="w-20">
+        <SelectTrigger className="w-20 cursor-pointer">
           <SelectValue placeholder="Escolha" />
         </SelectTrigger>
         <SelectContent>{renderOptions(tamanhoLista)}</SelectContent>

@@ -8,7 +8,8 @@ import { createAuthClient } from "better-auth/react";
 import { auth } from "./auth";
 
 export const authClient = createAuthClient({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://10.0.0.99:3000",
+  trustedOrigins: ["http://10.0.0.99:3000", "http://localhost:3000"],
   plugins: [
     inferAdditionalFields<typeof auth>(),
     customSessionClient<typeof auth>(),

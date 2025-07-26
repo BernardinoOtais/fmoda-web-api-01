@@ -9,7 +9,9 @@
     "./embarques": "./dist/embarques/raiz/index.js",
     "./embarques_idenvio": "./dist/embarques/id-envio/index.js",
     "./embarques_configurar": "./dist/embarques/configurar/index.js",
-    "./qualidade_balancom": "./dist/qualidade/balancom/index.js"
+    "./qualidade_balancom": "./dist/qualidade/balancom/index.js",
+    "./qualidade_balancom_op": "./dist/qualidade/balancom-op/index.js",
+    "./qualidade_balancom_op_composicao": "./dist/qualidade/balanco-op-composicao/index.js"
   },
   "scripts": {
     "db:generate": "npm run db:generate:auth && npm run db:generate:envios && npm run db:generate:qualidade",

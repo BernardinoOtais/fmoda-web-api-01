@@ -28,7 +28,7 @@ const SwitchFechado = ({ titulo, fechado }: SwitchFechadoProps) => {
         id="envio-fechado"
         checked={fechado}
         onCheckedChange={toggleFechado}
-        className="ml-auto"
+        className="ml-auto cursor-pointer"
       />
       <Label className="mr-auto">{titulo ?? "Envios fechados"}</Label>
     </>
