@@ -4,13 +4,13 @@ import { AutocompleteDto } from "@repo/tipos/comuns";
 import {
   ContainerOpsSchemasDto,
   OpSchemaDto,
-  PostConteudoDto,
   PostConteudoSchema,
 } from "@repo/tipos/embarques_idenvio";
 import { useMutation, useQueryClient } from "@repo/trpc";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import z from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -60,7 +60,8 @@ const InserConteudoCliente = ({
     pedido: "",
   });
   const [tamanhoUnico, setTamanhoUnico] = useState(true);
-  const form = useForm<PostConteudoDto>({
+
+  const form = useForm<z.input<typeof PostConteudoSchema>>({
     resolver: zodResolver(PostConteudoSchema),
     defaultValues: {
       idEnvio,
@@ -165,7 +166,7 @@ const InserConteudoCliente = ({
     })
   );
 
-  async function onSubmit(postConteudoDto: PostConteudoDto) {
+  async function onSubmit(postConteudoDto: z.infer<typeof PostConteudoSchema>) {
     setEstadoBoataoSubmitDisabled(true);
     postConteudo.mutate(postConteudoDto);
   }

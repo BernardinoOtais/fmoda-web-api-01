@@ -26,3 +26,17 @@ export const parsePositiveInt = (str: string): number | false => {
   }
   return false;
 };
+
+export function formatNCasasDecimais(number: number, nCasas: number) {
+  return new Intl.NumberFormat("pt-PT", {
+    minimumFractionDigits: nCasas,
+    maximumFractionDigits: nCasas,
+  }).format(number);
+}
+
+export const isParsableNumber = (value: string): boolean => {
+  if (typeof value !== "string") return false;
+
+  const normalized = value.replace(",", ".").trim();
+  return normalized !== "" && !isNaN(Number(normalized));
+};

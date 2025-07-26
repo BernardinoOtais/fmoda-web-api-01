@@ -9,6 +9,7 @@ import { customSession, username } from "better-auth/plugins";
 const prisma = new PrismaClient();
 
 export const options = {
+  trustedOrigins: ["http://localhost:3000", "http://10.0.0.99:3000"],
   database: prismaAdapter(prisma, {
     provider: "sqlite",
   }),

@@ -41,6 +41,7 @@ export const getContainersDb = async ({
                 norma: true,
                 OpTamanho: {
                   select: {
+                    op: true,
                     tam: true,
                     ordem: true,
                     qtt: true,
@@ -102,6 +103,7 @@ export const getContainersDb = async ({
                 norma: true,
                 OpTamanho: {
                   select: {
+                    op: true,
                     tam: true,
                     ordem: true,
                     qtt: true,

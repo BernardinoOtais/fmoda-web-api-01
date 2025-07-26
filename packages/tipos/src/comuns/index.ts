@@ -2,11 +2,13 @@ import { z } from "zod";
 
 export const InteiroNaoNegativoSchema = z.coerce
   .number({
-    required_error: "Tem que inserrir números...",
-    invalid_type_error: "Formato errado...",
+    error: (issue) =>
+      issue.input === undefined
+        ? "Tem que inserrir números..."
+        : "Formato errado...",
   })
   .int({ message: "Tem que ser inteiro...." })
-  .nonnegative({ message: "Tem que ser positivo..." });
+  .nonnegative({ message: "Tem que ser positivo..." }) as z.ZodNumber;
 
 export const VerdadeiroOuFalsoSchema = z
   .union([z.boolean(), z.string()])
@@ -45,10 +47,17 @@ export const FloatZeroSchema = z.preprocess(
 
     return undefined;
   },
-  z.number().refine((val) => val >= 0, {
-    message: "O valor tem de ser maior ou igual a 0",
-  })
-) as z.ZodType<number, z.ZodTypeDef, number>;
+  z
+    .number({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Tem que inserrir números..."
+          : "Formato errado...",
+    })
+    .refine((val) => val >= 0, {
+      message: "O valor tem de ser maior ou igual a 0",
+    })
+) as unknown as z.ZodNumber;
 
 export const FloatSchema = z.preprocess(
   (val) => {
@@ -67,3 +76,19 @@ export const FloatSchema = z.preprocess(
     message: "O valor tem de ser maior ou igual a 0",
   })
 );
+
+export const NewIdSql = z.uuid();
+
+export const NumeroInteiroMaiorQueZero = z.coerce
+  .number({
+    error: (issue) =>
+      issue.input === undefined
+        ? "Tem que inserrir números..."
+        : "Formato errado...",
+  })
+  .int({ message: "Tem que ser inteiro...." })
+  .min(1, { message: "Tem que ser maior que zero..." }) as z.ZodNumber;
+
+export const FotoPropSchema = z.object({
+  id: z.string().min(1),
+});

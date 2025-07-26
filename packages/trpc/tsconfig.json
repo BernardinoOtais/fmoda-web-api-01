@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@repo/typescript-config/base02.json",
   "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {

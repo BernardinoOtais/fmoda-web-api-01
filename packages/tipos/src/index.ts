@@ -7,6 +7,8 @@ import {
   VerdadeiroOuFalsoSchema,
 } from "@/comuns";
 
+export const NewIdSql = z.string().uuid();
+
 export const DadosParaPesquisaComPaginacaoEOrdemSchema = z.object({
   skip: InteiroNaoNegativoSchema,
   take: InteiroNaoNegativoSchema,
@@ -55,13 +57,19 @@ export const NumeroOuZero = z.preprocess(
   },
   z
     .number({
-      required_error: "Tem que inserrir números...",
-      invalid_type_error: "Formato de número errado...",
+      error: (issue) =>
+        issue.input === undefined
+          ? "Tem que inserrir números..."
+          : "Formato errado...",
     })
     .min(0, { message: "Qtde positiva..." })
 );
 
-export { FloatZeroSchema, InteiroNaoNegativoSchema } from "./comuns";
+export {
+  FloatZeroSchema,
+  InteiroNaoNegativoSchema,
+  FotoPropSchema,
+} from "./comuns";
 
 export const RespostaSchema = z.object({
   status: z.string(),
@@ -70,3 +78,17 @@ export const RespostaSchema = z.object({
   id: InteiroNaoNegativoSchema.optional(),
 });
 export const RespostaRecebidaSchema = z.array(RespostaSchema);
+
+export type NewIdSqlDto = z.infer<typeof NewIdSql>;
+
+export const StringPersonalizada = (tamanho: number, minimo?: number) =>
+  StringComTamanhoSchema(tamanho, minimo);
+
+export const NumeroInteiro = z.coerce
+  .number({
+    error: (issue) =>
+      issue.input === undefined
+        ? "Tem que inserrir números..."
+        : "Formato errado...",
+  })
+  .int({ message: "Tem que ser inteiro...." }) as z.ZodNumber;

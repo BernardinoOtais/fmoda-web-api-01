@@ -28,10 +28,12 @@ export const roleProtectedProcedure = (requiredPapel: string) =>
   baseProcedure.use(async ({ ctx, next }) => {
     const session = await getSession();
 
+    //console.log(session);
+
     if (!session) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
-        message: "Proibido...",
+        message: "Proibido....",
       });
     }
 
