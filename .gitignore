@@ -39,5 +39,5 @@ yarn-error.log*
 
 
 
-/shared-imagens/
-!/shared-imagens/
+/shared-imagens/imagens/*
+!/shared-imagens/imagens/.gitkeep
