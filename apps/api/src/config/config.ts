@@ -1,18 +1,18 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;
-const DEVELOPMENT = NODE_ENV === 'development';
+const DEVELOPMENT = NODE_ENV === "development";
 
-const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME ?? 'localhost';
+const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME ?? "localhost";
 const SERVER_PORT = process.env.PORT
   ? Number(process.env.PORT)
-  : Number(process.env.DEFAULT_SERVER_PORT);
+  : 8000 + Number(process.env.NODE_APP_INSTANCE);
 
 const ALLOWED_ORIGINS = (
-  process.env.ALLOWED_ORIGINS ?? 'http://localhost:3000'
-).split(',');
+  process.env.ALLOWED_ORIGINS ?? "http://localhost:3000"
+).split(",");
 
 const API_URI = process.env.API_URI;
 

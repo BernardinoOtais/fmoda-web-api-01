@@ -8,30 +8,32 @@ module.exports = {
     },
     {
       namespace: "next-express",
-      name: "api 1",
-      script: "node dist/server.js",
+      name: "api-8000",
+      script: "dist/server.js",
       cwd: "./apps/api",
-      instances: "1",
       exec_mode: "fork",
-      /*
-      exec_mode: "cluster",
-      instances: "10",
-      */
       env: {
         NODE_ENV: "production",
+        PORT: 8000,
       },
     },
     {
       namespace: "next-express",
-      name: "api 2",
-      script: "node dist/server.js",
+      name: "api-8001",
+      script: "dist/server.js",
       cwd: "./apps/api",
-      instances: "1",
       exec_mode: "fork",
-      /*
-      exec_mode: "cluster",
-      instances: "10",
-      */
+      env: {
+        NODE_ENV: "production",
+        PORT: 8001,
+      },
+    },
+    {
+      namespace: "next-express",
+      name: "api-8002",
+      script: "dist/server.js",
+      cwd: "./apps/api",
+      exec_mode: "fork",
       env: {
         NODE_ENV: "production",
         PORT: 8002,
