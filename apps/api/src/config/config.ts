@@ -6,9 +6,7 @@ const NODE_ENV = process.env.NODE_ENV;
 const DEVELOPMENT = NODE_ENV === "development";
 
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME ?? "localhost";
-const SERVER_PORT = process.env.PORT
-  ? Number(process.env.PORT)
-  : 8000 + Number(process.env.NODE_APP_INSTANCE);
+const SERVER_PORT = process.env.PORT ? Number(process.env.PORT) : 8000;
 
 const ALLOWED_ORIGINS = (
   process.env.ALLOWED_ORIGINS ?? "http://localhost:3000"
