@@ -10,7 +10,8 @@
     "./qualidade_balancom_composicao": "./dist/qualidade/balancom/composicao/index.js",
     "./consts": "./dist/consts/index.js",
     "./comuns": "./dist/index.js",
-    "./foto": "./dist/foto/index.js"
+    "./foto": "./dist/foto/index.js",
+    "./android_auth": "./dist/android/auth/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",

@@ -1,6 +1,7 @@
 import { server } from "@config/config";
 import HttpStatusCode from "@utils/http-status-code";
 import { Router } from "express";
+import { PostPapeisSchema } from "@repo/tipos/user";
 
 import type { Response, Request } from "express";
 
@@ -12,7 +13,7 @@ routes.get("/", (req: Request, res: Response) => {
     dateTime: new Date().toISOString(),
     status: "RUNNING",
     protected: false,
-    hello: "world",
+    hello: PostPapeisSchema,
   });
 });
 
