@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    "./argon2": "./dist/argon2.js"
+    "./argon2": "./dist/argon2.js",
+    "./jwt": "./dist/json-web-token.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
@@ -11,10 +12,13 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@node-rs/argon2": "^2.0.2"
+    "@repo/tipos": "*",
+    "@node-rs/argon2": "^2.0.2",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@repo/eslint-config": "*"
+    "@types/jsonwebtoken": "^9.0.10"
   }
 }

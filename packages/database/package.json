@@ -10,7 +10,8 @@
     "./embarques_configurar": "./dist/embarques/configurar/index.js",
     "./qualidade_balancom": "./dist/qualidade/balancom/index.js",
     "./qualidade_balancom_op": "./dist/qualidade/balancom-op/index.js",
-    "./qualidade_balancom_op_composicao": "./dist/qualidade/balanco-op-composicao/index.js"
+    "./qualidade_balancom_op_composicao": "./dist/qualidade/balanco-op-composicao/index.js",
+    "./android/auth": "./dist/android/auth/index.js"
   },
   "scripts": {
     "db:generate": "npm run db:generate:auth && npm run db:generate:envios && npm run db:generate:qualidade",

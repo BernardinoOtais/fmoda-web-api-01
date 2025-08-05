@@ -1,7 +1,14 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
-  "globalEnv": ["NODE_ENV", "IMAGE_PATH", "BASE_URL", "TRUSTED_ORIGINS"],
+  "globalEnv": [
+    "NODE_ENV",
+    "IMAGE_PATH",
+    "BASE_URL",
+    "TRUSTED_ORIGINS",
+    "ACCESS_TOKEN_SECRET",
+    "REFRESH_TOKEN_SECRET"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
