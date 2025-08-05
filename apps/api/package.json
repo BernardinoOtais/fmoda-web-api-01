@@ -18,6 +18,7 @@
     "tsx": "^4.20.3"
   },
   "dependencies": {
+    "@repo/db": "*",
     "@repo/tipos": "*",
     "body-parser": "^2.2.0",
     "compression": "^1.8.1",

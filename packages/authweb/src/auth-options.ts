@@ -1,12 +1,9 @@
-import { prismaAuth } from "@repo/db/auth";
-import { PrismaClient } from "@repo/db/auth";
+import { prismaAuth, prisma } from "@repo/db/auth";
 import { hashPassword, verifyPassword } from "@repo/encryption/argon2";
 import { type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { customSession, username } from "better-auth/plugins";
-
-const prisma = new PrismaClient();
 
 export const options = {
   trustedOrigins: process.env.TRUSTED_ORIGINS?.split(",") ?? [],

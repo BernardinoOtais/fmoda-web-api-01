@@ -1,7 +1,8 @@
 {
-  "extends": "@repo/typescript-config/base02.json",
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "noEmit": false,
+    "target": "es2024",
+    "module": "nodenext",
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./",

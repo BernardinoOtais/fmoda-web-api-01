@@ -15,4 +15,4 @@ export const prismaAuth = global.prismaAuth || new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") global.prismaAuth = prismaAuth;
 
-export { PrismaClient };
+export const prisma = new PrismaClient();
