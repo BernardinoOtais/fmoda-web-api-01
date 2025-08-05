@@ -1,14 +1,11 @@
-import { getPapeisDb } from "@repo/db/administrador_user";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
 export default async function Home() {
-  const papeis = await getPapeisDb();
   return (
     <>
-      <div>{JSON.stringify(papeis, null, 2)}</div>
       <div className="flex flex-col justify-center">
         <Button
           asChild

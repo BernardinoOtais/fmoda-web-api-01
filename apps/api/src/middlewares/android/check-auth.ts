@@ -9,7 +9,7 @@ interface CustomRequest extends Request {
   userData?: z.infer<typeof JwtPayloadSchema>;
 }
 
-export const catchAll = (
+export const checkAuth = (
   req: CustomRequest,
   res: Response,
   next: NextFunction

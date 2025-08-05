@@ -1,9 +1,13 @@
 import { ApiResponseBody } from "@utils/api-response-body";
 import HttpStatusCode from "@utils/http-status-code";
 
-import type { Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 
-export const catchAll = (res: Response, next: NextFunction): void => {
+export const catchAll = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const resBody = new ApiResponseBody<null>();
   resBody.error = {
     code: HttpStatusCode.NOT_FOUND,
