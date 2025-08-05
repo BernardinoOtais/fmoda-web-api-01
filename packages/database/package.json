@@ -1,7 +1,6 @@
 {
   "name": "@repo/db",
   "version": "0.0.0",
-  "type": "module",
   "exports": {
     "./auth": "./dist/prisma-servicos/auth/auth.js",
     "./user": "./dist/user/user.js",

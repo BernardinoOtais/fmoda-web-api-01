@@ -1,6 +1,5 @@
 {
   "name": "@repo/tipos",
-  "type": "module",
   "exports": {
     "./user": "./dist/user/user.schemas.js",
     "./embarques": "./dist/embarques/raiz/index.js",
@@ -11,7 +10,11 @@
     "./consts": "./dist/consts/index.js",
     "./comuns": "./dist/index.js",
     "./foto": "./dist/foto/index.js",
-    "./android_auth": "./dist/android/auth/index.js"
+    "./android_auth": {
+      "types": "./dist/android/auth/index.d.ts",
+      "import": "./dist/android/auth/index.js",
+      "default": "./dist/android/auth/index.js"
+    }
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
