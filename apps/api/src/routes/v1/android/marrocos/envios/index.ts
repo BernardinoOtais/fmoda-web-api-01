@@ -1,26 +1,22 @@
 import { server } from "@config/config";
+import { getEnvio } from "@repo/db/android/marrocos/envios";
 import HttpStatusCode from "@utils/http-status-code";
 import { Router } from "express";
 
-import authRoutes from "./auth";
-import routesMarrocosEnvios from "./marrocos/envios";
-
 import type { Response, Request } from "express";
 
-const androidRoutes = Router();
+const routesMarrocosEnvios = Router();
 
-androidRoutes.get("/", (req: Request, res: Response) => {
+routesMarrocosEnvios.get("/", async (req: Request, res: Response) => {
+  const coisas = await getEnvio("");
   res.status(HttpStatusCode.OK).json({
     tipo: server.NODE_ENV,
     dateTime: new Date().toISOString(),
     status: "RUNNING",
     protected: false,
-    hello: "Android",
+    hello: "Marrocos envios",
+    coisas,
   });
 });
 
-androidRoutes.use("/auth/", authRoutes);
-
-androidRoutes.use("/marrocos/envios/", routesMarrocosEnvios);
-
-export default androidRoutes;
+export default routesMarrocosEnvios;
