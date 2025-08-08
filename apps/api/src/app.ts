@@ -25,9 +25,6 @@ app.use(cookieParser());
 /**
  * Security enhancements and rate limiting.
  */
-/**
- * Security enhancements and rate limiting.
- */
 app.use(securityMiddleware());
 app.use(rateLimiter());
 

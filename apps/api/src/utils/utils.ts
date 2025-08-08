@@ -15,3 +15,14 @@ export const permiteSubcontainer = {
   4: [Caixa, Volumes],
   6: [Pallet, Caixa],
 };
+
+/**
+ * Safely parse JSON, falling back to an empty array.
+ */
+export const safeParseJson = (value: unknown) => {
+  try {
+    return typeof value === "string" ? JSON.parse(value) : [];
+  } catch {
+    return [];
+  }
+};

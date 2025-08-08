@@ -19,6 +19,7 @@
     "tsx": "^4.20.3"
   },
   "dependencies": {
+    "@repo/imagens": "*",
     "@repo/encryption": "*",
     "@repo/db": "*",
     "@repo/tipos": "*",

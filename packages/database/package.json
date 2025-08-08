@@ -12,7 +12,12 @@
     "./qualidade_balancom_op": "./dist/qualidade/balancom-op/index.js",
     "./qualidade_balancom_op_composicao": "./dist/qualidade/balanco-op-composicao/index.js",
     "./android/auth": "./dist/android/auth/index.js",
-    "./android/marrocos/envios": "./dist/android/marrocos/envios/index.js"
+    "./android/marrocos/envios": "./dist/android/marrocos/envios/index.js",
+    "./android/marrocos/envios/fim": "./dist/android/marrocos/envios/fim/index.js",
+    "./android/marrocos/paletes": "./dist/android/marrocos/paletes/index.js",
+    "./android/marrocos/caixas": "./dist/android/marrocos/caixas/index.js",
+    "./android/especial": "./dist/android/especial/index.js",
+    "./android/resumo": "./dist/android/resumo/index.js"
   },
   "scripts": {
     "db:generate": "npm run db:generate:auth && npm run db:generate:envios && npm run db:generate:qualidade",
