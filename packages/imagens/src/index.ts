@@ -1,1 +1,3 @@
-export * from "./get/get-imagem";
+import { fotoModelo } from "./get/get-imagem";
+
+export { fotoModelo };

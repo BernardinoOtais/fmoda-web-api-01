@@ -10,11 +10,14 @@
     "./consts": "./dist/consts/index.js",
     "./comuns": "./dist/index.js",
     "./foto": "./dist/foto/index.js",
-    "./android_auth": {
-      "types": "./dist/android/auth/index.d.ts",
-      "import": "./dist/android/auth/index.js",
-      "default": "./dist/android/auth/index.js"
-    }
+    "./android_auth": "./dist/android/auth/index.js",
+    "./android/marrocos/envios": "./dist/android/marrocos/envios/index.js",
+    "./android/marrocos/envios/fim": "./dist/android/marrocos/envios/fim/index.js",
+    "./android/marrocos/paletes": "./dist/android/marrocos/paletes/index.js",
+    "./android/marrocos/caixas": "./dist/android/marrocos/caixas/index.js",
+    "./android/especial": "./dist/android/especial/index.js",
+    "./android/resumo": "./dist/android/resumo/index.js",
+    "./android/imagem": "./dist/android/imagem/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",

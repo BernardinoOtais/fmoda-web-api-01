@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;
-const DEVELOPMENT = NODE_ENV === "development";
+const DEVELOPMENT = process.env.NODE_ENV ?? "development";
 
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME ?? "localhost";
 const SERVER_PORT = process.env.PORT ? Number(process.env.PORT) : 8000;
@@ -19,6 +19,8 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 const REFRESH_JWT_SECRET = process.env.REFRESH_JWT_SECRET;
 const REFRESH_JWT_EXPIRES_IN = process.env.REFRESH_JWT_EXPIRES_IN;
 
+const IMAGE_PATH = process.env.IMAGE_PATH;
+
 export const server = {
   SERVER_HOSTNAME,
   SERVER_PORT,
@@ -30,4 +32,5 @@ export const server = {
   REFRESH_JWT_SECRET,
   REFRESH_JWT_EXPIRES_IN,
   NODE_ENV,
+  IMAGE_PATH,
 };

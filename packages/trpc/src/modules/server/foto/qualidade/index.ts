@@ -3,11 +3,7 @@ import { FotoPropSchema } from "@repo/tipos/comuns";
 import { PAPEL_ROTA_QUALIDADE } from "@repo/tipos/consts";
 import { TRPCError } from "@trpc/server";
 
-import {
-  baseProcedure,
-  createTRPCRouter,
-  roleProtectedProcedure,
-} from "@/init";
+import { createTRPCRouter, roleProtectedProcedure } from "@/init";
 
 const PAPEL_ROTA = PAPEL_ROTA_QUALIDADE;
 export const qualidade_foto = createTRPCRouter({
