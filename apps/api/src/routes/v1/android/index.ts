@@ -1,26 +1,21 @@
-import { server } from "@config/config";
-import HttpStatusCode from "@utils/http-status-code";
 import { Router } from "express";
 
 import authRoutes from "./auth";
-import routesMarrocosEnvios from "./marrocos/envios";
-
-import type { Response, Request } from "express";
+import routesEspeciais from "./especial";
+import routesImagem from "./imagem";
+import routesMarrocos from "./marrocos";
+import routesResumo from "./resumo";
 
 const androidRoutes = Router();
 
-androidRoutes.get("/", (req: Request, res: Response) => {
-  res.status(HttpStatusCode.OK).json({
-    tipo: server.NODE_ENV,
-    dateTime: new Date().toISOString(),
-    status: "RUNNING",
-    protected: false,
-    hello: "Android",
-  });
-});
-
 androidRoutes.use("/auth/", authRoutes);
 
-androidRoutes.use("/marrocos/envios/", routesMarrocosEnvios);
+androidRoutes.use("/especial/", routesEspeciais);
+
+androidRoutes.use("/marrocos/", routesMarrocos);
+
+androidRoutes.use("/resumo/", routesResumo);
+
+androidRoutes.use("/imagem/", routesImagem);
 
 export default androidRoutes;
