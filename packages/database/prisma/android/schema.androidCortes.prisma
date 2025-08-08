@@ -1,0 +1,115 @@
+generator androidCortesClient {
+  provider = "prisma-client-js"
+  output   = "../../src/generated/prisma/android/cortes"
+}
+
+datasource androidCortesDb {
+  provider = "sqlserver"
+  url      = env("ANDROID_CORTES")
+}
+
+model Envio {
+  idEnvio            Int           @id(map: "PK_Envio") @default(autoincrement())
+  dataEnvio          DateTime      @androidCortesDb.DateTime
+  nomeUser           String        @androidCortesDb.VarChar(25)
+  estadoEnvio        Boolean
+  estadoEnvioEnviado Boolean
+  Users              Users         @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_Envio_Users")
+  EnvioDestino       EnvioDestino?
+  EnvioLote          EnvioLote[]
+  EnvioOp            EnvioOp?
+}
+
+model EnvioAltQuantidade {
+  idAlteracao  Int      @id(map: "PK_EnvioAltQuantidade") @default(autoincrement())
+  idEnvio      Int
+  codigoIcf    String   @androidCortesDb.NChar(30)
+  dataLeitura  DateTime @androidCortesDb.DateTime
+  nomeUser     String   @androidCortesDb.VarChar(25)
+  nLote        Int
+  qtdeAlterada Int
+}
+
+model EnvioDestino {
+  idEnvio          Int      @id(map: "PK_EnvioDestino")
+  dataEnvioDestino DateTime @androidCortesDb.DateTime
+  faseLinx         String   @androidCortesDb.VarChar(25)
+  sectorLinx       String   @androidCortesDb.VarChar(25)
+  recursoLinx      String   @androidCortesDb.VarChar(25)
+  nomeUser         String   @androidCortesDb.VarChar(25)
+  ip               String   @androidCortesDb.NChar(200)
+  nLotes           Int
+  Envio            Envio    @relation(fields: [idEnvio], references: [idEnvio], onUpdate: NoAction, map: "FK_EnvioDestino_Envio")
+  Users            Users    @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnvioDestino_Users")
+}
+
+model EnvioLote {
+  idEnvio       Int
+  codigoIcf     String        @androidCortesDb.NChar(30)
+  dataLeitura   DateTime      @androidCortesDb.DateTime
+  nomeUser      String        @androidCortesDb.VarChar(25)
+  nLote         Int
+  qtdeAlterada  Int
+  Envio         Envio         @relation(fields: [idEnvio], references: [idEnvio], onUpdate: NoAction, map: "FK_EnvioLote_Envio")
+  EnvioLoteDesc EnvioLoteDesc @relation(fields: [codigoIcf], references: [codigoIcf], onUpdate: NoAction, map: "FK_EnvioLote_EnvioLoteDesc")
+  Users         Users         @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnvioLote_Users")
+
+  @@id([idEnvio, codigoIcf], map: "PK_EnvioLote")
+  @@index([codigoIcf], map: "Chave NONCLUSTERED codigoIcf")
+}
+
+model EnvioLoteCor {
+  idCor Int    @id(map: "PK_EnvioLoteCor") @default(autoincrement())
+  cor   String @androidCortesDb.VarChar(7)
+}
+
+model EnvioLoteDesc {
+  codigoIcf      String      @id(map: "PK_EnvioLoteDesc") @androidCortesDb.NChar(30)
+  opIcf          String      @androidCortesDb.NVarChar(25)
+  codigoCorteIcf Int
+  qtdeIcf        Int
+  modeloLinx     String      @androidCortesDb.NVarChar(200)
+  corIcf         String      @androidCortesDb.NVarChar(50)
+  partidaIcf     String      @androidCortesDb.NVarChar(12)
+  tamSeqIcf      Int
+  tamIcf         String      @androidCortesDb.NChar(10)
+  idParte        Int
+  EnvioLote      EnvioLote[]
+  Partes         Partes      @relation(fields: [idParte], references: [idparte], onUpdate: NoAction, map: "FK_EnvioLoteDesc_Partes")
+}
+
+model EnvioOp {
+  idEnvio Int    @id(map: "PK_EnvioOp_1")
+  opIcf   String @androidCortesDb.NVarChar(25)
+  Envio   Envio  @relation(fields: [idEnvio], references: [idEnvio], onUpdate: NoAction, map: "FK_EnvioOp_Envio")
+
+  @@index([opIcf], map: "EnvioOPOpIcf")
+}
+
+model Partes {
+  idparte       Int             @id(map: "PK_Partes")
+  descParte     String          @androidCortesDb.NVarChar(50)
+  EnvioLoteDesc EnvioLoteDesc[]
+}
+
+model sysdiagrams {
+  name         String @androidCortesDb.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B6100551192") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model Users {
+  nomeUser     String         @id(map: "PK_Users") @androidCortesDb.VarChar(25)
+  nome         String         @androidCortesDb.NVarChar(50)
+  apelido      String         @androidCortesDb.NVarChar(50)
+  pHashed      String         @androidCortesDb.Char(60)
+  dataCriacao  DateTime       @androidCortesDb.DateTime
+  inativo      Boolean
+  Envio        Envio[]
+  EnvioDestino EnvioDestino[]
+  EnvioLote    EnvioLote[]
+}

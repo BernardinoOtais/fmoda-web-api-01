@@ -1,0 +1,380 @@
+generator androidMarrocosClient {
+  provider = "prisma-client-js"
+  output   = "../../src/generated/prisma/android/marrocos"
+}
+
+datasource androidMarrocosDb {
+  provider = "sqlserver"
+  url      = env("ANDROID_MARROCOS")
+}
+
+model EnviosMarrocos {
+  idEnvioMarrocos         Int                       @id(map: "PK_EnviosMarrocos") @default(autoincrement())
+  nomeEnvio               String                    @androidMarrocosDb.NVarChar(50)
+  dataTime                DateTime                  @androidMarrocosDb.DateTime
+  estadoEnvio             Boolean
+  estadoEmvioImp          Boolean
+  estadoConteudo          Boolean
+  estadoTerminado         Boolean
+  nomeUser                String                    @androidMarrocosDb.VarChar(25)
+  dataFim                 DateTime?                 @androidMarrocosDb.DateTime
+  Users                   Users                     @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocos_Users")
+  EnviosMarrocosDestino   EnviosMarrocosDestino?
+  EnviosMarrocosEnvioPeso EnviosMarrocosEnvioPeso[]
+  EnviosMarrocosPaletes   EnviosMarrocosPaletes[]
+  EnviosMarrocosPedidos   EnviosMarrocosPedidos[]
+  EnviosMarrocosPrecos    EnviosMarrocosPrecos[]
+}
+
+model EnviosMarrocosAc {
+  idEnvioMarrocosAc          Int                          @id(map: "PK_EnviosMarrocosAc") @default(autoincrement())
+  nomeEnvio                  String                       @androidMarrocosDb.NVarChar(50)
+  dataTime                   DateTime                     @androidMarrocosDb.DateTime
+  estadoEnvio                Boolean
+  estadoEnvioImp             Boolean
+  estadoConteudo             Boolean
+  estadoTerminado            Boolean
+  nomeUser                   String                       @androidMarrocosDb.VarChar(25)
+  obs                        String?                      @androidMarrocosDb.Text
+  Users                      Users                        @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocosAc_Users")
+  EnviosMarrocosAcContainers EnviosMarrocosAcContainers[]
+}
+
+model EnviosMarrocosAcContainers {
+  idContainers                     Int                           @id(map: "PK_EnviosMarrocosAcPrimeiroContainer") @default(autoincrement())
+  idEnvioMarrocosAc                Int
+  idPai                            Int?
+  idContainer                      Int
+  dataContainer                    DateTime                      @androidMarrocosDb.DateTime
+  nomeUser                         String                        @androidMarrocosDb.VarChar(25)
+  nContainerNoContainer            Int
+  nivelContainer                   Int
+  pesoBruto                        Float
+  temContainers                    Boolean
+  temConteudo                      Boolean
+  alturaSePalete                   Decimal                       @androidMarrocosDb.Decimal(14, 4)
+  EnviosMarrocosAc                 EnviosMarrocosAc              @relation(fields: [idEnvioMarrocosAc], references: [idEnvioMarrocosAc], onUpdate: NoAction, map: "FK_EnviosMarrocosAcContainers_EnviosMarrocosAc1")
+  EnviosMarrocosAcContainers       EnviosMarrocosAcContainers?   @relation("EnviosMarrocosAcContainersToEnviosMarrocosAcContainers", fields: [idPai], references: [idContainers], onDelete: NoAction, onUpdate: NoAction, map: "FK_EnviosMarrocosAcContainers_EnviosMarrocosAcContainers")
+  other_EnviosMarrocosAcContainers EnviosMarrocosAcContainers[]  @relation("EnviosMarrocosAcContainersToEnviosMarrocosAcContainers")
+  EnviosMarrocosAcTipoContainer    EnviosMarrocosAcTipoContainer @relation(fields: [idContainer], references: [idContainer], onUpdate: NoAction, map: "FK_EnviosMarrocosAcContainers_EnviosMarrocosAcTipoContainer")
+  Users                            Users                         @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocosAcContainers_Users")
+  EnviosMarrocosAcConteudo         EnviosMarrocosAcConteudo[]
+}
+
+model EnviosMarrocosAcConteudo {
+  idConteudo                       Int                              @id(map: "PK_EnviosMarrocosAcConteudo") @default(autoincrement())
+  idContainers                     Int
+  stamp                            String                           @androidMarrocosDb.Char(25)
+  qtde                             Decimal                          @androidMarrocosDb.Decimal(14, 4)
+  nAux                             Int
+  nomeUser                         String                           @androidMarrocosDb.VarChar(25)
+  EnviosMarrocosAcContainers       EnviosMarrocosAcContainers       @relation(fields: [idContainers], references: [idContainers], onUpdate: NoAction, map: "FK_EnviosMarrocosAcConteudo_EnviosMarrocosAcContainers")
+  EnviosMarrocosAcConteudoOriginal EnviosMarrocosAcConteudoOriginal @relation(fields: [stamp], references: [stamp], onUpdate: NoAction, map: "FK_EnviosMarrocosAcConteudo_EnviosMarrocosAcConteudoOriginal")
+  Users                            Users                            @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocosAcConteudo_Users")
+
+  @@unique([idContainers, stamp], map: "U_IdContainers_Stamp")
+}
+
+model EnviosMarrocosAcConteudoOriginal {
+  stamp                    String                     @id(map: "PK_EnviosMarrocosAcConteudoOriginal") @androidMarrocosDb.Char(25)
+  op                       Decimal                    @androidMarrocosDb.Decimal(9, 0)
+  ref                      String                     @androidMarrocosDb.Char(18)
+  design                   String                     @androidMarrocosDb.VarChar(60)
+  familia                  String                     @androidMarrocosDb.VarChar(18)
+  usr1                     String                     @androidMarrocosDb.VarChar(20)
+  usr2                     String                     @androidMarrocosDb.VarChar(20)
+  usr3                     String                     @androidMarrocosDb.VarChar(35)
+  usr4                     String                     @androidMarrocosDb.VarChar(20)
+  usr5                     String                     @androidMarrocosDb.VarChar(120)
+  usr6                     String                     @androidMarrocosDb.VarChar(30)
+  qttOriginal              Decimal                    @androidMarrocosDb.Decimal(14, 4)
+  qttDisponivel            Decimal                    @androidMarrocosDb.Decimal(14, 4)
+  qttUsada                 Decimal                    @androidMarrocosDb.Decimal(14, 4)
+  usaAux                   Boolean
+  nAuxOriginal             Int
+  nAuxDisponivel           Int
+  nAuxUsada                Int
+  unidade                  String                     @androidMarrocosDb.VarChar(4)
+  lote                     String                     @androidMarrocosDb.VarChar(30)
+  tam                      String                     @androidMarrocosDb.Char(50)
+  pcusto                   Decimal                    @androidMarrocosDb.Decimal(18, 5)
+  epcusto                  Decimal                    @androidMarrocosDb.Decimal(19, 6)
+  peso                     Float
+  pbruto                   Float
+  ndos                     Decimal                    @androidMarrocosDb.Decimal(3, 0)
+  nmdos                    String                     @androidMarrocosDb.VarChar(24)
+  obrano                   Decimal                    @androidMarrocosDb.Decimal(10, 0)
+  nomeUser                 String                     @androidMarrocosDb.VarChar(25)
+  EnviosMarrocosAcConteudo EnviosMarrocosAcConteudo[]
+  Users                    Users                      @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocosAcConteudoOriginal_Users")
+}
+
+model EnviosMarrocosAcTipoContainer {
+  idContainer                        Int                                  @id(map: "PK_EnviosMarrocosAcTipContainer") @default(autoincrement())
+  permiteSubContainer                Boolean
+  pesoContainer                      Float
+  EnviosMarrocosAcContainers         EnviosMarrocosAcContainers[]
+  EnviosMarrocosAcTipoContainerNomes EnviosMarrocosAcTipoContainerNomes[]
+}
+
+model EnviosMarrocosAcTipoContainerNomes {
+  idContainer                   Int
+  codIdioma                     String                        @androidMarrocosDb.Char(3)
+  nome                          String                        @androidMarrocosDb.NVarChar(100)
+  EnviosMarrocosAcTipoContainer EnviosMarrocosAcTipoContainer @relation(fields: [idContainer], references: [idContainer], onUpdate: NoAction, map: "FK_EnviosMarrocosAcTipoContainerNomes_EnviosMarrocosAcTipoContainer")
+  Idiomas                       Idiomas                       @relation(fields: [codIdioma], references: [codIdioma], onUpdate: NoAction, map: "FK_EnviosMarrocosAcTipoContainerNomes_Idiomas")
+
+  @@id([idContainer, codIdioma], map: "PK_EnviosMarrocosAcTipoContainerNomes")
+}
+
+model EnviosMarrocosAltQuantidade {
+  idAlteracao           Int      @id(map: "PK_EnvioMarrocosAltQuantidade") @default(autoincrement())
+  idEnvioMarrocosPalete Int
+  idEnvioMarrocosCaixas Int
+  codIcf                String   @androidMarrocosDb.NChar(30)
+  nomeUser              String   @androidMarrocosDb.VarChar(25)
+  dataTime              DateTime @androidMarrocosDb.DateTime
+  valorInserido         Int
+  Users                 Users    @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnvioMarrocosAltQuantidade_Users")
+}
+
+model EnviosMarrocosCaixaCor {
+  idCor                Int                    @id(map: "PK_EnvioMarrocosCorCaixa") @default(autoincrement())
+  cor                  String                 @androidMarrocosDb.VarChar(7)
+  EnviosMarrocosCaixas EnviosMarrocosCaixas[]
+}
+
+model EnviosMarrocosCaixas {
+  idEnvioMarrocosCaixas     Int                       @id(map: "PK_EnviosMarrocosCaixas") @default(autoincrement())
+  idEnvioMarrocosPalete     Int
+  dataTime                  DateTime                  @androidMarrocosDb.DateTime
+  nomeUser                  String                    @androidMarrocosDb.VarChar(25)
+  numeroCaixaPalete         Int
+  idParte                   Int
+  codIcf                    String                    @unique(map: "AK_codIcf") @androidMarrocosDb.NChar(40)
+  valorIcf                  Int
+  valorInserido             Int
+  partida                   String                    @androidMarrocosDb.NChar(12)
+  op                        String                    @androidMarrocosDb.NVarChar(25)
+  produto                   String                    @androidMarrocosDb.Char(50)
+  modelo                    String                    @androidMarrocosDb.NVarChar(200)
+  corProduto                String                    @androidMarrocosDb.NVarChar(50)
+  tamanho                   String                    @androidMarrocosDb.NVarChar(10)
+  tamanhoSeq                Int
+  idTipoCaixa               Int
+  cor                       Int
+  EnviosMarrocosCaixasTipo  EnviosMarrocosCaixasTipo  @relation(fields: [idTipoCaixa], references: [idTipoCaixa], onUpdate: NoAction, map: "FK_EnviosMarrocosCaixas_Caixas")
+  EnviosMarrocosCaixaCor    EnviosMarrocosCaixaCor    @relation(fields: [cor], references: [idCor], onUpdate: NoAction, map: "FK_EnviosMarrocosCaixas_EnvioMarrocosCorCaixa")
+  EnviosMarrocosPaletes     EnviosMarrocosPaletes     @relation(fields: [idEnvioMarrocosPalete], references: [idEnvioMarrocosPalete], onUpdate: NoAction, map: "FK_EnviosMarrocosCaixas_EnviosMarrocosPaletes")
+  EnviosMarrocosPeso        EnviosMarrocosPeso        @relation(fields: [produto, idParte, tamanhoSeq, tamanho], references: [produto, idParte, tamanhoSeq, tamanho], onUpdate: NoAction, map: "FK_EnviosMarrocosCaixas_EnviosMarrocosPeso1")
+  EnviosMarrocosPartesPecas EnviosMarrocosPartesPecas @relation(fields: [idParte], references: [idParte], onUpdate: NoAction, map: "FK_EnviosMarrocosCaixas_PartesPecas")
+  Users                     Users                     @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocosCaixas_Users")
+
+  @@index([op], map: "<EnviosMarrocosCaixas_Op_idEnvioMarrocosPalete, sysname,>")
+  @@index([op], map: "<Indice_Codigos_Icf, sysname,>")
+  @@index([idEnvioMarrocosPalete], map: "IdPaletNumeroCaixaPalete")
+  @@index([idParte, produto, tamanho, tamanhoSeq], map: "IX_EnviosMarrocosCaixas_idParte_produto_tamanho_tamanhoSeq_90CB6")
+  @@index([op], map: "IX_EnviosMarrocosCaixas_op_06474")
+  @@index([op], map: "IX_EnviosMarrocosCaixas_op_DCFC5")
+}
+
+model EnviosMarrocosCaixasTipo {
+  idTipoCaixa          Int                    @id(map: "PK_Caixas") @default(autoincrement())
+  descricao            String                 @androidMarrocosDb.NVarChar(50)
+  alturaM              Float
+  larguraM             Float
+  comprimentoM         Float
+  EnviosMarrocosCaixas EnviosMarrocosCaixas[]
+}
+
+model EnviosMarrocosDestino {
+  idEnvioMarrocos Int            @id(map: "PK_EnviosMarrocosDestino")
+  clifor          String         @androidMarrocosDb.Char(25)
+  EnviosMarrocos  EnviosMarrocos @relation(fields: [idEnvioMarrocos], references: [idEnvioMarrocos], onDelete: Cascade, onUpdate: NoAction, map: "FK_EnviosMarrocosDestino_EnviosMarrocos")
+}
+
+model EnviosMarrocosEnvioPeso {
+  idEnvioMarrocos Int
+  produto         String         @androidMarrocosDb.Char(50)
+  idParte         Int
+  tamanhoSeq      Int
+  tamanho         String         @androidMarrocosDb.NVarChar(10)
+  nomeUser        String         @androidMarrocosDb.VarChar(25)
+  peso            Float
+  EnviosMarrocos  EnviosMarrocos @relation(fields: [idEnvioMarrocos], references: [idEnvioMarrocos], onDelete: Cascade, onUpdate: NoAction, map: "FK_EnviosMarrocosEnvioPeso_EnviosMarrocos")
+
+  @@id([idEnvioMarrocos, produto, idParte, tamanhoSeq, tamanho], map: "PK_EnviosMarrocosEnvioPeso_1")
+}
+
+model EnviosMarrocosPaletes {
+  idEnvioMarrocosPalete Int                    @id(map: "PK_EnviosMarrocosPaletes") @default(autoincrement())
+  idEnvioMarrocos       Int
+  numeroPalete          Int
+  estadoPalete          Boolean
+  dataTime              DateTime               @androidMarrocosDb.DateTime
+  nomeUser              String                 @androidMarrocosDb.VarChar(25)
+  EnviosMarrocosCaixas  EnviosMarrocosCaixas[]
+  EnviosMarrocos        EnviosMarrocos         @relation(fields: [idEnvioMarrocos], references: [idEnvioMarrocos], onUpdate: NoAction, map: "FK_EnviosMarrocosPaletes_EnviosMarrocos")
+  Users                 Users                  @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocosPaletes_Users")
+
+  @@index([idEnvioMarrocos], map: "IX_EnviosMarrocosPaletes_idEnvioMarrocos_4A24A")
+  @@index([idEnvioMarrocos], map: "IX_EnviosMarrocosPaletes_idEnvioMarrocos_B46AF")
+  @@index([idEnvioMarrocos, numeroPalete], map: "IX_EnviosMarrocosPaletes_idEnvioMarrocos_numeroPalete_76406")
+}
+
+model EnviosMarrocosPartesPecas {
+  idParte               Int                    @id(map: "PK_PartesPecas")
+  descricaoParte        String                 @androidMarrocosDb.NVarChar(50)
+  descricaoParteFrances String                 @androidMarrocosDb.NVarChar(50)
+  EnviosMarrocosCaixas  EnviosMarrocosCaixas[]
+  EnviosMarrocosPeso    EnviosMarrocosPeso[]
+}
+
+model EnviosMarrocosPedidos {
+  idEnvioMarrocos Int
+  op              String         @androidMarrocosDb.NVarChar(25)
+  pedido          String         @androidMarrocosDb.Char(25)
+  pedidoCliente   String         @androidMarrocosDb.VarChar(25)
+  nomeUser        String         @androidMarrocosDb.VarChar(25)
+  pedidoEntra     Boolean
+  EnviosMarrocos  EnviosMarrocos @relation(fields: [idEnvioMarrocos], references: [idEnvioMarrocos], onDelete: Cascade, onUpdate: NoAction, map: "FK_EnviosMarrocosPedidos_EnviosMarrocos")
+
+  @@id([idEnvioMarrocos, op, pedido, pedidoCliente], map: "PK_EnviosMarrocosPedidos_1")
+}
+
+model EnviosMarrocosPeso {
+  produto                   String                    @androidMarrocosDb.Char(50)
+  idParte                   Int
+  tamanhoSeq                Int
+  tamanho                   String                    @androidMarrocosDb.NVarChar(10)
+  nomeUser                  String                    @androidMarrocosDb.VarChar(25)
+  peso                      Float
+  EnviosMarrocosCaixas      EnviosMarrocosCaixas[]
+  EnviosMarrocosPartesPecas EnviosMarrocosPartesPecas @relation(fields: [idParte], references: [idParte], onUpdate: NoAction, map: "FK_EnviosMarrocosPeso_EnviosMarrocosPartesPecas")
+  Users                     Users                     @relation(fields: [nomeUser], references: [nomeUser], onUpdate: NoAction, map: "FK_EnviosMarrocosPeso_Users")
+
+  @@id([produto, idParte, tamanhoSeq, tamanho], map: "PK_EnviosMarrocosPeso_1")
+}
+
+model EnviosMarrocosPrecos {
+  idEnvioMarrocos   Int
+  op                String         @androidMarrocosDb.NVarChar(25)
+  Componente_Enviar String         @androidMarrocosDb.VarChar(78)
+  ArtigoPI          String         @androidMarrocosDb.VarChar(25)
+  design            String         @androidMarrocosDb.Char(60)
+  qtt               Int
+  Custo             Decimal        @androidMarrocosDb.Decimal(19, 6)
+  precoEntra        Boolean
+  Fornecedor        String         @androidMarrocosDb.Char(55)
+  nomeUser          String         @androidMarrocosDb.VarChar(25)
+  EnviosMarrocos    EnviosMarrocos @relation(fields: [idEnvioMarrocos], references: [idEnvioMarrocos], onUpdate: NoAction, map: "FK_EnviosMarrocosPrecos_EnviosMarrocos")
+
+  @@id([idEnvioMarrocos, op, Componente_Enviar, Fornecedor], map: "PK_EnviosMarrocosPrecos")
+}
+
+model Idiomas {
+  codIdioma                          String                               @id(map: "PK_Idiomas") @androidMarrocosDb.Char(3)
+  idiomaDesc                         String                               @androidMarrocosDb.NVarChar(50)
+  EnviosMarrocosAcTipoContainerNomes EnviosMarrocosAcTipoContainerNomes[]
+  tradutorFamilia                    tradutorFamilia[]
+  tradutorPrimeiraParte              tradutorPrimeiraParte[]
+  tradutorQuartaParte                tradutorQuartaParte[]
+  tradutorSegundaParte               tradutorSegundaParte[]
+  tradutorTerceiraParte              tradutorTerceiraParte[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model nTraduz {
+  nTraduz String @androidMarrocosDb.VarChar(75)
+
+  @@ignore
+}
+
+model sysdiagrams {
+  name         String @androidMarrocosDb.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B6100551192") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model tradutorF {
+  ref      String   @id(map: "PK_tradutor") @androidMarrocosDb.Char(18)
+  tDesignO String   @androidMarrocosDb.VarChar(120)
+  data     DateTime @androidMarrocosDb.DateTime
+  tDesignR String   @androidMarrocosDb.VarChar(120)
+
+  @@index([data], map: "IX_tradutorF_data_FC605")
+}
+
+model tradutorFamilia {
+  familia    String  @androidMarrocosDb.VarChar(18)
+  codIdioma  String  @androidMarrocosDb.Char(3)
+  descFamili String  @androidMarrocosDb.VarChar(60)
+  Idiomas    Idiomas @relation(fields: [codIdioma], references: [codIdioma], onUpdate: NoAction, map: "FK_tradutorFamilia_Idiomas")
+
+  @@id([familia, codIdioma], map: "PK_tradutorFamilia")
+}
+
+model tradutorPrimeiraParte {
+  codPrimeiraParte  String  @androidMarrocosDb.VarChar(3)
+  familia           String  @androidMarrocosDb.VarChar(18)
+  codIdioma         String  @androidMarrocosDb.Char(3)
+  descPrimeiraParte String  @androidMarrocosDb.VarChar(75)
+  Idiomas           Idiomas @relation(fields: [codIdioma], references: [codIdioma], onUpdate: NoAction, map: "FK_tradutorPrimeiraParte_Idiomas")
+
+  @@id([codPrimeiraParte, familia, codIdioma], map: "PK_tradutorPrimeiraParte")
+}
+
+model tradutorQuartaParte {
+  codQuartaParte   String  @androidMarrocosDb.VarChar(3)
+  codTerceiraParte String  @androidMarrocosDb.VarChar(3)
+  codIdioma        String  @androidMarrocosDb.Char(3)
+  descQuartaParte  String  @androidMarrocosDb.VarChar(75)
+  Idiomas          Idiomas @relation(fields: [codIdioma], references: [codIdioma], onUpdate: NoAction, map: "FK_tradutorQuartaParte_Idiomas")
+
+  @@id([codQuartaParte, codTerceiraParte, codIdioma], map: "PK_tradutorQuartaParte")
+}
+
+model tradutorSegundaParte {
+  familia          String  @androidMarrocosDb.VarChar(18)
+  codSegundaParte  String  @androidMarrocosDb.VarChar(3)
+  codPrimeiraParte String  @androidMarrocosDb.VarChar(3)
+  codIdioma        String  @androidMarrocosDb.Char(3)
+  descSegundaParte String  @androidMarrocosDb.VarChar(75)
+  Idiomas          Idiomas @relation(fields: [codIdioma], references: [codIdioma], onUpdate: NoAction, map: "FK_tradutorSegundaParte_Idiomas")
+
+  @@id([familia, codSegundaParte, codPrimeiraParte, codIdioma], map: "PK_tradutorSegundaParte")
+}
+
+model tradutorTerceiraParte {
+  familia           String  @androidMarrocosDb.VarChar(18)
+  codTerceiraParte  String  @androidMarrocosDb.VarChar(3)
+  codSegundaParte   String  @androidMarrocosDb.VarChar(3)
+  codPrimeiraParte  String  @androidMarrocosDb.VarChar(3)
+  codIdioma         String  @androidMarrocosDb.Char(3)
+  descTerceiraParte String  @androidMarrocosDb.VarChar(75)
+  Idiomas           Idiomas @relation(fields: [codIdioma], references: [codIdioma], onUpdate: NoAction, map: "FK_tradutorTerceiraParte_Idiomas")
+
+  @@id([familia, codTerceiraParte, codSegundaParte, codPrimeiraParte, codIdioma], map: "PK_tradutorTerceiraParte")
+}
+
+model Users {
+  nomeUser                         String                             @id(map: "PK_Users") @androidMarrocosDb.VarChar(25)
+  nome                             String                             @androidMarrocosDb.NVarChar(50)
+  apelido                          String                             @androidMarrocosDb.NVarChar(50)
+  pHashed                          String                             @androidMarrocosDb.Char(60)
+  dataCriacao                      DateTime                           @androidMarrocosDb.Date
+  inativo                          Boolean
+  EnviosMarrocos                   EnviosMarrocos[]
+  EnviosMarrocosAc                 EnviosMarrocosAc[]
+  EnviosMarrocosAcContainers       EnviosMarrocosAcContainers[]
+  EnviosMarrocosAcConteudo         EnviosMarrocosAcConteudo[]
+  EnviosMarrocosAcConteudoOriginal EnviosMarrocosAcConteudoOriginal[]
+  EnviosMarrocosAltQuantidade      EnviosMarrocosAltQuantidade[]
+  EnviosMarrocosCaixas             EnviosMarrocosCaixas[]
+  EnviosMarrocosPaletes            EnviosMarrocosPaletes[]
+  EnviosMarrocosPeso               EnviosMarrocosPeso[]
+}

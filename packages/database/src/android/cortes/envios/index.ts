@@ -1,0 +1,4 @@
+import { getCortesEnvios } from "./get/get-cortes-envios";
+import { postCortesEnvio } from "./post/post-cortes-envio";
+
+export { getCortesEnvios, postCortesEnvio };

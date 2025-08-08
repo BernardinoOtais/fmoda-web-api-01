@@ -17,7 +17,8 @@
     "./android/marrocos/caixas": "./dist/android/marrocos/caixas/index.js",
     "./android/especial": "./dist/android/especial/index.js",
     "./android/resumo": "./dist/android/resumo/index.js",
-    "./android/imagem": "./dist/android/imagem/index.js"
+    "./android/imagem": "./dist/android/imagem/index.js",
+    "./android/cortes/envios": "./dist/android/cortes/envios/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",

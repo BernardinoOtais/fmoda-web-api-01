@@ -1,9 +1,9 @@
 import { Router } from "express";
 
 import authRoutes from "./auth";
+import routesCortes from "./cortes";
 import routesEspeciais from "./especial";
 import routesImagem from "./imagem";
-import routesCortes from "./lotes";
 import routesMarrocos from "./marrocos";
 import routesResumo from "./resumo";
 
