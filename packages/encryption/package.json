@@ -1,7 +1,6 @@
 {
   "name": "@repo/encryption",
   "version": "0.0.0",
-  "type": "module",
   "exports": {
     "./argon2": "./dist/argon2.js",
     "./jwt": "./dist/json-web-token.js"

@@ -1,7 +1,6 @@
 {
   "name": "@repo/authweb",
   "version": "0.0.0",
-  "type": "module",
   "exports": {
     "./auth": "./dist/auth.js",
     "./authClient": "./dist/auth-client.js",
