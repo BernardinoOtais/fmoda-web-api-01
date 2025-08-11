@@ -27,7 +27,7 @@ export const requestLogger = () => {
       logger.info(`Resposta enviada: ${method} ${url}`, {
         status: res.statusCode,
         responseTime: `${responseTime}ms`,
-        body: body instanceof Buffer ? body.toString() : body,
+        //        body: body instanceof Buffer ? body.toString() : body,
       });
 
       return originalSend.call(this, body);

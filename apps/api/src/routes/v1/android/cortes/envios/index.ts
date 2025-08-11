@@ -29,7 +29,7 @@ routesEnvios.get(
       const { opIcf } = GetEnviosSchema.parse(req.query);
 
       const dados = await getCortesEnvios(opIcf);
-      console.log("Os tais dados", dados);
+      // console.log("Os tais dados", dados);
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
