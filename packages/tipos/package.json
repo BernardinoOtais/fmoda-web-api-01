@@ -18,7 +18,9 @@
     "./android/especial": "./dist/android/especial/index.js",
     "./android/resumo": "./dist/android/resumo/index.js",
     "./android/imagem": "./dist/android/imagem/index.js",
-    "./android/cortes/envios": "./dist/android/cortes/envios/index.js"
+    "./android/cortes/envios": "./dist/android/cortes/envios/index.js",
+    "./android/cortes/envios/lotes": "./dist/android/cortes/envios/lotes/index.js",
+    "./android/cortes/fim": "./dist/android/cortes/fim/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",

@@ -1,5 +1,9 @@
 import { server } from "@config/config";
 
+import HttpStatusCode from "./http-status-code";
+
+import type { Response } from "express";
+
 export function parseAPIVersion(version: number) {
   return server.API_URI!.replace("$v", `v${version}`);
 }
@@ -25,4 +29,17 @@ export const safeParseJson = (value: unknown) => {
   } catch {
     return [];
   }
+};
+
+export const sendInternalError = (res: Response, error: unknown): void => {
+  res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+    erro: getErrorMessage(error),
+  });
+};
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
 };
