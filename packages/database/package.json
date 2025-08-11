@@ -18,7 +18,9 @@
     "./android/marrocos/caixas": "./dist/android/marrocos/caixas/index.js",
     "./android/especial": "./dist/android/especial/index.js",
     "./android/resumo": "./dist/android/resumo/index.js",
-    "./android/cortes/envios": "./dist/android/cortes/envios/index.js"
+    "./android/cortes/envios": "./dist/android/cortes/envios/index.js",
+    "./android/cortes/envios/lotes": "./dist/android/cortes/envios/lotes/index.js",
+    "./android/cortes/fim": "./dist/android/cortes/fim/index.js"
   },
   "scripts": {
     "db:generate": "npm run db:generate:auth && npm run db:generate:envios && npm run db:generate:qualidade && npm run db:generate:androidMarrocos && npm run db:generate:androidCortes",
