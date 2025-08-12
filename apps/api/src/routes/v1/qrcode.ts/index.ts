@@ -20,7 +20,7 @@ qrcode.get(
   validaSchema(NovoQrcodeSchema),
   async (req: Request, res: Response) => {
     try {
-      const { dados, nome } = NovoQrcodeSchema.parse(req.body);
+      const { dados, nome } = NovoQrcodeSchema.parse(req.query);
 
       const dadosRecebidos = await escreveQrcode(dados, nome);
 
