@@ -1,6 +1,7 @@
 {
   "name": "@repo/trpc",
   "version": "0.0.0",
+  "type": "module",
   "exports": {
     "./init": "./dist/init.js",
     "./_app": "./dist/routers/_app.js",
