@@ -17,7 +17,7 @@ qrcode.use(checkIp());
 
 qrcode.get(
   "/",
-  validaSchema(NovoQrcodeSchema),
+  validaSchema(NovoQrcodeSchema, "query"),
   async (req: Request, res: Response) => {
     try {
       const { dados, nome } = NovoQrcodeSchema.parse(req.query);
