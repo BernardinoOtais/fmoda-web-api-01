@@ -7,7 +7,9 @@
     "BASE_URL",
     "TRUSTED_ORIGINS",
     "ACCESS_TOKEN_SECRET",
-    "REFRESH_TOKEN_SECRET"
+    "REFRESH_TOKEN_SECRET",
+    "LOG_WEB",
+    "LOG_API"
   ],
   "tasks": {
     "build": {

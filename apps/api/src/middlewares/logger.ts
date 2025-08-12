@@ -1,4 +1,4 @@
-import logger from "@config/logger";
+import loggerApi from "@repo/logger/logger-api";
 
 import type { Request, Response, NextFunction } from "express";
 
@@ -11,7 +11,7 @@ export const requestLogger = () => {
     const startTime = Date.now();
 
     // Registar detalhes do pedido recebido
-    logger.info(`Pedido recebido: ${method} ${url}`, {
+    loggerApi.info(`Pedido recebido: ${method} ${url}`, {
       headers: {
         "user-agent": headers["user-agent"],
         origin: headers.origin,
@@ -24,7 +24,7 @@ export const requestLogger = () => {
       const responseTime = Date.now() - startTime;
 
       // Registar detalhes da resposta enviada
-      logger.info(`Resposta enviada: ${method} ${url}`, {
+      loggerApi.info(`Resposta enviada: ${method} ${url}`, {
         status: res.statusCode,
         responseTime: `${responseTime}ms`,
         //        body: body instanceof Buffer ? body.toString() : body,

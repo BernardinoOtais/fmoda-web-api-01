@@ -28,7 +28,7 @@ routesLotes.get(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -51,7 +51,7 @@ routesLotes.post(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -67,7 +67,7 @@ routesLotes.delete(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );

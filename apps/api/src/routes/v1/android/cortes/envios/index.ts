@@ -33,7 +33,7 @@ routesEnvios.get(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -49,7 +49,7 @@ routesEnvios.post(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -65,7 +65,7 @@ routesEnvios.delete(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );

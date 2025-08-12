@@ -21,23 +21,24 @@ import {
   PostSubstituiCaixaSchema,
 } from "@repo/tipos/android/marrocos/caixas";
 import HttpStatusCode from "@utils/http-status-code";
+import { sendInternalError } from "@utils/utils";
 import { Router } from "express";
 
-import type { Response, Request, NextFunction } from "express";
+import type { Response, Request } from "express";
 
 const routesMarrocosCaixas = Router();
 
 routesMarrocosCaixas.get(
   "/apagamas/:idEnvioMarrocosCaixas",
   validaSchema(DeleteCaixasSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocosCaixas } = DeleteCaixasSchema.parse(req.params);
       const dados = await deleteCaixaMasDeixaCaixa(idEnvioMarrocosCaixas);
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -45,14 +46,14 @@ routesMarrocosCaixas.get(
 routesMarrocosCaixas.get(
   "/reset/:idEnvioMarrocosPalete",
   validaSchema(GetCaixasSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocosPalete } = GetCaixasSchema.parse(req.params);
       const dados = await getResetNumeroCaixas(idEnvioMarrocosPalete);
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -60,14 +61,14 @@ routesMarrocosCaixas.get(
 routesMarrocosCaixas.get(
   "/:idEnvioMarrocosPalete",
   validaSchema(GetCaixasSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocosPalete } = GetCaixasSchema.parse(req.params);
       const dados = await getCaixas(idEnvioMarrocosPalete);
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -77,7 +78,7 @@ routesMarrocosCaixas.delete(
   validaSchema(DeleteListaCaixasQuerySchema, "query"),
   validaSchema(DeleteListaCaixasBodySchema),
 
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       console.log("O tais body", req.body);
       console.log("O tais query", req.query);
@@ -94,7 +95,7 @@ routesMarrocosCaixas.delete(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -102,14 +103,14 @@ routesMarrocosCaixas.delete(
 routesMarrocosCaixas.delete(
   "/:idEnvioMarrocosCaixas",
   validaSchema(DeleteCaixasSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocosCaixas } = DeleteCaixasSchema.parse(req.params);
       const dados = await deleteCaixaEDevolveLista(idEnvioMarrocosCaixas);
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -117,7 +118,7 @@ routesMarrocosCaixas.delete(
 routesMarrocosCaixas.post(
   "/junta",
   validaSchema(JuntaCaixasSchema, "query"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocosCaixas, idEnvioMarrocosPalete } =
         JuntaCaixasSchema.parse(req.query);
@@ -127,7 +128,7 @@ routesMarrocosCaixas.post(
       );
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -135,7 +136,7 @@ routesMarrocosCaixas.post(
 routesMarrocosCaixas.post(
   "/substitui",
   validaSchema(PostSubstituiCaixaSchema, "query"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocosCaixas, nomeUser, codIcf } =
         PostSubstituiCaixaSchema.parse(req.query);
@@ -146,7 +147,7 @@ routesMarrocosCaixas.post(
       );
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -154,7 +155,7 @@ routesMarrocosCaixas.post(
 routesMarrocosCaixas.post(
   "/",
   validaSchema(PostNovaCaixaSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       console.log("Post nova Caixa");
       const { idEnvioMarrocosPalete, nomeUser, codIcf } =
@@ -166,7 +167,7 @@ routesMarrocosCaixas.post(
       );
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -174,7 +175,7 @@ routesMarrocosCaixas.post(
 routesMarrocosCaixas.patch(
   "/",
   validaSchema(PatchQuantidadeDaCaixaSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocosCaixas, nomeUser, valorInserido } =
         PatchQuantidadeDaCaixaSchema.parse(req.body);
@@ -185,7 +186,7 @@ routesMarrocosCaixas.patch(
       );
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );

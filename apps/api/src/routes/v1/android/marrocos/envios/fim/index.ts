@@ -14,20 +14,21 @@ import {
   TerminaEnvioSchema,
 } from "@repo/tipos/android/marrocos/envios/fim";
 import HttpStatusCode from "@utils/http-status-code";
+import { sendInternalError } from "@utils/utils";
 import { Router } from "express";
 
-import type { Response, Request, NextFunction } from "express";
+import type { Response, Request } from "express";
 
 const routesMarrocosEnviosFim = Router();
 
 routesMarrocosEnviosFim.get(
   "/destinos",
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const dados = await getDestinos();
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -35,7 +36,7 @@ routesMarrocosEnviosFim.get(
 routesMarrocosEnviosFim.get(
   "/:idEnvioMarrocos",
   validaSchema(GetPesos, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocos } = GetPesos.parse(req.params);
       const dados = await getEnvioMarrocosFimPhc(idEnvioMarrocos);
@@ -58,7 +59,7 @@ routesMarrocosEnviosFim.get(
       //console.log(JSON.stringify(dadosTratados, null, 2));
       res.status(HttpStatusCode.OK).json(dadosTratados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -66,7 +67,7 @@ routesMarrocosEnviosFim.get(
 routesMarrocosEnviosFim.post(
   "/gravalista",
   validaSchema(ListaPedidosEPesos),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { listaPedidosEPesos } = ListaPedidosEPesos.parse(req.body);
       const listaPedidosEPesosParaPost = "[" + listaPedidosEPesos + "]";
@@ -90,7 +91,7 @@ routesMarrocosEnviosFim.post(
       //console.log(JSON.stringify(dadosTratados, null, 2));
       res.status(HttpStatusCode.OK).json(dadosTratados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -98,7 +99,7 @@ routesMarrocosEnviosFim.post(
 routesMarrocosEnviosFim.get(
   "/resumo/:idEnvioMarrocos",
   validaSchema(GetPesos, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocos } = GetPesos.parse(req.params);
       const dados = await getResumo(idEnvioMarrocos);
@@ -122,7 +123,7 @@ routesMarrocosEnviosFim.get(
       //console.log(JSON.stringify(dadosTratados, null, 2));
       res.status(HttpStatusCode.OK).json(dadosTratados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -130,13 +131,13 @@ routesMarrocosEnviosFim.get(
 routesMarrocosEnviosFim.get(
   "/termina/:idEnvioMarrocos",
   validaSchema(TerminaEnvioSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocos } = TerminaEnvioSchema.parse(req.params);
       const dados = await getTermina(idEnvioMarrocos);
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );

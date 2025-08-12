@@ -1,7 +1,8 @@
 {
   "name": "@repo/imagens",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/imagens/index.js",
+    "./qrcode": "./dist/qrcode/index.js"
   },
   "scripts": {
     "dev": "tsc --watch --preserveWatchOutput",
@@ -10,9 +11,12 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*"
+    "@repo/typescript-config": "*",
+    "@types/qrcode": "^1.5.5"
   },
   "dependencies": {
-    "@repo/tipos": "*"
+    "@repo/tipos": "*",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.34.3"
   }
 }

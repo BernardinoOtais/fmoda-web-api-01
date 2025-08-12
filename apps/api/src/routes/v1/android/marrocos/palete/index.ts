@@ -9,23 +9,24 @@ import {
   PostNovaPaleteSchema,
 } from "@repo/tipos/android/marrocos/paletes";
 import HttpStatusCode from "@utils/http-status-code";
+import { sendInternalError } from "@utils/utils";
 import { Router } from "express";
 
-import type { Response, Request, NextFunction } from "express";
+import type { Response, Request } from "express";
 
 const routesMarrocosPaletes = Router();
 
 routesMarrocosPaletes.get(
   "/:idEnvioMarrocos",
   validaSchema(GetPaletesSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocos } = GetPaletesSchema.parse(req.params);
       const dados = await getPaletes(idEnvioMarrocos);
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -33,7 +34,7 @@ routesMarrocosPaletes.get(
 routesMarrocosPaletes.post(
   "/",
   validaSchema(PostNovaPaleteSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const body = PostNovaPaleteSchema.parse(req.body);
 
@@ -41,7 +42,7 @@ routesMarrocosPaletes.post(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -49,14 +50,14 @@ routesMarrocosPaletes.post(
 routesMarrocosPaletes.delete(
   "/:idEnvioMarrocos",
   validaSchema(GetPaletesSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { idEnvioMarrocos } = GetPaletesSchema.parse(req.params);
       const dados = await deletePalete(idEnvioMarrocos);
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );

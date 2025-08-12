@@ -12,6 +12,7 @@ import {
   RefreshTokenSchema,
 } from "@repo/tipos/android_auth";
 import HttpStatusCode from "@utils/http-status-code";
+import { sendInternalError } from "@utils/utils";
 import { Router } from "express";
 
 import type { Response, Request } from "express";
@@ -78,9 +79,7 @@ authRoutes.post(
       });
     } catch (error) {
       console.error("Login error:", error);
-      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-        message: "Erro no servidor",
-      });
+      return sendInternalError(res, error);
     }
   }
 );
@@ -118,9 +117,7 @@ authRoutes.post(
       });
     } catch (error) {
       console.error("RefresToken", error);
-      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-        message: "Erro no servidor",
-      });
+      return sendInternalError(res, error);
     }
   }
 );

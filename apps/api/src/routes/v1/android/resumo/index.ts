@@ -6,10 +6,10 @@ import {
   GetResumoSchema,
 } from "@repo/tipos/android/resumo";
 import HttpStatusCode from "@utils/http-status-code";
-import { safeParseJson } from "@utils/utils";
+import { safeParseJson, sendInternalError } from "@utils/utils";
 import { Router } from "express";
 
-import type { Response, Request, NextFunction } from "express";
+import type { Response, Request } from "express";
 
 const routesResumo = Router();
 
@@ -21,7 +21,7 @@ routesResumo.use(checkAuth());
 routesResumo.get(
   "/:op",
   validaSchema(GetResumoSchema, "params"),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     try {
       const { op } = GetResumoSchema.parse(req.params);
       const dados = await getResumo(op);
@@ -43,7 +43,7 @@ routesResumo.get(
       //      console.log("Os tais dados tratados: ", dadosTratados);
       res.status(HttpStatusCode.OK).json(dadosTratados);
     } catch (error) {
-      next(error);
+      return sendInternalError(res, error);
     }
   }
 );

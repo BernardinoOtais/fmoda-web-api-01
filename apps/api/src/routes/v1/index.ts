@@ -3,6 +3,7 @@ import HttpStatusCode from "@utils/http-status-code";
 import { Router } from "express";
 
 import androidRoutes from "./android/index";
+import qrcode from "./qrcode.ts";
 
 import type { Response, Request } from "express";
 
@@ -19,5 +20,6 @@ routes.get("/", (req: Request, res: Response) => {
 });
 
 routes.use("/android", androidRoutes);
+routes.use("/qrcode", qrcode);
 
 export default routes;

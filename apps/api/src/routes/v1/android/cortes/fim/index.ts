@@ -27,7 +27,7 @@ routesFim.get(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -48,7 +48,7 @@ routesFim.get(
 
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );
@@ -79,7 +79,7 @@ routesFim.post(
       );
       res.status(HttpStatusCode.OK).json(dados);
     } catch (error) {
-      sendInternalError(res, error);
+      return sendInternalError(res, error);
     }
   }
 );

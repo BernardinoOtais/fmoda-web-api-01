@@ -47,6 +47,7 @@ const BmConteudo = ({
 
   const tamanhoLista = data.tamanhoLista;
   const bms = data.lista;
+
   return (
     <>
       <header className="x-1 space-y-1.5 border-b py-3 text-center">

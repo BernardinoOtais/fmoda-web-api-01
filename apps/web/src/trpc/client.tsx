@@ -26,10 +26,13 @@ function getQueryClient() {
   return browserQueryClient;
 }
 function getUrl() {
-  const base = (() => {
-    return process.env.NEXT_PUBLIC_APP_URL;
-  })();
-  return `${base}/api/trpc`;
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}/api/trpc`;
+  }
+  // Fallback for SSR
+  return process.env.NEXT_PUBLIC_APP_URL
+    ? `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`
+    : "http://localhost:3000/api/trpc";
 }
 export function TRPCReactProvider(
   props: Readonly<{
