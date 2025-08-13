@@ -13,7 +13,7 @@ const qrcode = Router();
 /**
  * Auth verification
  */
-//qrcode.use(checkIp());
+qrcode.use(checkIp());
 
 qrcode.get(
   "/",

@@ -3,7 +3,7 @@ import HttpStatusCode from "@utils/http-status-code";
 import { Router } from "express";
 
 import androidRoutes from "./android/index";
-import qrcode from "./qrcode.ts";
+import qrcode from "./qrcode";
 
 import type { Response, Request } from "express";
 
