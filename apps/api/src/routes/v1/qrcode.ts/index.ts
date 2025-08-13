@@ -13,7 +13,7 @@ const qrcode = Router();
 /**
  * Auth verification
  */
-qrcode.use(checkIp());
+//qrcode.use(checkIp());
 
 qrcode.get(
   "/",
@@ -21,11 +21,13 @@ qrcode.get(
   async (req: Request, res: Response) => {
     try {
       const queryValidada = NovoQrcodeSchema.safeParse(req.query);
+
       if (!queryValidada.success) {
         return res.status(HttpStatusCode.OK).json(queryValidada.error);
       }
 
       const { dados, nome } = queryValidada.data;
+
       const dadosRecebidos = await escreveQrcode(dados, nome);
 
       return res.status(HttpStatusCode.OK).json(dadosRecebidos || "");

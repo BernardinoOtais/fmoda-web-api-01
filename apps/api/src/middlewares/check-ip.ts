@@ -11,24 +11,13 @@ export const checkIp = () => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
       const ipPermitido = server.IP_PERMITIDO;
-      console.log("ipPermitido :", ipPermitido);
+
       const ip = extractClientIP(req);
 
-      console.log("o claude", ip);
-
       if (typeof ip === "string") {
-        const normalizedIP = ip.startsWith("::ffff:") ? ip.slice(7) : ip;
-
-        console.log(
-          "normalizedIP: ",
-          normalizedIP,
-          " ipPermitido :",
-          ipPermitido,
-          " ip: ",
-          ip
-        );
-        if (normalizedIP === ipPermitido) return next();
+        if (ip === ipPermitido) return next();
       }
+
       res.status(HttpStatusCode.UNAUTHORIZED).json({ message: "Auth failed" });
     } catch (error) {
       console.error(
