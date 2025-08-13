@@ -52,7 +52,7 @@ export const roleProtectedProcedure = (requiredPapel: string) =>
         message: "Proibido....",
       });
     }
-    const userId = session.user.id;
+    const userName = session.user.name;
     const userRoles = session.papeis || [];
     if (!session.papeis.includes(requiredPapel)) {
       const duration = Date.now() - start;
@@ -61,7 +61,7 @@ export const roleProtectedProcedure = (requiredPapel: string) =>
       loggerWeb.warn("Authorization Failed", {
         ...baseLogData,
         duration: `${duration}ms`,
-        userId,
+        userName,
         userRoles:
           process.env.NODE_ENV === "development" ? userRoles : "[REDACTED]",
         reason: `User lacks required role: ${requiredPapel}`,
@@ -79,7 +79,7 @@ export const roleProtectedProcedure = (requiredPapel: string) =>
     loggerWeb.info("Protected Procedure Success", {
       ...baseLogData,
       duration: `${duration}ms`,
-      userId,
+      userName,
     });
 
     return next({ ctx: { ...ctx, auth: session } });
