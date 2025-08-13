@@ -20,13 +20,7 @@ qrcode.get(
   validaSchema(NovoQrcodeSchema, "query"),
   async (req: Request, res: Response) => {
     try {
-      const queryValidada = NovoQrcodeSchema.safeParse(req.query);
-
-      if (!queryValidada.success) {
-        return res.status(HttpStatusCode.OK).json(queryValidada.error);
-      }
-
-      const { dados, nome } = queryValidada.data;
+      const { dados, nome } = NovoQrcodeSchema.parse(req.query);
 
       const dadosRecebidos = await escreveQrcode(dados, nome);
 

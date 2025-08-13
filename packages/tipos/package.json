@@ -21,7 +21,8 @@
     "./android/cortes/envios": "./dist/api/android/cortes/envios/index.js",
     "./android/cortes/envios/lotes": "./dist/api/android/cortes/envios/lotes/index.js",
     "./android/cortes/fim": "./dist/api/android/cortes/fim/index.js",
-    "./qrcode": "./dist/api/qrcode/index.js"
+    "./qrcode": "./dist/api/qrcode/index.js",
+    "./tradutor": "./dist/api/tradutor/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
