@@ -17,11 +17,15 @@ qrcode.use(checkIp());
 
 qrcode.get(
   "/",
-  //  validaSchema(NovoQrcodeSchema, "query"),
+  validaSchema(NovoQrcodeSchema, "query"),
   async (req: Request, res: Response) => {
     try {
-      const { dados, nome } = NovoQrcodeSchema.parse(req.query);
+      const queryValidada = NovoQrcodeSchema.safeParse(req.query);
+      if (!queryValidada.success) {
+        return res.status(HttpStatusCode.OK).json(queryValidada.error);
+      }
 
+      const { dados, nome } = queryValidada.data;
       const dadosRecebidos = await escreveQrcode(dados, nome);
 
       return res.status(HttpStatusCode.OK).json(dadosRecebidos || "");
