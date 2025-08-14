@@ -10,5 +10,9 @@ export const getUserDb = async (nomeUser: string) =>
         where: { providerId: "credential" },
         select: { password: true },
       },
+      userPapeis: {
+        where: { idPapel: "531854CA-3478-483E-98DE-DF5F463C8EE2" },
+      },
     },
   });
+//531854CA-3478-483E-98DE-DF5F463C8EE2 android

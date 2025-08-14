@@ -1,7 +1,7 @@
 import { GoogleTranslateResponseSchema } from "@repo/tipos/tradutor";
 
 export const tradutor = async (sl: string, tl: string, q: string) => {
-  console.log("q : ", q);
+  //console.log("q : ", q);
   const url = new URL("https://translate.googleapis.com/translate_a/single");
   url.searchParams.append("client", "gtx");
   url.searchParams.append("sl", sl);
