@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DadosParaPesquisaComPaginacaoEOrdemDto } from "@repo/tipos/comuns";
 import { OpDto, OPschema } from "@repo/tipos/qualidade_balancom";
-import { useMutation, useQuery, useSuspenseQuery } from "@repo/trpc";
+import { useMutation, useQuery } from "@repo/trpc";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

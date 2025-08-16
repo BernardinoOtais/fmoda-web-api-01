@@ -3,6 +3,7 @@ import { PAPEL_ROTA_ADMINISTRADOR } from "@repo/tipos/consts";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import AlteraPassword from "./altera-password";
 import NovoUser from "./novo-user";
 
 import {
@@ -58,7 +59,7 @@ const AdminidtradorLoader = async ({ searchParams }: PageProps) => {
       case "criaConta":
         return <NovoUser />;
       case "alteraPass":
-        return <div>🔑 Formulário para alterar a senha de um usuário.</div>;
+        return <AlteraPassword />;
       case "alteraTipoConta":
         return <div>👤 Opções para alterar o tipo da conta do usuário.</div>;
       default:

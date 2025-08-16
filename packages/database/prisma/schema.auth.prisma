@@ -62,7 +62,7 @@ model user {
   image           String?
   createdAt       DateTime
   updatedAt       DateTime
-  username        String?      @unique
+  username        String       @unique
   displayUsername String?
   account         account[]
   session         session[]

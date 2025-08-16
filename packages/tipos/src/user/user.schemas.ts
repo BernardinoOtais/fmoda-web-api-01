@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { StringPersonalizada } from "..";
 
 export const LoginSchema = z.object({
   nomeUser: z.string().min(1, { message: "Username é obrigatório." }),
@@ -50,14 +51,9 @@ export const CriaUserComValidacaoPasswordSchema = z
     message: z.string().optional(),
     papeis: z.array(chave).min(1, { message: "Deve ter pelo menos um papel." }),
   })
-  .superRefine((val, ctx) => {
-    if (val.password !== val.confirmPassword) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "As Passwords não são iguais.",
-        path: ["confirmPassword"],
-      });
-    }
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As Passwords não são iguais.",
+    path: ["confirmPassword"],
   });
 
 export type CriaUserComValidacaoPasswordDto = z.infer<
@@ -70,3 +66,17 @@ export const PostPapeisSchema = z.object({
     z.string().min(4, { message: "Deve ter pelo menos 4 caracteres." })
   ),
 });
+
+export const AlteroUserPasswordSchema = z
+  .object({
+    value: StringPersonalizada(64, 10),
+    password: PasswordValidaSchema,
+    confirmPassword: PasswordValidaSchema,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As Passwords não são iguais.",
+    path: ["confirmPassword"],
+  });
+export type AlteroUserPasswordSchemaDto = z.infer<
+  typeof AlteroUserPasswordSchema
+>;

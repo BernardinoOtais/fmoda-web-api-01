@@ -5,7 +5,7 @@ import {
   CriaUserComValidacaoPasswordDto,
   CriaUserComValidacaoPasswordSchema,
 } from "@repo/tipos/user";
-import { useMutation, useSuspenseQuery } from "@repo/trpc";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@repo/trpc";
 import { CircleHelp, Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,6 +27,7 @@ import { useTRPC } from "@/trpc/client";
 
 const NovoUserForm = () => {
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(
     trpc.administrador.getPapeis.queryOptions()
   );
@@ -84,12 +85,15 @@ const NovoUserForm = () => {
         username: data.nomeUser,
         apelido: data.apelido,
       });
+
       if (!userCriado.data?.user) {
         toast.error("Erro ao criar user");
         reset();
         return;
       }
       createdUser = userCriado.data.user;
+
+      queryClient.invalidateQueries(trpc.administrador.getUsers.queryOptions());
 
       await insiroPapeis.mutateAsync({
         userId: createdUser.id,

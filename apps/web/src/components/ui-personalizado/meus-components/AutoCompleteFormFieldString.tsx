@@ -98,7 +98,7 @@ export function AutoCompleteFormFieldString<T extends FieldValues>({
               </FormControl>
             </PopoverTrigger>
             <PopoverContent
-              className={cn("p-0", largura)}
+              className={cn("p-0 min-w-full")}
               style={{ pointerEvents: "auto" }}
             >
               <Command>
@@ -108,7 +108,6 @@ export function AutoCompleteFormFieldString<T extends FieldValues>({
                   <CommandGroup>
                     {options.map((option) => (
                       <CommandItem
-                        className=""
                         key={option.value}
                         disabled={disable}
                         value={option.label}
