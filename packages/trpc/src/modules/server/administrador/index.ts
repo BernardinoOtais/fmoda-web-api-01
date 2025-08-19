@@ -3,9 +3,16 @@ import {
   postPapeisDb,
   getUsersDb,
   postAlteroPassword,
+  getUserPapeisDb,
+  patchPapeisDeUserDb,
 } from "@repo/db/administrador_user";
 import { PAPEL_ROTA_ADMINISTRADOR } from "@repo/tipos/consts";
-import { AlteroUserPasswordSchema, PostPapeisSchema } from "@repo/tipos/user";
+import {
+  AlteraTipoDeContaDestUserSchema,
+  AlteraTipoDeContaSchema,
+  AlteroUserPasswordSchema,
+  PostPapeisSchema,
+} from "@repo/tipos/user";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, roleProtectedProcedure } from "@/init";
@@ -60,6 +67,33 @@ export const administrador = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Erro ao alterar password...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+
+  getUserPapeis: roleProtectedProcedure(PAPEL_ROTA)
+    .input(AlteraTipoDeContaDestUserSchema)
+    .query(async ({ input }) => {
+      try {
+        return await getUserPapeisDb(input.name);
+      } catch (err) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao obter User Papaeis...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+  patchPapeisDeUtilizador: roleProtectedProcedure(PAPEL_ROTA)
+    .input(AlteraTipoDeContaSchema)
+    .mutation(async ({ input }) => {
+      try {
+        await patchPapeisDeUserDb(input.id, input.papeis);
+      } catch (err) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao alterar papeis...",
           cause: err, // optional, for logging/debugging
         });
       }

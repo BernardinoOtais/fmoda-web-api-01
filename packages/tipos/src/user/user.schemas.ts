@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { StringPersonalizada } from "..";
 
 export const LoginSchema = z.object({
@@ -80,3 +81,16 @@ export const AlteroUserPasswordSchema = z
 export type AlteroUserPasswordSchemaDto = z.infer<
   typeof AlteroUserPasswordSchema
 >;
+
+export const AlteraTipoDeContaSchema = z.object({
+  id: StringPersonalizada(64, 10),
+  papeis: z.array(chave).min(1, { message: "Deve ter pelo menos um papel." }),
+});
+
+export type AlteraTipoDeContaSchemaDto = z.infer<
+  typeof AlteraTipoDeContaSchema
+>;
+
+export const AlteraTipoDeContaDestUserSchema = z.object({
+  name: StringPersonalizada(50, 4),
+});

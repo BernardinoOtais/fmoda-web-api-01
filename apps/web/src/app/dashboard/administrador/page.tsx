@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import AlteraPassword from "./altera-password";
+import AlteroTipoDeConta from "./altero-tipo-de-conta";
 import NovoUser from "./novo-user";
 
 import {
@@ -61,7 +62,7 @@ const AdminidtradorLoader = async ({ searchParams }: PageProps) => {
       case "alteraPass":
         return <AlteraPassword />;
       case "alteraTipoConta":
-        return <div>👤 Opções para alterar o tipo da conta do usuário.</div>;
+        return <AlteroTipoDeConta />;
       default:
         return <div>⚠ Selecione uma opção válida.</div>;
     }
