@@ -16,6 +16,7 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, roleProtectedProcedure } from "@/init";
 
 const PAPEL_ROTA = PAPEL_ROTA_EMBARQUES;
+
 export const embarques = createTRPCRouter({
   getEnviosAcessorios: roleProtectedProcedure(PAPEL_ROTA)
     .input(DadosParaPesquisaComPaginacaoEOrdemSchema)

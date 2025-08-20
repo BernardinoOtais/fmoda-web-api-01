@@ -6,12 +6,7 @@ import {
   AlteraTipoDeContaSchema,
   AlteraTipoDeContaSchemaDto,
 } from "@repo/tipos/user";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-  useQuery,
-} from "@repo/trpc";
+import { useMutation, useSuspenseQuery, useQuery } from "@repo/trpc";
 import { CircleHelp } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
