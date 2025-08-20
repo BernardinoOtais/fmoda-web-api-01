@@ -48,8 +48,8 @@ const ContainerConteudoFooterWrapper = ({
     !!pai
   ) {
     return (
-      <main className="relative grow ">
-        <div className="absolute top-0 bottom-0 flex flex-col w-full space-y-2">
+      <main className="relative grow">
+        <div className="absolute top-0 bottom-0 flex w-full">
           <WrapperConteudoAcessorios idContainer={pai} idEnvio={idEnvio} />
         </div>
       </main>

@@ -29,7 +29,7 @@ const WrapperConteudoAcessorios = ({
   const conteudoValido = conteudo;
 
   return (
-    <>
+    <div className="flex flex-col gap-1 w-full">
       <ConteudoExistente
         idContainer={idContainer}
         idEnvio={idEnvio}
@@ -38,7 +38,7 @@ const WrapperConteudoAcessorios = ({
       />
 
       <WrapperInsereConteudo idEnvio={idEnvio} idContainer={idContainer} />
-    </>
+    </div>
   );
 };
 
