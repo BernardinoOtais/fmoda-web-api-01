@@ -180,71 +180,77 @@ const ComposicaoResultante = ({
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
         Composição Resultante
       </h3>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-center space-y-1"
-        >
-          <div className="flex flex-row space-x-1 items-end">
-            {total?.map((comp, indice) => {
-              return (
-                <div key={comp.idComposicao}>
-                  {comp.qtt !== "0" && (
-                    <>
-                      <FormField
-                        control={form.control}
-                        name={`ComposicoesTratadas.${indice}.qtt`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="">
-                              <div className="mx-auto">
-                                <span>%</span>
-                                <span className="pr-2">
-                                  {comp?.composicaoAbreviatura}
-                                </span>
-                              </div>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                className="w-24"
-                                {...field}
-                                autoFocus
-                                disabled={isPending}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </>
-                  )}
-                </div>
-              );
-            })}
-            <span className="w-20">{` = ${somaPercentagem} %`}</span>
-            <Button
-              type="button"
-              className="cursor-pointer"
-              disabled={isPending}
-              onClick={() => {
-                reset();
-              }}
-            >
-              Reset
-            </Button>
-          </div>
-          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
-            Composição calculada
-          </h3>
-          <span className="font-semibold">{percentragemCalculada(total)}</span>
-          <Button
-            type="submit"
-            className="cursor-pointer"
-            disabled={somaPercentagem !== 100 || isPending}
+      <div className="relative w-full overflow-x-auto">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col space-y-1 max-w-5xl mx-auto"
           >
-            Grava Composição...
-          </Button>
-        </form>
-      </Form>
+            <div className="flex flex-row space-x-1 items-end">
+              {total?.map((comp, indice) => {
+                return (
+                  <div key={comp.idComposicao}>
+                    {comp.qtt !== "0" && (
+                      <>
+                        <FormField
+                          control={form.control}
+                          name={`ComposicoesTratadas.${indice}.qtt`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="">
+                                <div className="mx-auto">
+                                  <span>%</span>
+                                  <span className="pr-2">
+                                    {comp?.composicaoAbreviatura}
+                                  </span>
+                                </div>
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="w-28"
+                                  {...field}
+                                  autoFocus
+                                  disabled={isPending}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+              <span className="w-24 flex-shrink-0 text-center">
+                {` = ${somaPercentagem} %`}
+              </span>
+              <Button
+                type="button"
+                className="cursor-pointer"
+                disabled={isPending}
+                onClick={() => {
+                  reset();
+                }}
+              >
+                Reset
+              </Button>
+            </div>
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
+              Composição calculada
+            </h3>
+            <span className="font-semibold">
+              {percentragemCalculada(total)}
+            </span>
+            <Button
+              type="submit"
+              className="cursor-pointer w-52 mx-auto"
+              disabled={somaPercentagem !== 100 || isPending}
+            >
+              Grava Composição...
+            </Button>
+          </form>
+        </Form>
+      </div>
     </>
   );
 };

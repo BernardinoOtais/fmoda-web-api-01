@@ -81,8 +81,8 @@ const ConteudoExistente = ({
   };
 
   return (
-    <div>
-      <Table>
+    <>
+      <Table className="max-w-[2000px] mx-auto ">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[70px]">Op</TableHead>
@@ -127,7 +127,7 @@ const ConteudoExistente = ({
           Conteudo
         </Button>
       )}
-    </div>
+    </>
   );
 };
 

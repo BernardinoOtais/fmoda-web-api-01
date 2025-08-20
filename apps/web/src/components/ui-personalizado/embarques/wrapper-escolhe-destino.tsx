@@ -32,7 +32,7 @@ export function WrapperEscolheDestino<T extends FieldValues>({
       name={name}
       options={data}
       placeholder="Destino..."
-      largura={largura ?? "w-[450px]"}
+      largura={largura ?? "w-[350px] sm:w-[450px]"}
       mostraErro={false}
       disable={isSaving !== undefined ? isSaving : false}
     />
