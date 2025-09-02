@@ -12,6 +12,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@types/multer": "^2.0.0",
     "@types/qrcode": "^1.5.5"
   },
   "dependencies": {
