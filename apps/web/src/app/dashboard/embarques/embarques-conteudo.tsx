@@ -6,10 +6,10 @@ import React from "react";
 
 import NovoEnvio from "./novo-envio";
 import WrapperEnvios from "./wrapper-envios";
-import SwitchFechado from "../../../components/ui-personalizado/meus-components/switch-fechado";
 
 import NItensPorPagina from "@/components/ui-personalizado/meus-components/n-itens-por-pagina";
 import Paginacao from "@/components/ui-personalizado/meus-components/paginacao";
+import SwitchFechado from "@/components/ui-personalizado/meus-components/switch-fechado";
 import { useTRPC } from "@/trpc/client";
 
 type EmbarquesConteudoFinalProps = {

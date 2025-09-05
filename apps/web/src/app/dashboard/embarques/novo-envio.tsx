@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import WrapperEscolheDestino from "@/components/ui-personalizado/embarques/wrapper-escolhe-destino";
+import WrapperEscolheDestino from "@/components/ui-personalizado/meus-components/wrapper-escolhe-destino";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 

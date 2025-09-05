@@ -9,10 +9,9 @@ import { useMutation, useQueryClient } from "@repo/trpc";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import WrapperEscolheDestino from "../wrapper-escolhe-destino";
-
 import { Form } from "@/components/ui/form";
 import { useTRPC } from "@/trpc/client";
+import WrapperEscolheDestino from "../../meus-components/wrapper-escolhe-destino";
 
 type DestinosDesteEnvioProps = {
   idEnvio: number;

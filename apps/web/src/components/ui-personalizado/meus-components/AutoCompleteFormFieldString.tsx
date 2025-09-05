@@ -100,9 +100,17 @@ export function AutoCompleteFormFieldString<T extends FieldValues>({
             <PopoverContent
               className={cn("p-0 min-w-full")}
               style={{ pointerEvents: "auto" }}
+              side="bottom"
+              align="start"
+              // 👇 this makes it render outside the DialogContent container
+              forceMount
             >
               <Command>
-                <CommandInput placeholder="Pesquisa..." disabled={disable} />
+                <CommandInput
+                  placeholder="Pesquisa..."
+                  disabled={disable}
+                  className="w-full"
+                />
                 <CommandList>
                   <CommandEmpty>{emptyMessage}</CommandEmpty>
                   <CommandGroup>

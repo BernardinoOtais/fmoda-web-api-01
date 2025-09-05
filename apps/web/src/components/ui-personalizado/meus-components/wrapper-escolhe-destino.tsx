@@ -11,6 +11,7 @@ type WrapperEscolheDestinoProps<T extends FieldValues> = {
   largura?: string;
   isSaving?: boolean;
   label?: string;
+  placeholder?: string;
 };
 
 export function WrapperEscolheDestino<T extends FieldValues>({
@@ -19,6 +20,7 @@ export function WrapperEscolheDestino<T extends FieldValues>({
   largura,
   isSaving,
   label,
+  placeholder,
 }: WrapperEscolheDestinoProps<T>) {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
@@ -31,7 +33,7 @@ export function WrapperEscolheDestino<T extends FieldValues>({
       label={label}
       name={name}
       options={data}
-      placeholder="Destino..."
+      placeholder={placeholder || "Destino..."}
       largura={largura ?? "w-[350px] sm:w-[450px]"}
       mostraErro={false}
       disable={isSaving !== undefined ? isSaving : false}

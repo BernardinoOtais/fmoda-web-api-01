@@ -1,56 +1,53 @@
+import { PlaneamentoOpsNaoPlaneadas } from "@repo/tipos/planeamento";
+
 import { prismaEnvios } from "@/prisma-servicos/envios/envios";
 
-export const getOpAbertasDb = async () => {
-  //throw new Error("Simulated failure for testing");
-  const dados = await prismaEnvios.$queryRaw<
-    {
-      ref: string;
-      design: string;
-      fot: string;
-      json_data: string;
-    }[]
-  >`
-select 
-    bi.ref,
-    bi.design,
-    foto = 'file:' + replace(replace(max(fref.u_imagem), '\PHC\', '\fotostratadas\op\'), '\', '/'),
-    json_data = (
-        select 
-            bo.obrano,
-            sum(bi2.qtt) as total_qtt
-        from 
-			FMO_PHC..bo bo
-        join 
-			FMO_PHC..bo2 bo2 on bo.bostamp = bo2.bo2stamp
-        join 
-			FMO_PHC..bi bi2 on bo.bostamp = bi2.bostamp
-        where bo.ndos = 1
-          and bo2.area = 'Marrocos '
-          and bo.fechada = 0 
-          and bo.tabela1 != 'amostra'
-          and bi2.ref = bi.ref
-          and bi2.design = bi.design
-        group by bo.obrano
-		order by 2
-        for json path
-    )
-from 
-	FMO_PHC..bo bo
+type tabelaRecebida = PlaneamentoOpsNaoPlaneadas[];
+export const getOpAbertasDb =
+  async () => prismaEnvios.$queryRaw<tabelaRecebida>`
+SELECT 
+	id			    = trim(cast(bo.obrano as char(15))),
+	op			    = trim(cast(bo.obrano as char(15))),
+    modelo          = trim(bo.marca) + '/' + 
+				    LTRIM(RTRIM(ISNULL(
+                        IIF(CHARINDEX(' - ', bi_first.cor) > 0,
+                            LEFT(bi_first.cor, CHARINDEX(' - ', bi_first.cor)),
+                            bi_first.cor
+                        ), ''
+                    ))),
+    descricao       = LTRIM(RTRIM(ISNULL(REPLACE(bi_first.design, LTRIM(RTRIM(bo.marca)), ''), ''))),
+    pedido          = LTRIM(RTRIM(ISNULL(
+                        IIF(CHARINDEX(';', bo3.u_tpestamp) > 0,
+                            LEFT(bo3.u_tpestamp, CHARINDEX(';', bo3.u_tpestamp) - 1),
+                            bo3.u_tpestamp
+                        ), ''
+                    ))),
+    corNome         = bi_first.cor,
+	quantidade      = LTRIM(RTRIM(CAST(CAST(ISNULL(bi_sum.total_qtt, 0) AS INT) AS VARCHAR(15)))),
+	departamento    = bo.tabela2,
+	foto           = REPLACE(fref.u_imagem, '\\10.0.0.13\Winsig\DEP\PHC\docsphc\desenhos', 'Desenhos')
+FROM 
+    FMO_PHC..bo
+JOIN 
+    FMO_PHC..bo2 ON bo.bostamp = bo2.bo2stamp
+JOIN 
+    FMO_PHC..bo3 ON bo.bostamp = bo3.bo3stamp
 join 
-	FMO_PHC..bo2 bo2 on bo.bostamp = bo2.bo2stamp
-join 
-	FMO_PHC..fref fref on bo.fref = fref.fref
-join 
-	FMO_PHC..bi bi on bo.bostamp = bi.bostamp
-where bo.ndos = 1
-  and bo2.area = 'Marrocos '
-  and bo.fechada = 0 
-  and bo.tabela1 != 'amostra'
-group
-	by bi.ref, bi.design
-order by 
-	bi.ref, bi.design;
-    `;
-
-  return dados;
-};
+	FMO_PHC..fref on bo.fref = fref.fref
+OUTER APPLY (
+    SELECT TOP 1 
+        design,
+        cor
+    FROM FMO_PHC..bi 
+    WHERE bi.bostamp = bo.bostamp
+) bi_first
+OUTER APPLY (
+    SELECT SUM(qtt) AS total_qtt
+    FROM FMO_PHC..bi 
+    WHERE bi.bostamp = bo.bostamp
+) bi_sum
+WHERE bo.ndos = 1
+	and bo2.area = 'MARROCOS'
+	and bo.fechada = 0
+	and bo.tabela1 != 'amostra'
+order by 1`;

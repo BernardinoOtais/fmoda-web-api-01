@@ -70,7 +70,7 @@ export const MenusExistentes: MenusTodos = {
     subMenuItems: [
       {
         nome: "N. Planeamento",
-        path: "/dashboard/planeamento/novoplaneamento",
+        path: "/dashboard/planeamento?novo=true",
         icon: PlaneIcon,
         subMenu: false,
       },

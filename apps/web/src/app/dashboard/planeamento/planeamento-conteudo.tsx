@@ -1,11 +1,8 @@
 "use client";
-import { useSuspenseQuery } from "@repo/trpc";
 import Image from "next/image";
-
-import React, { RefObject, useEffect, useRef, useState, Suspense } from "react";
+import React, { useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
-import { useTRPC } from "@/trpc/client";
 
 const PlaneamentoConteudo = () => {
   /*
