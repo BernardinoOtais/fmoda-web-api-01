@@ -25,7 +25,7 @@ SELECT
     corNome         = bi_first.cor,
 	quantidade      = LTRIM(RTRIM(CAST(CAST(ISNULL(bi_sum.total_qtt, 0) AS INT) AS VARCHAR(15)))),
 	departamento    = bo.tabela2,
-	foto           = REPLACE(fref.u_imagem, '\\10.0.0.13\Winsig\DEP\PHC\docsphc\desenhos', 'Desenhos')
+	foto           =  REPLACE(fref.u_imagem, '\\\\10.0.0.13\\Winsig\\DEP\\PHC\\docsphc\\desenhos', 'Desenhos')
 FROM 
     FMO_PHC..bo
 JOIN 

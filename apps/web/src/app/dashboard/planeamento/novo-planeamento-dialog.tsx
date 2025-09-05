@@ -38,17 +38,6 @@ const NovoPlaneamentoDialog = ({
   const { data } = useSuspenseQuery(
     trpc.planeamento.getOpsEClientes.queryOptions()
   );
-  const form = useForm<PosNovoPlaneamentoDto>({
-    resolver: zodResolver(PosNovoPlaneamentoSchema),
-    defaultValues: {
-      op: undefined,
-    },
-  });
-  const opValue = form.watch("op");
-
-  const debouncedOp = useDebounce({ op: opValue }, 1250);
-
-  async function onSubmit(values: PosNovoPlaneamentoDto) {}
 
   return (
     <Dialog
