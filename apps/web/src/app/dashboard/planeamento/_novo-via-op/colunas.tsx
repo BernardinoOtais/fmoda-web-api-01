@@ -70,11 +70,13 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
         <div className="flex flex-col items-center justify-center">
           <p>{departamento}</p>
           {process.env.NODE_ENV === "production" && (
-            <LazyFotoClient
-              src={foto}
-              alt="Foto Modelo"
-              cssImage="w-24 mx-auto m-2"
-            />
+            <div className="w-24 h-24 flex items-center justify-center relative">
+              <LazyFotoClient
+                src={foto}
+                alt="Foto Modelo"
+                cssImage="w-24 h-24 object-contain mx-auto"
+              />
+            </div>
           )}
           <p>{modelo}</p>
           <p>{descricao}</p>
