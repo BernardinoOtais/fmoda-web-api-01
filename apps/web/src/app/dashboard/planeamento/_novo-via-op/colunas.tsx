@@ -6,7 +6,7 @@ import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import FotoClient from "@/components/ui-personalizado/fotos/foto-client";
+import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 
 export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
   {
@@ -70,7 +70,7 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
         <div className="flex flex-col items-center justify-center">
           <p>{departamento}</p>
           {process.env.NODE_ENV === "production" && (
-            <FotoClient
+            <LazyFotoClient
               src={foto}
               alt="Foto Modelo"
               cssImage="w-24 mx-auto m-2"
