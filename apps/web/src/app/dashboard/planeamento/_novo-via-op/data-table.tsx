@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col h-full ">
-      <div className="flex flex-row pb-1 space-x-3">
+      <div className="flex sm:flex-row flex-col pb-1 space-x-3">
         <div className="flex flex-col items-start space-y-1">
           <Label>Op...</Label>
           <Input

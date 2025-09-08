@@ -54,7 +54,7 @@ const NovoPlaneamentoDialog = ({
         }
       }}
     >
-      <DialogContent className="!w-2/3 !h-8/10 !sm:w-2/3 !sm:h-2/3 !max-w-[1080px] !max-h-[80vh] min-w-[500px] flex flex-col !p-2 ">
+      <DialogContent className="!w-2/3 !h-8/10 !sm:w-2/3 !sm:h-2/3 !max-w-[1080px] !max-h-[80vh]  flex flex-col !p-2 ">
         <DialogHeader className=" pb-0 flex-shrink-0">
           <DialogTitle>Novo Planeamento</DialogTitle>
           <DialogDescription>Cria novo Planeamento</DialogDescription>

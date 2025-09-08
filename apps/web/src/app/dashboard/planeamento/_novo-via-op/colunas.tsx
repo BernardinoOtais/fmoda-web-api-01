@@ -11,7 +11,8 @@ import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-cl
 export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
   {
     id: "select",
-    header: ({ table }) => (
+    accessorKey: "op", // Add this to specify what field to sort by
+    header: ({ table, column }) => (
       <div className="flex flex-row gap-2 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
         <label className="flex items-center cursor-pointer">
           <Checkbox
@@ -27,6 +28,14 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
           />
           <span>Op</span>
         </label>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex justify-center items-center "
+          size="icon"
+        >
+          <ArrowUpDown className="" />
+        </Button>
       </div>
     ),
     cell: ({ row }) => (
@@ -42,7 +51,7 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
         </label>
       </div>
     ),
-    enableSorting: false,
+    enableSorting: true,
     enableHiding: false,
   },
   {
