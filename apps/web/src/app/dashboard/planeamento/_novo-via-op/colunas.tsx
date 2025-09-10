@@ -2,13 +2,15 @@
 
 import { PlaneamentoOpsNaoPlaneadas } from "@repo/tipos/planeamento";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 
-export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
+export const colunasNovoPlaneamento = (
+  maisQueUmaOP: boolean
+): ColumnDef<PlaneamentoOpsNaoPlaneadas>[] => [
   {
     id: "select",
     accessorKey: "op", // Add this to specify what field to sort by
@@ -16,6 +18,7 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
       <div className="flex flex-row gap-2 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
         <label className="flex items-center cursor-pointer">
           <Checkbox
+            disabled={maisQueUmaOP}
             checked={
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -34,7 +37,13 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
           className="flex justify-center items-center "
           size="icon"
         >
-          <ArrowUpDown className="" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowUp className="h-4 w-4" />
+          ) : column.getIsSorted() === "desc" ? (
+            <ArrowDown className="h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="h-4 w-4" />
+          )}
         </Button>
       </div>
     ),
@@ -69,7 +78,13 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
           className="flex justify-center items-center w-full"
         >
           Modelo / Departamento
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowUp className="h-4 w-4" />
+          ) : column.getIsSorted() === "desc" ? (
+            <ArrowDown className="h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="h-4 w-4" />
+          )}
         </Button>
       );
     },
@@ -107,7 +122,13 @@ export const colunas: ColumnDef<PlaneamentoOpsNaoPlaneadas>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Qtt
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === "asc" ? (
+            <ArrowUp className="h-4 w-4" />
+          ) : column.getIsSorted() === "desc" ? (
+            <ArrowDown className="h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="h-4 w-4" />
+          )}
         </Button>
       );
     },

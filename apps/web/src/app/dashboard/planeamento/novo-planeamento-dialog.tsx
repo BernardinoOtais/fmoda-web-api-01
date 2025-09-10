@@ -4,7 +4,7 @@ import { useSuspenseQuery } from "@repo/trpc";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import { colunas } from "./_novo-via-op/colunas";
+import { colunasNovoPlaneamento } from "./_novo-via-op/colunas";
 import { DataTable } from "./_novo-via-op/data-table";
 
 import { Button } from "@/components/ui/button";
@@ -29,12 +29,17 @@ const NovoPlaneamentoDialog = ({
 }: NovoPlaneamentoDialogProps) => {
   const [rowSelection, setRowSelection] = useState({});
 
+  const [departamento, setDepartamento] = useState<string | null>(null);
+
+  const [maisQueUmaOP, setMaisQueUmaOp] = useState<boolean>(false);
+
   const router = useRouter();
   const trpc = useTRPC();
 
   const { data } = useSuspenseQuery(
     trpc.planeamento.getOpsEClientes.queryOptions()
   );
+
   const selectedCount = Object.keys(rowSelection).length;
 
   const criaPlaneamentos = () => {
@@ -43,6 +48,8 @@ const NovoPlaneamentoDialog = ({
       .filter(Boolean);
     console.log("Selection :", selectedRows);
   };
+
+  const colunas = colunasNovoPlaneamento(maisQueUmaOP);
   return (
     <Dialog
       open={novo === "true"}
@@ -54,7 +61,7 @@ const NovoPlaneamentoDialog = ({
         }
       }}
     >
-      <DialogContent className="!w-2/3 !h-8/10 !sm:w-2/3 !sm:h-2/3 !max-w-[1080px] !max-h-[80vh]  flex flex-col !p-2 ">
+      <DialogContent className="!w-2/3 !h-8/10 !sm:w-2/3 !sm:h-2/3 !max-w-[1080px] !max-h-[80vh]  flex flex-col !p-4 ">
         <DialogHeader className=" pb-0 flex-shrink-0">
           <DialogTitle>Novo Planeamento</DialogTitle>
           <DialogDescription>Cria novo Planeamento</DialogDescription>
@@ -66,6 +73,8 @@ const NovoPlaneamentoDialog = ({
             data={data.ops}
             rowSelection={rowSelection}
             setRowSelection={setRowSelection}
+            maisQueUmaOP={maisQueUmaOP}
+            setMaisQueUmaOp={setMaisQueUmaOp}
           />
         </div>
 

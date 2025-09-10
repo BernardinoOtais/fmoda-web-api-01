@@ -5,47 +5,53 @@ import {
   ColumnFiltersState,
   SortingState,
   VisibilityState,
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { RowSelectionState } from "@tanstack/react-table";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import DataTableComponent from "@/components/ui-personalizado/data-table/data-table-component";
+import DataTablePagination from "@/components/ui-personalizado/data-table/data-table-pagination";
+import DataTableSelectedItens from "@/components/ui-personalizado/data-table/data-table-selected-itens";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  rowSelection: RowSelectionState; // 👈 controlled state
-  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
+interface RowWithDepartamento {
+  departamento: string;
 }
 
-export function DataTable<TData, TValue>({
+interface DataTableProps<TData extends RowWithDepartamento, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  rowSelection: RowSelectionState;
+  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
+
+  maisQueUmaOP: boolean;
+  setMaisQueUmaOp: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const INITIAL_COLUMN_VISIBILITY: VisibilityState = {
+  modelo: false,
+  op: false,
+};
+
+export function DataTable<TData extends RowWithDepartamento, TValue>({
   columns,
   data,
   rowSelection,
   setRowSelection,
+  maisQueUmaOP,
+  setMaisQueUmaOp,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const [columnVisibility] = useState<VisibilityState>({
-    modelo: false,
-    op: false,
-  });
+  const columnVisibility = useMemo(() => INITIAL_COLUMN_VISIBILITY, []);
 
   const table = useReactTable({
     data,
@@ -55,6 +61,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(), // 👈 add this
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
@@ -64,109 +71,102 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    setRowSelection({});
+    setColumnFilters([]);
+  }, [maisQueUmaOP, setRowSelection]);
+
+  useEffect(() => {
+    if (!maisQueUmaOP) return;
+
+    const selectedIds = Object.keys(rowSelection);
+    if (selectedIds.length !== 1) return;
+
+    const selectedRow = data[Number(selectedIds[0])];
+    if (!selectedRow) return;
+
+    table.setColumnFilters((old) => [
+      ...old.filter((f) => f.id !== "departamento"),
+      { id: "departamento", value: selectedRow.departamento },
+    ]);
+  }, [maisQueUmaOP, rowSelection, data, table]);
+
   return (
-    <div className="flex flex-col h-full ">
-      <div className="flex sm:flex-row flex-col pb-1 space-x-3">
-        <div className="flex flex-col items-start space-y-1">
-          <Label>Op...</Label>
-          <Input
-            placeholder="Filtrar op..."
-            value={(table.getColumn("op")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("op")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+    <div className="flex flex-col h-full space-y-2">
+      <div className="w-full flex flex-col space-y-2">
+        {/* Top Row */}
+        <div className="w-full flex flex-col sm:flex-row items-center ">
+          <div className="flex items-center gap-3 hover:bg-accent/50 cursor-pointer mx-auto">
+            <Checkbox
+              id="terms"
+              checked={maisQueUmaOP}
+              onCheckedChange={(checked) => setMaisQueUmaOp(!!checked)}
+            />
+            <Label htmlFor="terms">Mais que 1 op Planeamento...</Label>
+          </div>
+          <span className="mx-auto">Fornecedor</span>
         </div>
-        <div className="flex flex-col items-start space-y-1 ">
-          <Label>Departamento...</Label>
-          <Input
-            placeholder="Dep..."
-            value={
-              (table.getColumn("departamento")?.getFilterValue() as string) ??
-              ""
-            }
-            onChange={(event) =>
-              table
-                .getColumn("departamento")
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        </div>
-        <div className="flex flex-col items-start space-y-1 ">
-          <Label>Modelo...</Label>
-          <Input
-            placeholder="Modelo..."
-            value={
-              (table.getColumn("modelo")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("modelo")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        </div>
-        <div className="flex w-full items-end">
-          <div className="ml-auto text-sm text-muted-foreground mr-1.5">
-            {table.getFilteredSelectedRowModel().rows.length} de{" "}
-            {table.getFilteredRowModel().rows.length} linha(s) seleccionadas.
+
+        {/* Filters */}
+        <div className="flex flex-col sm:flex-row pb-1 ">
+          <div className="flex flex-col space-y-1">
+            <Label>Op...</Label>
+            <Input
+              placeholder="Filtrar op..."
+              value={(table.getColumn("op")?.getFilterValue() as string) ?? ""}
+              onChange={(e) =>
+                table.getColumn("op")?.setFilterValue(e.target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <Label>Departamento...</Label>
+            <Input
+              disabled={maisQueUmaOP} // ⭐ improvement: automatically disabled when multi-op mode is on
+              placeholder="Dep..."
+              value={
+                (table.getColumn("departamento")?.getFilterValue() as string) ??
+                ""
+              }
+              onChange={(e) =>
+                table.getColumn("departamento")?.setFilterValue(e.target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <Label>Modelo...</Label>
+            <Input
+              placeholder="Modelo..."
+              value={
+                (table.getColumn("modelo")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(e) =>
+                table.getColumn("modelo")?.setFilterValue(e.target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>
+
+          <div className="flex items-end flex-1 justify-end">
+            {/* Status */}
+            <DataTableSelectedItens table={table} />
           </div>
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-hidden rounded-md border">
-        <div className="h-full overflow-auto">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+      {/* Tabela */}
+      <DataTableComponent
+        table={table}
+        numeroColunas={columns.length}
+        tableHeaderStyle="sticky top-0 z-10 bg-background border-b border-border"
+      />
+
+      {/* Pagination */}
+      <DataTablePagination table={table} />
     </div>
   );
 }

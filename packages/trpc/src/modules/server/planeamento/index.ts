@@ -1,4 +1,4 @@
-import { getOpAbertasDb, getClientesBd } from "@repo/db/planeamento";
+import { getOpAbertasDb, getFornecedoresBd } from "@repo/db/planeamento";
 import { saveBase64Image } from "@repo/imagens";
 import { PAPEL_ROTA_PLANEAMENTO } from "@repo/tipos/consts";
 import { uploadPhotoSchema } from "@repo/tipos/foto";
@@ -11,9 +11,9 @@ const PAPEL_ROTA = PAPEL_ROTA_PLANEAMENTO;
 export const planeamento = createTRPCRouter({
   getOpsEClientes: roleProtectedProcedure(PAPEL_ROTA).query(async () => {
     try {
-      const getClientes = await getClientesBd();
+      const getFornecedores = await getFornecedoresBd();
       const getOpAbertas = await getOpAbertasDb();
-      return { clientes: getClientes, ops: getOpAbertas };
+      return { fornecedores: getFornecedores, ops: getOpAbertas };
     } catch (err) {
       throw new TRPCError({
         code: "BAD_REQUEST",
