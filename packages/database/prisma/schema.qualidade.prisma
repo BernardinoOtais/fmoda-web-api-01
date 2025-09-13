@@ -583,3 +583,66 @@ model UserPapeis {
 
   @@id([idPapel, nomeUser], map: "PK_UserPapeis")
 }
+
+model departamentos {
+  departamento_id Int      @id(map: "PK_departamentos") @default(autoincrement())
+  departamento    String   @unique(map: "UQ_departamento") @qualidadeDb.NVarChar(60)
+  planos          planos[]
+}
+
+model ops {
+  op_chave       String         @id(map: "PK_ops") @qualidadeDb.Char(25)
+  op             Int
+  pedido_cliente String         @qualidadeDb.NVarChar(100)
+  ref            String         @qualidadeDb.NVarChar(25)
+  cor_nome       String         @qualidadeDb.NVarChar(25)
+  descricao      String         @qualidadeDb.NVarChar(60)
+  foto           String         @qualidadeDb.NVarChar(200)
+  qtt            Int
+  plano_livres   plano_livres[]
+  plano_ops      plano_ops[]
+}
+
+model plano_livres {
+  plan_livre_id  Int     @id(map: "PK_plano_livres_1") @default(autoincrement())
+  plan_id        Int
+  op_chave       String? @qualidadeDb.Char(25)
+  ref            String  @qualidadeDb.NVarChar(25)
+  descricao      String  @qualidadeDb.NVarChar(60)
+  pedido_cliente String  @qualidadeDb.NVarChar(100)
+  foto           String  @qualidadeDb.NVarChar(200)
+  qtt            Int
+  ops            ops?    @relation(fields: [op_chave], references: [op_chave], onDelete: NoAction, onUpdate: NoAction, map: "FK_plano_livres_ops")
+  planos         planos  @relation(fields: [plan_id], references: [plan_id], onUpdate: NoAction, map: "FK_plano_livres_planos")
+}
+
+model plano_ops {
+  plan_op_id Int    @id(map: "PK_plano_ops_1")
+  plan_id    Int
+  op_chave   String @qualidadeDb.Char(25)
+  foto       String @qualidadeDb.NVarChar(200)
+  qtt        Int
+  ops        ops    @relation(fields: [op_chave], references: [op_chave], onUpdate: NoAction, map: "FK_plano_ops_ops")
+  planos     planos @relation(fields: [plan_id], references: [plan_id], onUpdate: NoAction, map: "FK_plano_ops_planos")
+}
+
+model planos {
+  plan_id           Int              @id(map: "PK_planos") @default(autoincrement())
+  sub_contratado_id String?          @qualidadeDb.Char(25)
+  departamento_id   Int
+  qtt               Int
+  valor             Decimal?         @default(0, map: "DF_planos_valor") @qualidadeDb.Decimal(19, 4)
+  createdAt         DateTime         @default(dbgenerated("sysdatetime()"), map: "DF_planos_createdAt")
+  endDate           DateTime?
+  enviado           Boolean          @default(false, map: "DF_planos_enviado")
+  plano_livres      plano_livres[]
+  plano_ops         plano_ops[]
+  departamentos     departamentos    @relation(fields: [departamento_id], references: [departamento_id], onUpdate: NoAction, map: "FK_planos_departamentos")
+  sub_contratados   sub_contratados? @relation(fields: [sub_contratado_id], references: [sub_contratado_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_planos_sub_contratados")
+}
+
+model sub_contratados {
+  sub_contratado_id   String   @id(map: "PK_sub_contratados") @qualidadeDb.Char(25)
+  sub_contratado_nome String   @qualidadeDb.NVarChar(60)
+  planos              planos[]
+}

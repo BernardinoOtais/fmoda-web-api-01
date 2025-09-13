@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@repo/trpc";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -27,9 +28,12 @@ const NovoPlaneamentoDialog = ({
   novo,
   idDestino,
 }: NovoPlaneamentoDialogProps) => {
-  const [rowSelection, setRowSelection] = useState({});
+  //Escolha fornecedor
+  const [value, setValue] = useState(idDestino || "");
 
-  const [departamento, setDepartamento] = useState<string | null>(null);
+  const [posting, setPosting] = useState(false);
+
+  const [rowSelection, setRowSelection] = useState({});
 
   const [maisQueUmaOP, setMaisQueUmaOp] = useState<boolean>(false);
 
@@ -41,15 +45,15 @@ const NovoPlaneamentoDialog = ({
   );
 
   const selectedCount = Object.keys(rowSelection).length;
-
   const criaPlaneamentos = () => {
+    setPosting(true);
     const selectedRows = Object.keys(rowSelection)
       .map((key) => data.ops[Number(key)])
       .filter(Boolean);
     console.log("Selection :", selectedRows);
   };
 
-  const colunas = colunasNovoPlaneamento(maisQueUmaOP);
+  const colunas = colunasNovoPlaneamento(maisQueUmaOP, posting);
   return (
     <Dialog
       open={novo === "true"}
@@ -75,20 +79,29 @@ const NovoPlaneamentoDialog = ({
             setRowSelection={setRowSelection}
             maisQueUmaOP={maisQueUmaOP}
             setMaisQueUmaOp={setMaisQueUmaOp}
+            fornecedores={data.fornecedores}
+            value={value}
+            setValue={setValue}
+            posting={posting}
           />
         </div>
 
         <DialogFooter className="">
           <Button
-            disabled={selectedCount === 0}
+            disabled={selectedCount === 0 || value === "" || posting}
             onClick={criaPlaneamentos}
-            className=""
+            className="relative cursor-pointer flex justify-center items-center"
           >
-            {selectedCount === 0
-              ? "..."
-              : selectedCount === 1
-                ? "Novo Planeamento..."
-                : "Novos Planeamentos..."}
+            {posting && (
+              <Loader2 className="absolute h-4 w-4 animate-spin text-current" />
+            )}
+            <span className={posting ? "opacity-0" : ""}>
+              {selectedCount === 0
+                ? "..."
+                : selectedCount === 1
+                  ? "Novo Planeamento..."
+                  : "Novos Planeamentos..."}
+            </span>
           </Button>
         </DialogFooter>
       </DialogContent>

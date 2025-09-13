@@ -30,6 +30,18 @@ const DataTablePagination = <TData,>({
   table,
 }: DataTablePaginationProps<TData>) => {
   const id = useId();
+  const numeroDeLinhas = table.getRowCount();
+  const linhas = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  const lista =
+    numeroDeLinhas >= 100
+      ? linhas
+      : linhas.filter(
+          (n) =>
+            n <= numeroDeLinhas ||
+            (n > numeroDeLinhas &&
+              n === Math.min(...linhas.filter((x) => x > numeroDeLinhas)))
+        );
+
   return (
     <div className="flex items-center justify-between gap-8 mt-auto">
       {/* Results per page */}
@@ -47,7 +59,7 @@ const DataTablePagination = <TData,>({
             <SelectValue placeholder="Select number of results" />
           </SelectTrigger>
           <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
-            {[5, 10, 25, 50].map((pageSize) => (
+            {lista.map((pageSize) => (
               <SelectItem key={pageSize} value={pageSize.toString()}>
                 {pageSize}
               </SelectItem>

@@ -7,8 +7,8 @@ export const getFornecedoresBd = async (): Promise<
 > => prismaEnvios.$queryRaw<{ value: string; label: string }[]>`
 select 
     distinct 
-    value = fl.flstamp,
-    label = fl.nome
+    value = trim(fl.flstamp),
+    label = trim(fl.nome)
 from
     FMO_PHC..fl
 where 

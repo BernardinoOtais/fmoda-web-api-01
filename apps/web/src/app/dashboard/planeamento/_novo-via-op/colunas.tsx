@@ -9,16 +9,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 
 export const colunasNovoPlaneamento = (
-  maisQueUmaOP: boolean
+  maisQueUmaOP: boolean,
+  posting: boolean
 ): ColumnDef<PlaneamentoOpsNaoPlaneadas>[] => [
   {
     id: "select",
-    accessorKey: "op", // Add this to specify what field to sort by
+    accessorKey: "op",
     header: ({ table, column }) => (
       <div className="flex flex-row gap-2 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
         <label className="flex items-center cursor-pointer">
           <Checkbox
-            disabled={maisQueUmaOP}
+            disabled={maisQueUmaOP || posting}
             checked={
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -33,6 +34,7 @@ export const colunasNovoPlaneamento = (
         </label>
         <Button
           variant="ghost"
+          disabled={posting}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex justify-center items-center "
           size="icon"
@@ -51,6 +53,7 @@ export const colunasNovoPlaneamento = (
       <div className="flex flex-row gap-2 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
         <label className="flex items-center cursor-pointer">
           <Checkbox
+            disabled={posting}
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label={`Select ${row.original.op}`}
@@ -66,13 +69,14 @@ export const colunasNovoPlaneamento = (
   {
     accessorKey: "op",
     header: "Op",
-    enableHiding: true, // allow hiding
+    enableHiding: true,
   },
   {
     accessorKey: "departamento",
     header: ({ column }) => {
       return (
         <Button
+          disabled={posting}
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex justify-center items-center w-full"
@@ -118,6 +122,7 @@ export const colunasNovoPlaneamento = (
     header: ({ column }) => {
       return (
         <Button
+          disabled={posting}
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -136,6 +141,6 @@ export const colunasNovoPlaneamento = (
   {
     accessorKey: "modelo",
     header: "Modelo",
-    enableHiding: true, // allow hiding
+    enableHiding: true,
   },
 ];
