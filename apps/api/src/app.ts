@@ -26,6 +26,11 @@ app.use(cookieParser());
  * Security enhancements and rate limiting.
  */
 app.use(securityMiddleware());
+
+/**
+ * Trust your reverse proxy or load balancer
+ */
+app.set("trust proxy", 1);
 app.use(rateLimiter());
 
 /**
