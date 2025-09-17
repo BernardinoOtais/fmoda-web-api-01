@@ -1,10 +1,20 @@
-import { getOpAbertasDb, getFornecedoresBd } from "@repo/db/planeamento";
+import {
+  getOpAbertasDb,
+  getFornecedoresBd,
+  postDePlaneamentosDB,
+  getPlaneamentosDb,
+} from "@repo/db/planeamento";
 import { saveBase64Image } from "@repo/imagens";
 import { PAPEL_ROTA_PLANEAMENTO } from "@repo/tipos/consts";
 import { uploadPhotoSchema } from "@repo/tipos/foto";
+import {
+  GetPlaneamentosSchemas,
+  PosNovoPlaneamentoSchema,
+} from "@repo/tipos/planeamento";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, roleProtectedProcedure } from "@/init";
+import { delay } from "@/utils/delay";
 
 const PAPEL_ROTA = PAPEL_ROTA_PLANEAMENTO;
 
@@ -22,6 +32,34 @@ export const planeamento = createTRPCRouter({
       });
     }
   }),
+  getPlaneamentos: roleProtectedProcedure(PAPEL_ROTA)
+    .input(GetPlaneamentosSchemas)
+    .query(async ({ input }) => {
+      try {
+        // await delay(5000); // waits 2 seconds
+        return await getPlaneamentosDb(input.enviado, input.sub_contratado_id);
+      } catch (err) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao obter Planeamentos.",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+  postDePlaneamentos: roleProtectedProcedure(PAPEL_ROTA)
+    .input(PosNovoPlaneamentoSchema)
+    .mutation(async ({ input }) => {
+      try {
+        await postDePlaneamentosDB(input);
+      } catch (err) {
+        console.log(err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao inserir planeamentos..",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
   patchEstadoItem: roleProtectedProcedure(PAPEL_ROTA)
     .input(uploadPhotoSchema)
     .mutation(async ({ input }) => {
@@ -37,3 +75,5 @@ export const planeamento = createTRPCRouter({
       }
     }),
 });
+
+//postDePlaneamentosDB

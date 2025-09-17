@@ -16,7 +16,7 @@ export const colunasNovoPlaneamento = (
     id: "select",
     accessorKey: "op",
     header: ({ table, column }) => (
-      <div className="flex flex-row gap-2 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
+      <div className="flex flex-row gap-2 items-center justify-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
         <label className="flex items-center cursor-pointer">
           <Checkbox
             disabled={maisQueUmaOP || posting}
@@ -50,7 +50,7 @@ export const colunasNovoPlaneamento = (
       </div>
     ),
     cell: ({ row }) => (
-      <div className="flex flex-row gap-2 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
+      <div className="flex flex-row gap-2 items-center  justify-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-9 px-2 py-2 ">
         <label className="flex items-center cursor-pointer">
           <Checkbox
             disabled={posting}
@@ -65,11 +65,6 @@ export const colunasNovoPlaneamento = (
     ),
     enableSorting: true,
     enableHiding: false,
-  },
-  {
-    accessorKey: "op",
-    header: "Op",
-    enableHiding: true,
   },
   {
     accessorKey: "departamento",
@@ -95,7 +90,7 @@ export const colunasNovoPlaneamento = (
     cell: ({ row }) => {
       const { modelo, foto, descricao, departamento } = row.original;
       return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center ">
           <p>{departamento}</p>
           {process.env.NODE_ENV === "production" && (
             <div className="w-24 h-24 flex items-center justify-center relative">
@@ -112,11 +107,6 @@ export const colunasNovoPlaneamento = (
       );
     },
   },
-
-  {
-    accessorKey: "pedido",
-    header: "Pedido",
-  },
   {
     accessorKey: "quantidade",
     header: ({ column }) => {
@@ -125,6 +115,7 @@ export const colunasNovoPlaneamento = (
           disabled={posting}
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="w-full mx-auto"
         >
           Qtt
           {column.getIsSorted() === "asc" ? (
@@ -137,10 +128,27 @@ export const colunasNovoPlaneamento = (
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const { quantidade } = row.original;
+      return (
+        <div className="flex flex-col items-center justify-center">
+          {quantidade}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "pedido",
+    header: "Pedido",
   },
   {
     accessorKey: "modelo",
     header: "Modelo",
+    enableHiding: true,
+  },
+  {
+    accessorKey: "op",
+    header: "Op",
     enableHiding: true,
   },
 ];

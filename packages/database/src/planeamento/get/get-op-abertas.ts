@@ -1,10 +1,10 @@
 import { PlaneamentoOpsNaoPlaneadas } from "@repo/tipos/planeamento";
 
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
+import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
 type tabelaRecebida = PlaneamentoOpsNaoPlaneadas[];
 export const getOpAbertasDb =
-  async () => prismaEnvios.$queryRaw<tabelaRecebida>`
+  async () => prismaQualidade.$queryRaw<tabelaRecebida>`
 SELECT 
 	id			    = trim(cast(bo.obrano as char(15))),
 	op			    = trim(cast(bo.obrano as char(15))),

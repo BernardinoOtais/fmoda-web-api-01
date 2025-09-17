@@ -1,10 +1,10 @@
 import { AutocompleteStringDto } from "@repo/tipos/comuns";
 
-import { prismaEnvios } from "@/prisma-servicos/envios/envios";
+import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
 export const getFornecedoresBd = async (): Promise<
   AutocompleteStringDto[]
-> => prismaEnvios.$queryRaw<{ value: string; label: string }[]>`
+> => prismaQualidade.$queryRaw<{ value: string; label: string }[]>`
 select 
     distinct 
     value = trim(fl.flstamp),

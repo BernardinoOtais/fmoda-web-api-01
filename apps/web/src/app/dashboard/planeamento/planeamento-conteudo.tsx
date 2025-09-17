@@ -1,17 +1,30 @@
 "use client";
-import Image from "next/image";
-import React, { useRef, useState } from "react";
+import { useSuspenseQuery } from "@repo/trpc";
+import React from "react";
 
-import { Input } from "@/components/ui/input";
+import { useTRPC } from "@/trpc/client";
 
 const PlaneamentoConteudo = () => {
-  /*
   const trpc = useTRPC();
 
   const { data } = useSuspenseQuery(
-    trpc.planeamento.getOpAbertas.queryOptions()
+    trpc.planeamento.getPlaneamentos.queryOptions(
+      { enviado: false },
+      {
+        staleTime: Infinity,
+      }
+    )
   );
-  */
+
+  return <div>{JSON.stringify(data)}</div>;
+};
+
+export default PlaneamentoConteudo;
+
+/*
+
+
+
 
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -37,7 +50,10 @@ const PlaneamentoConteudo = () => {
       setPreview(URL.createObjectURL(file)); // generate local preview
     }
   };
-  return (
+
+
+
+
     <div onDragOver={handleDragOver} onDrop={handleDrop}>
       <Input
         type="file"
@@ -59,7 +75,4 @@ const PlaneamentoConteudo = () => {
         }}
       />
     </div>
-  );
-};
-
-export default PlaneamentoConteudo;
+*/

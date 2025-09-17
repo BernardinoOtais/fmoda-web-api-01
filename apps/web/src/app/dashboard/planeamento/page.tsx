@@ -15,9 +15,8 @@ export const metadata: Metadata = {
   title: "Planeamento",
 };
 
-type PlaneamentoProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
+type SearchParams = { [key: string]: string | string[] | undefined };
+type PlaneamentoProps = { searchParams: Promise<SearchParams> };
 
 const Planeamento = ({ searchParams }: PlaneamentoProps) => {
   return (
@@ -30,35 +29,39 @@ const Planeamento = ({ searchParams }: PlaneamentoProps) => {
 export default Planeamento;
 
 const PlaneamentoLoader = async ({ searchParams }: PlaneamentoProps) => {
-  const { novo } = await searchParams;
+  const { novo, enviado } = await searchParams;
   await authorizePapelOrRedirect("Planeamento");
   const queryClient = getQueryClient();
 
+  const estadoEnvios = enviado === "true";
   void queryClient.prefetchQuery(
-    trpc.planeamento.getOpsEClientes.queryOptions()
+    trpc.planeamento.getPlaneamentos.queryOptions({ enviado: estadoEnvios })
   );
+
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense
-        fallback={
-          <LoadingState
-            title="A carregar Bms..."
-            description="Pode demorar alguns segundos.."
-          />
-        }
-      >
-        <ErrorBoundary
+    <>
+      {novo === "true" && <NovoPlaneamentoDialog novo={novo} />}
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense
           fallback={
-            <ErrorState
-              title="Erro!!"
-              description="Não foi possível carregar Bms..."
+            <LoadingState
+              title="A carregar Planeamentos"
+              description="Pode demorar alguns segundos.."
             />
           }
         >
-          <NovoPlaneamentoDialog novo={novo} />
-          <PlaneamentoConteudo />
-        </ErrorBoundary>
-      </Suspense>
-    </HydrationBoundary>
+          <ErrorBoundary
+            fallback={
+              <ErrorState
+                title="Erro!!"
+                description="Não foi possível carregar os Planeamentos..."
+              />
+            }
+          >
+            <PlaneamentoConteudo />
+          </ErrorBoundary>
+        </Suspense>
+      </HydrationBoundary>
+    </>
   );
 };

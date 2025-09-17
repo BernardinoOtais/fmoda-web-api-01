@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 import { useSidebar } from "../sidebar-modificada";
@@ -10,7 +11,7 @@ const BotaoHeader = () => {
 
   if ((isMobile && openMobile) || (state === "expanded" && !isMobile))
     return (
-      <a href="/dashboard">
+      <Link href="/dashboard">
         <div className="flex flex-row gap-3">
           <div className="flex aspect-square items-center justify-center rounded-lg">
             <Image
@@ -25,18 +26,18 @@ const BotaoHeader = () => {
             <span className="truncate text-xs">Indústria têxtiel S.A.</span>
           </div>
         </div>
-      </a>
+      </Link>
     );
 
   return (
-    <a href="/dashboard">
+    <Link href="/dashboard">
       <Image
         src="/favicon.ico"
         alt="Favicon"
         width={32} // Set width
         height={32} // Set height
       />
-    </a>
+    </Link>
   );
 };
 

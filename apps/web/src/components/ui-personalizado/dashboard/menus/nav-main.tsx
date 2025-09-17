@@ -1,5 +1,6 @@
 import { getSession } from "@repo/authweb/session";
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import {
@@ -46,10 +47,10 @@ export async function NavMain() {
           >
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.nome}>
-                <a href={item.path}>
+                <Link href={item.path}>
                   {item.icon && <item.icon />}
                   <span>{item.nome}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
               {item.subMenuItems?.length ? (
                 <>
@@ -64,9 +65,9 @@ export async function NavMain() {
                       {item.subMenuItems?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.nome}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.path}>
+                            <Link href={subItem.path}>
                               <span>{subItem.nome}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}

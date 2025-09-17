@@ -36,6 +36,8 @@
     "db:pull:qualidade": "prisma db pull --schema=prisma/schema.qualidade.prisma",
     "db:pull:androidMarrocos": "prisma db pull --schema=prisma/android/schema.androidMarrocos.prisma",
     "db:pull:androidCortes": "prisma db pull --schema=prisma/android/schema.androidCortes.prisma",
+    "db:formatAuth": "prisma format --schema=prisma/schema.auth.prisma",
+    "db:validateAuth": "prisma validate --schema=prisma/schema.auth.prisma",
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
     "build": "npm run db:generate && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "postbuild": "cp -r src/generated dist/",

@@ -1,10 +1,6 @@
 import z from "zod";
 
-import {
-  ChavePhcSchema,
-  NumeroInteiroMaiorQueZero,
-  StringComTamanhoSchema,
-} from "@/comuns";
+import { ChavePhcSchema, NumeroInteiroMaiorQueZero } from "@/comuns";
 
 export type PlaneamentoOpsNaoPlaneadas = {
   id: string;
@@ -18,12 +14,36 @@ export type PlaneamentoOpsNaoPlaneadas = {
   foto: string;
 };
 
+export type PlaneamentoPostOps = {
+  op_chave: string;
+  op: string;
+  ref: string;
+  modelo: string;
+  descricao: string;
+  pedido: string;
+  corNome: string;
+  quantidade: string;
+  departamento: string;
+  foto: string;
+};
+
 //Novo planeamento
-export const PosNovoPlaneamentoSchema = z.object({
-  idDestino: ChavePhcSchema,
-  op: NumeroInteiroMaiorQueZero.optional(),
-  modelo: StringComTamanhoSchema(15, 4),
+export const GetPlaneamentosSchemas = z.object({
+  enviado: z.boolean(),
+  sub_contratado_id: ChavePhcSchema.optional(),
 });
 
-export type PosNovoPlaneamentoDto = z.infer<typeof PosNovoPlaneamentoSchema>;
+export const QantidadeOpSchema = NumeroInteiroMaiorQueZero;
+export const OpSchema = NumeroInteiroMaiorQueZero;
+export const PosNovoPlaneamentoSchema = z.object({
+  idDestino: ChavePhcSchema,
+  ops: z.array(
+    z.object({
+      op: NumeroInteiroMaiorQueZero,
+    })
+  ),
+  maisQueUmaOP: z.boolean(),
+});
+
+export type PosNovosPlaneamentosDto = z.infer<typeof PosNovoPlaneamentoSchema>;
 //Novo planeamento
