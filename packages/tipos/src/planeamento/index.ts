@@ -2,6 +2,8 @@ import z from "zod";
 
 import { ChavePhcSchema, NumeroInteiroMaiorQueZero } from "@/comuns";
 
+export type { PlaneamentoLinha } from "./planeamentos-tipo";
+
 export type PlaneamentoOpsNaoPlaneadas = {
   id: string;
   op: string;
@@ -44,6 +46,6 @@ export const PosNovoPlaneamentoSchema = z.object({
   ),
   maisQueUmaOP: z.boolean(),
 });
+//Novo planeamento
 
 export type PosNovosPlaneamentosDto = z.infer<typeof PosNovoPlaneamentoSchema>;
-//Novo planeamento

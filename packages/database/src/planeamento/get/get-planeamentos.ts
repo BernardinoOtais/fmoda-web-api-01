@@ -10,8 +10,12 @@ export const getPlaneamentosDb = async (
       ...(sub_contratado_id ? { sub_contratado_id } : {}),
     },
     select: {
+      plan_id: true,
       departamentos: true,
       sub_contratados: true,
+      modelo: true,
+      descricao: true,
+      cor_nome: true,
       qtt: true,
       valor: true,
       plano_ops: {
@@ -27,6 +31,7 @@ export const getPlaneamentosDb = async (
               modelo: true,
               descricao: true,
               cor_nome: true,
+              foto: true,
               qtt: true,
             },
           },
@@ -50,6 +55,7 @@ export const getPlaneamentosDb = async (
               modelo: true,
               descricao: true,
               cor_nome: true,
+              foto: true,
               qtt: true,
             },
           },
@@ -60,6 +66,7 @@ export const getPlaneamentosDb = async (
 
   return planeamentos.map((plano) => ({
     ...plano,
+    id: plano.plan_id,
     valor: plano.valor ? plano.valor.toString() : "",
   }));
 };

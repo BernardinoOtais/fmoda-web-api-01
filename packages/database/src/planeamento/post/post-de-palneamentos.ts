@@ -10,14 +10,17 @@ import { getOpAbertaDb } from "../get/get-op-aberta";
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
 type Planeamento = {
+  plan_id: number;
+  sub_contratado_id: string | null;
   departamento_id: number;
+  modelo: string;
+  descricao: string;
+  cor_nome: string | null;
   qtt: number;
   valor: Decimal | null;
   createdAt: Date;
   endDate: Date | null;
   enviado: boolean;
-  plan_id: number;
-  sub_contratado_id: string | null;
 };
 
 export const postDePlaneamentosDB = async (
@@ -51,6 +54,9 @@ export const postDePlaneamentosDB = async (
       data: {
         sub_contratado_id: idDestino,
         departamento_id: departamento.departamento_id,
+        modelo: dadosAInserir[0]?.modelo || "",
+        descricao: dadosAInserir[0]?.descricao || "",
+        cor_nome: dadosAInserir[0]?.corNome,
         qtt: qttPlaneada,
       },
     });
@@ -81,6 +87,9 @@ export const postDePlaneamentosDB = async (
           data: {
             sub_contratado_id: idDestino,
             departamento_id: departamento.departamento_id,
+            modelo: dadosOp.modelo,
+            descricao: dadosOp.descricao,
+            cor_nome: dadosOp.corNome,
             qtt: quantidadeResult.data,
           },
         });

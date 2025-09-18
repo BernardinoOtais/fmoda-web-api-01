@@ -14,7 +14,7 @@ import {
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, roleProtectedProcedure } from "@/init";
-import { delay } from "@/utils/delay";
+//import { delay } from "@/utils/delay";
 
 const PAPEL_ROTA = PAPEL_ROTA_PLANEAMENTO;
 

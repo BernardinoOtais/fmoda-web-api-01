@@ -451,6 +451,9 @@ model planos {
   plan_id           Int              @id(map: "PK_planos") @default(autoincrement())
   sub_contratado_id String?          @qualidadeDb.Char(25)
   departamento_id   Int
+  modelo            String           @qualidadeDb.NVarChar(25)
+  descricao         String           @qualidadeDb.NVarChar(60)
+  cor_nome          String?          @qualidadeDb.NVarChar(25)
   qtt               Int
   valor             Decimal?         @default(0, map: "DF_planos_valor") @qualidadeDb.Decimal(19, 4)
   createdAt         DateTime         @default(dbgenerated("sysdatetime()"), map: "DF_planos_createdAt")
