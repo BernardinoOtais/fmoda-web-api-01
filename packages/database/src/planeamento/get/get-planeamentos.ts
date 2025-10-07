@@ -13,6 +13,7 @@ export const getPlaneamentosDb = async (
       plan_id: true,
       departamentos: true,
       sub_contratados: true,
+      pedido_cliente: true,
       modelo: true,
       descricao: true,
       cor_nome: true,
@@ -26,7 +27,7 @@ export const getPlaneamentosDb = async (
           qtt: true,
           ops: {
             select: {
-              op_chave: true,
+              op: true,
               pedido_cliente: true,
               modelo: true,
               descricao: true,
@@ -50,7 +51,7 @@ export const getPlaneamentosDb = async (
           qtt: true,
           ops: {
             select: {
-              op_chave: true,
+              op: true,
               pedido_cliente: true,
               modelo: true,
               descricao: true,

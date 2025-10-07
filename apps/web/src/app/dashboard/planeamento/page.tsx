@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import NovoPlaneamentoDialog from "./novo-planeamento-dialog";
+import NovoPlaneamentoDialog from "./_novo-planeamento/novo-planeamento-dialog";
 import PlaneamentoConteudo from "./planeamento-conteudo";
 
 import ErrorState from "@/components/ui-personalizado/states/error-state";
@@ -29,18 +29,20 @@ const Planeamento = ({ searchParams }: PlaneamentoProps) => {
 export default Planeamento;
 
 const PlaneamentoLoader = async ({ searchParams }: PlaneamentoProps) => {
-  const { novo, enviado } = await searchParams;
+  const { novo, enviado, tab } = await searchParams;
+
   await authorizePapelOrRedirect("Planeamento");
   const queryClient = getQueryClient();
 
   const estadoEnvios = enviado === "true";
+
   void queryClient.prefetchQuery(
     trpc.planeamento.getPlaneamentos.queryOptions({ enviado: estadoEnvios })
   );
 
   return (
     <>
-      {novo === "true" && <NovoPlaneamentoDialog novo={novo} />}
+      {novo === "true" && <NovoPlaneamentoDialog novo={novo} tab={tab} />}
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense
           fallback={

@@ -425,7 +425,7 @@ model plano_livres {
   plan_livre_id  Int     @id(map: "PK_plano_livres_1") @default(autoincrement())
   plan_id        Int
   op_chave       String? @qualidadeDb.Char(25)
-  pedido_cliente String? @qualidadeDb.NChar(10)
+  pedido_cliente String? @qualidadeDb.NVarChar(100)
   modelo         String  @qualidadeDb.NVarChar(25)
   descricao      String  @qualidadeDb.NVarChar(60)
   cor_nome       String? @qualidadeDb.NVarChar(25)
@@ -451,6 +451,7 @@ model planos {
   plan_id           Int              @id(map: "PK_planos") @default(autoincrement())
   sub_contratado_id String?          @qualidadeDb.Char(25)
   departamento_id   Int
+  pedido_cliente    String?          @qualidadeDb.NVarChar(100)
   modelo            String           @qualidadeDb.NVarChar(25)
   descricao         String           @qualidadeDb.NVarChar(60)
   cor_nome          String?          @qualidadeDb.NVarChar(25)

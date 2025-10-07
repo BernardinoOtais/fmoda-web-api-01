@@ -21,23 +21,34 @@ export const colunasPlaneamentos = (): ColumnDef<PlaneamentoLinha>[] => [
                 cssImage="w-24 h-24 object-contain mx-auto"
               />
             ))}
+          {process.env.NODE_ENV === "production" &&
+            plano_livres?.map((livre) => (
+              <LazyFotoClient
+                key={livre.plan_livre_id} // use a unique key field
+                src={livre.foto || ""}
+                alt="Foto Modelo"
+                cssImage="w-24 h-24 object-contain mx-auto"
+              />
+            ))}
         </div>
       );
     },
   },
   {
-    accessorKey: "qtt",
-    header: "Qtt",
+    accessorKey: "op",
+    header: "Op",
+    cell: ({ row }) => {
+      const { plano_ops, plano_livres } = row.original;
+      return (
+        <div className="flex flex-col items-center justify-center">
+          {plano_ops?.map((op) => (
+            <p key={op.plan_op_id}>{op.ops.op}</p>
+          ))}
+          {plano_livres?.map((livre) => (
+            <p key={livre.plan_livre_id}>{livre.ops?.op}</p>
+          ))}
+        </div>
+      );
+    },
   },
 ];
-
-/*
-
-              <LazyFotoClient
-              key={op.op}
-              src={op.foto}
-              alt="Foto Modelo"
-              cssImage="w-24 h-24 object-contain mx-auto"
-            />
-
-*/

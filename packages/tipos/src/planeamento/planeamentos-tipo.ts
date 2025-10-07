@@ -2,6 +2,7 @@ export type PlaneamentoLinha = {
   id: number;
   valor: string;
   qtt: number;
+  pedido_cliente: string | null;
   modelo: string;
   descricao: string;
   cor_nome: string | null;
@@ -18,7 +19,7 @@ export type PlaneamentoLinha = {
       qtt: number;
       descricao: string;
       foto: string;
-      op_chave: string;
+      op: number;
       pedido_cliente: string;
       cor_nome: string;
     } | null;
@@ -36,7 +37,7 @@ export type PlaneamentoLinha = {
       qtt: number;
       descricao: string;
       foto: string;
-      op_chave: string;
+      op: number;
       pedido_cliente: string;
       cor_nome: string;
     };

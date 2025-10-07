@@ -4,7 +4,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableHeader,
@@ -13,6 +12,7 @@ import {
   TableCell,
   TableHead,
 } from "@/components/ui/table";
+import DataTableComponent from "@/components/ui-personalizado/data-table/data-table-component";
 
 type DataTablePlaneamnetosProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
@@ -30,49 +30,14 @@ export const DataTablePlaneamnetos = <TData, TValue>({
   });
 
   return (
-    <div className="overflow-hidden rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+    <div className="flex flex-col h-full">
+      <div className="w-full flex flex-col space-y-2"></div>
+      {/* Tabela */}
+      <DataTableComponent
+        table={table}
+        numeroColunas={columns.length}
+        tableHeaderStyle="sticky top-0 z-10 bg-background border-b border-border"
+      />
     </div>
   );
 };

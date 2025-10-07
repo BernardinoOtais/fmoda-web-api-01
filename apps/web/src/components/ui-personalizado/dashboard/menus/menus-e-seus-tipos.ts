@@ -80,6 +80,12 @@ export const MenusExistentes: MenusTodos = {
         icon: PlaneIcon,
         subMenu: false,
       },
+      {
+        nome: "Op's Datas",
+        path: "/dashboard/planeamento/opdatas",
+        icon: PlaneIcon,
+        subMenu: false,
+      },
     ],
   },
   Modelistas: {
