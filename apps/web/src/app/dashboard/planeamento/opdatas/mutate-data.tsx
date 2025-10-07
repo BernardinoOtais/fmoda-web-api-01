@@ -60,28 +60,37 @@ const MutateData = ({ dataOriginal, op, variavel, nData }: DataProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const [erro, setErro] = useState(false);
+  const [today] = useState(new Date());
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>(dataOriginal);
   const [month, setMonth] = useState<Date>(dataOriginal);
-  const [inputValue, setInputValue] = useState(formatDate(dataOriginal));
-  const [lastValidDate, setLastValidDate] = useState<Date>(dataOriginal);
-  const [today] = useState(new Date());
 
-  const debouncedValue = useDebounce(inputValue, 300);
+  const [raw, setRaw] = useState(formatDate(dataOriginal));
+
+  const [erro, setErro] = useState(false);
+
+  const debouncedValue = useDebounce(raw, 150);
+
+  const [wasManuallyChanged, setWasManuallyChanged] = useState(false);
 
   // Sync with dataOriginal when it changes
   useEffect(() => {
+    setRaw(formatDate(dataOriginal));
     setDate(dataOriginal);
     setMonth(dataOriginal);
-    setInputValue(formatDate(dataOriginal));
-    setLastValidDate(dataOriginal);
+    setWasManuallyChanged(false);
+    setErro(false);
   }, [dataOriginal]);
+
+  useEffect(() => {
+    setErro(false);
+  }, [debouncedValue]);
 
   const { mutate: insiroData, isPending } = useMutation(
     trpc.planeamento.postDeData.mutationOptions({
       onMutate: async (valor) => {
+        setErro(false);
         await queryClient.cancelQueries(
           trpc.planeamento.getOpCamioesEnvios.queryOptions({ op: op })
         );
@@ -123,11 +132,11 @@ const MutateData = ({ dataOriginal, op, variavel, nData }: DataProps) => {
         return { previousData };
       },
       onSuccess: () => {
-        toast.success("Fornecedor inserido com sucesso");
+        toast.success("Data inserida com sucesso...");
       },
       onError: (_error, _updatedEnvio, context) => {
         setErro(true);
-        toast.error("Não foi possível inserir o Fornecedor");
+        toast.error("Não foi possível inserir o Data...");
 
         if (
           context?.previousData &&
@@ -149,35 +158,39 @@ const MutateData = ({ dataOriginal, op, variavel, nData }: DataProps) => {
     })
   );
 
-  // Parse debounced input and update date
   useEffect(() => {
-    // Skip if the debounced value is already formatted from lastValidDate
-    if (debouncedValue === formatDate(lastValidDate) || erro) {
-      return;
-    }
+    if (!wasManuallyChanged) return;
 
     const parsed = parseDate(debouncedValue);
 
-    if (parsed && parsed !== dataOriginal) {
-      setDate(parsed);
-      setMonth(parsed);
-      setLastValidDate(parsed);
-      insiroData({ op, variavel, nData, data: parsed });
-    } else if (debouncedValue.trim() !== "") {
-      // Invalid input - reset to last valid date
-      setInputValue(formatDate(lastValidDate));
-    }
+    if (!parsed) return;
+
+    // CHANGE 3: Use setTime(0,0,0,0) for accurate date comparison (ignoring time)
+    const parsedDateOnly = new Date(parsed);
+    parsedDateOnly.setHours(0, 0, 0, 0);
+
+    const originalDateOnly = new Date(dataOriginal);
+    originalDateOnly.setHours(0, 0, 0, 0);
+
+    if (originalDateOnly.getTime() === parsedDateOnly.getTime()) return;
+
+    if (erro || isPending) return;
+    insiroData({ op, variavel, nData, data: parsed });
+
+    setDate(parsed);
+    setMonth(parsed);
   }, [
     dataOriginal,
     debouncedValue,
     erro,
     insiroData,
-    lastValidDate,
+    isPending,
     nData,
     op,
     variavel,
+    wasManuallyChanged,
   ]);
-  // MARKED CHANGE: Function to handle popover open/close
+
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
     if (newOpen) {
@@ -207,14 +220,19 @@ const MutateData = ({ dataOriginal, op, variavel, nData }: DataProps) => {
           id="date"
           disabled={isPending}
           placeholder="dd/mm/yyyy"
-          value={inputValue}
+          value={raw}
           className="bg-background "
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={(e) => {
+            setRaw(e.target.value);
+            // CHANGE 4: Set wasManuallyChanged immediately on typing
+            setWasManuallyChanged(true);
+          }}
           onKeyDown={(e) => {
             if (e.key === "ArrowDown") {
               setErro(false);
               e.preventDefault();
               setOpen(true);
+              setWasManuallyChanged(true);
             }
           }}
         />
@@ -243,10 +261,11 @@ const MutateData = ({ dataOriginal, op, variavel, nData }: DataProps) => {
               onMonthChange={setMonth}
               onSelect={(selected) => {
                 if (selected) {
+                  setWasManuallyChanged(true);
                   setErro(false);
                   setDate(selected);
                   setMonth(selected);
-                  setInputValue(formatDate(selected));
+                  setRaw(formatDate(selected));
                   setOpen(false);
                 }
               }}

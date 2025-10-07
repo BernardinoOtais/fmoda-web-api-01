@@ -1,6 +1,6 @@
 import { FornecedorSchemaParaUsar } from "@repo/tipos/planeamento";
 import { useMutation, useQueryClient } from "@repo/trpc";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
@@ -14,38 +14,20 @@ type MutateFornecedorProps = {
 
 const MutateFornecededor = ({ valorOriginal, op }: MutateFornecedorProps) => {
   const trpc = useTRPC();
+
   const queryClient = useQueryClient();
 
-  const [raw, setRaw] = useState(valorOriginal);
+  const [raw, setRaw] = useState(valorOriginal ?? "");
+
   const [erro, setErro] = useState(false);
+
   const debounced = useDebounce(raw, 1250);
 
-  const wasManuallyChanged = useRef(false);
-
-  const parsedOp = useMemo(() => {
-    const parsed = parseInt(op);
-    return isNaN(parsed) ? null : parsed;
-  }, [op]);
-
-  const queryKey = useMemo(
-    () =>
-      parsedOp
-        ? trpc.planeamento.getOpCamioesEnvios.queryKey({ op: parsedOp })
-        : null,
-    [trpc.planeamento.getOpCamioesEnvios, parsedOp]
-  );
-
-  const queryOptions = useMemo(
-    () =>
-      parsedOp
-        ? trpc.planeamento.getOpCamioesEnvios.queryOptions({ op: parsedOp })
-        : null,
-    [trpc.planeamento.getOpCamioesEnvios, parsedOp]
-  );
+  const [wasManuallyChanged, setWasManuallyChanged] = useState(false);
 
   useEffect(() => {
-    setRaw(valorOriginal);
-    wasManuallyChanged.current = false;
+    setRaw(valorOriginal.toString() ?? "");
+    setWasManuallyChanged(false);
   }, [valorOriginal]);
 
   useEffect(() => {
@@ -55,59 +37,86 @@ const MutateFornecededor = ({ valorOriginal, op }: MutateFornecedorProps) => {
   const { mutate: insiroFornecedor, isPending } = useMutation(
     trpc.planeamento.postFornecedor.mutationOptions({
       onMutate: async (valor) => {
-        if (!queryOptions || !queryKey) return;
-
         setErro(false);
-        await queryClient.cancelQueries(queryOptions);
 
-        const previousData = queryClient.getQueryData(queryKey);
+        await queryClient.cancelQueries(
+          trpc.planeamento.getOpCamioesEnvios.queryOptions({ op: parseInt(op) })
+        );
 
-        queryClient.setQueryData(queryKey, (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            fornecedor: valor.fornecedor,
-          };
-        });
+        const previousData = queryClient.getQueryData(
+          trpc.planeamento.getOpCamioesEnvios.queryKey({ op: parseInt(op) })
+        );
+
+        queryClient.setQueryData(
+          trpc.planeamento.getOpCamioesEnvios.queryKey({ op: parseInt(op) }),
+          (old) => {
+            if (!old) return old;
+            return {
+              ...old,
+              fornecedor: valor.fornecedor,
+            };
+          }
+        );
 
         return { previousData };
       },
       onSuccess: () => {
-        toast.success("Fornecedor inserido com sucesso");
+        toast.success("Fornecedor inserida com sucesso...");
+        setWasManuallyChanged(false);
       },
       onError: (_error, _updatedEnvio, context) => {
         setErro(true);
-        toast.error("Não foi possível inserir o Fornecedor");
+        setRaw(valorOriginal?.toString() ?? "");
+        toast.error("Não foi possível inserir a Fornecedor...");
 
-        if (context?.previousData && queryKey) {
-          queryClient.setQueryData(queryKey, context.previousData);
-
-          setRaw(valorOriginal);
+        if (
+          context?.previousData &&
+          trpc.planeamento.getOpCamioesEnvios.queryKey({ op: parseInt(op) })
+        ) {
+          queryClient.setQueryData(
+            trpc.planeamento.getOpCamioesEnvios.queryKey({ op: parseInt(op) }),
+            context.previousData
+          );
         }
       },
       onSettled: () => {
-        if (queryOptions) {
-          void queryClient.refetchQueries(queryOptions);
+        if (
+          trpc.planeamento.getOpCamioesEnvios.queryOptions({ op: parseInt(op) })
+        ) {
+          void queryClient.refetchQueries(
+            trpc.planeamento.getOpCamioesEnvios.queryOptions({
+              op: parseInt(op),
+            })
+          );
         }
       },
     })
   );
 
   useEffect(() => {
-    if (!wasManuallyChanged.current) return;
-    if (!parsedOp) return;
-    if (erro || isPending) return;
+    if (!wasManuallyChanged) return;
 
     const parsed = FornecedorSchemaParaUsar.safeParse(debounced);
+
     if (!parsed.success) return;
 
     const novo = parsed.data;
 
-    if (novo === valorOriginal) return;
+    if (valorOriginal !== undefined && novo === valorOriginal) {
+      return;
+    }
 
-    insiroFornecedor({ op: parsedOp, fornecedor: novo });
-    wasManuallyChanged.current = false;
-  }, [debounced, erro, insiroFornecedor, isPending, parsedOp, valorOriginal]);
+    if (erro || isPending) return;
+    insiroFornecedor({ op: parseInt(op), fornecedor: novo });
+  }, [
+    debounced,
+    erro,
+    insiroFornecedor,
+    isPending,
+    op,
+    valorOriginal,
+    wasManuallyChanged,
+  ]);
 
   return (
     <Input
@@ -116,7 +125,7 @@ const MutateFornecededor = ({ valorOriginal, op }: MutateFornecedorProps) => {
       value={raw}
       onChange={(e) => {
         setRaw(e.target.value);
-        wasManuallyChanged.current = true;
+        setWasManuallyChanged(true);
       }}
       className="w-96"
       placeholder="Fornecedor..."

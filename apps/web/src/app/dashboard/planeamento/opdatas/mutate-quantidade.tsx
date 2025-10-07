@@ -32,13 +32,9 @@ const MutateQuantidade = ({
 
   const [wasManuallyChanged, setWasManuallyChanged] = useState(false);
 
-  // CHANGE 1: Use ref to track the last submitted value
-  const lastSubmittedValue = useRef<number | null>(null);
-
   useEffect(() => {
     setRaw(valorOriginal.toString() ?? "");
     setWasManuallyChanged(false);
-    lastSubmittedValue.current = valorOriginal;
   }, [valorOriginal]);
 
   useEffect(() => {
@@ -88,12 +84,13 @@ const MutateQuantidade = ({
         return { previousData };
       },
       onSuccess: () => {
-        toast.success("Fornecedor inserido com sucesso");
+        toast.success("Quantidade inserida com sucesso...");
         setWasManuallyChanged(false);
       },
       onError: (_error, _updatedEnvio, context) => {
         setErro(true);
-        toast.error("Não foi possível inserir o Fornecedor");
+        setRaw(valorOriginal?.toString() ?? "");
+        toast.error("Não foi possível inserir a Quantidade...");
 
         if (
           context?.previousData &&
@@ -115,63 +112,39 @@ const MutateQuantidade = ({
     })
   );
 
-  // CHANGE 2: Simplified effect with proper guards
   useEffect(() => {
-    // Guard 1: Only proceed if user manually changed the value
     if (!wasManuallyChanged) return;
 
-    // Guard 2: Don't proceed if there's an error or mutation is pending
-    if (erro || isPending) return;
-
-    // Parse the debounced value
     const parsed = NumeroOuZero.safeParse(debounced);
 
-    // Guard 3: If parsing failed, reset to 0
-    if (!parsed.success) {
-      setRaw("0");
-      setWasManuallyChanged(false);
-      return;
-    }
+    if (!parsed.success) return;
 
     const novo = parsed.data;
 
-    // Guard 4: Handle non-parsable numbers
-    if (!isParsableNumber(debounced)) {
+    if (!isParsableNumber(debounced) && !erro) {
       setRaw("0");
-      setWasManuallyChanged(false);
       return;
     }
 
-    // Guard 5: Skip if value is same as original
     if (valorOriginal !== undefined && novo === valorOriginal) {
-      setWasManuallyChanged(false);
       return;
     }
 
-    // Guard 6: Skip if this is the same value we just submitted
-    if (lastSubmittedValue.current === novo) {
-      setWasManuallyChanged(false);
-      return;
-    }
-
-    // CHANGE 3: All guards passed, submit the mutation
-    console.log("Submitting mutation:", { op, variavel, nQtt, qtt: novo });
-    lastSubmittedValue.current = novo;
+    if (erro || isPending) return;
     insereQtt({ op, variavel, nQtt, qtt: novo });
-
-    // CHANGE 4: Removed wasManuallyChanged from dependencies
-    // The onSuccess callback will reset it
   }, [
     debounced,
     erro,
-    isPending,
-    valorOriginal,
-    op,
-    variavel,
-    nQtt,
     insereQtt,
+    isPending,
+    nQtt,
+    op,
+    valorOriginal,
+    variavel,
+    wasManuallyChanged,
   ]);
 
+  //    insereQtt({ op, variavel, nQtt, qtt: novo });
   return (
     <Input
       inputMode="text"

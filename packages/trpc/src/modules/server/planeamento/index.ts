@@ -108,7 +108,6 @@ export const planeamento = createTRPCRouter({
     .mutation(async ({ input }) => {
       try {
         const { op, variavel, nData, data } = input;
-
         await postDataDb(op, variavel, nData, data);
       } catch (err) {
         console.log(err);

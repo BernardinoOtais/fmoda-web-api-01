@@ -3,7 +3,9 @@ import { OPschema } from "@repo/tipos/qualidade_balancom";
 import { useQuery } from "@repo/trpc";
 import React, { useState } from "react";
 
+import MutateData from "./mutate-data";
 import MutateFornecededor from "./mutate-fornecedor";
+import MutateQuantidade from "./mutate-quantidade";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,8 +20,6 @@ import {
 import FotoClient from "@/components/ui-personalizado/fotos/foto-client";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
-import MutateData from "./mutate-data";
-import MutateQuantidade from "./mutate-quantidade";
 
 const OpDatasConteudo = () => {
   const trpc = useTRPC();
@@ -56,7 +56,7 @@ const OpDatasConteudo = () => {
           />
         </div>
       </header>
-      <main className="relative grow">
+      <main className="relative grow" key={debouncedOp}>
         <div className="absolute top-0 bottom-0 flex w-full">
           <div className="flex w-full flex-col items-center m-2 space-y-2 overflow-auto">
             {debouncedOp === "" ? (
@@ -137,6 +137,7 @@ const OpDatasConteudo = () => {
                     {`Fornecedores`}
                   </h3>
                   <MutateFornecededor
+                    key={debouncedOp}
                     op={debouncedOp}
                     valorOriginal={data[0].fornecedor ?? ""}
                   />
