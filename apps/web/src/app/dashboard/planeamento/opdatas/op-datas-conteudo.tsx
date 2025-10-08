@@ -43,6 +43,8 @@ const OpDatasConteudo = () => {
     return new Intl.DateTimeFormat("pt-PT", options).format(date);
   };
 
+  console.log(data);
+
   return (
     <>
       <header className="x-1 space-y-1.5 border-b py-3 text-center">

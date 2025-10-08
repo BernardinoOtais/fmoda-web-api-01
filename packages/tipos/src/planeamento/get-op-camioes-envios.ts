@@ -33,7 +33,7 @@ export const OpCamioesEnviosSchema = z.object({
   stamp: ChavePhcSchema,
   op: NumeroInteiroMaiorQueZero,
   client: StringComTamanhoSchema(25, 3),
-  foto: StringComTamanhoSchema(200, 3),
+  foto: StringComTamanhoSchema(500, 3),
   modelo: StringComTamanhoSchema(25, 0).optional(),
   area: StringComTamanhoSchema(25, 3),
   pedido: StringComTamanhoSchema(25, 3),

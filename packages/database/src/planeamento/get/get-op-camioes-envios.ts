@@ -8,7 +8,7 @@ SELECT
     stamp = bo.bostamp,
     op = bo.obrano,
     client = TRIM(bo.tabela2),
-	foto = REPLACE(fref.u_imagem, '\\\\10.0.0.13\\Winsig\\DEP\\PHC\\docsphc\\desenhos', 'Desenhos'),
+	foto = trim(REPLACE(fref.u_imagem, '\\\\10.0.0.13\\Winsig\\DEP\\PHC\\docsphc\\desenhos', 'Desenhos')),
     modelo = TRIM(bo.marca),
     area = TRIM(bo2.area),
     pedido = TRIM(bo3.u_tpestamp),
