@@ -440,7 +440,9 @@ const InsereDataEQuantidade = ({
           </Tooltip>
 
           {/* ✅ Submit Button */}
-          <Button type="submit">Adicionar</Button>
+          <Button disabled={qttNoComponent === 0} type="submit">
+            Adicionar
+          </Button>
         </div>
       </form>
     </Form>
