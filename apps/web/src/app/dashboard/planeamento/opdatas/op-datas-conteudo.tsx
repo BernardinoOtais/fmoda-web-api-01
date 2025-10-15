@@ -3,9 +3,8 @@ import { OPschema } from "@repo/tipos/qualidade_balancom";
 import { useQuery } from "@repo/trpc";
 import React, { useState } from "react";
 
-import MutateData from "./mutate-data";
+import DatasQuantidades from "./_datas-e-quantidades/datas-quantidades";
 import MutateFornecededor from "./mutate-fornecedor";
-import MutateQuantidade from "./mutate-quantidade";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,8 +41,6 @@ const OpDatasConteudo = () => {
     };
     return new Intl.DateTimeFormat("pt-PT", options).format(date);
   };
-
-  console.log(data);
 
   return (
     <>
@@ -144,52 +141,28 @@ const OpDatasConteudo = () => {
                     valorOriginal={data[0].fornecedor ?? ""}
                   />
                 </div>
-                <div className="flex flex-col lg:flex-row lg:space-x-1 space-y-1">
+                <div className="flex flex-col lg:flex-row lg:space-x-1 space-y-1 items-end">
                   <div>
                     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center">
                       {`Camiões...`}
                     </h3>
-                    <div className="flex flex-col space-y-1 ">
-                      {data[0].camioes.map((c) => (
-                        <div key={c.n} className="flex flex-row space-x-1">
-                          <MutateData
-                            dataOriginal={c.dataIn}
-                            op={parseInt(debouncedOp)}
-                            variavel="u_datacam"
-                            nData={c.n}
-                          />
-                          <MutateQuantidade
-                            op={parseInt(debouncedOp)}
-                            variavel="u_camqtt"
-                            nQtt={c.n}
-                            valorOriginal={c.valor}
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    <DatasQuantidades
+                      op={parseInt(debouncedOp)}
+                      dados={data[0].camioes}
+                      variavelD="u_datacam"
+                      variavelQ="u_camqtt"
+                    />
                   </div>
                   <div>
                     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center">
                       {`Envios...`}
                     </h3>
-                    <div className="flex flex-col space-y-1 ">
-                      {data[0].envios.map((e) => (
-                        <div key={e.n} className="flex flex-row space-x-1">
-                          <MutateData
-                            dataOriginal={e.dataIn}
-                            op={parseInt(debouncedOp)}
-                            variavel="u_datafor"
-                            nData={e.n}
-                          />
-                          <MutateQuantidade
-                            op={parseInt(debouncedOp)}
-                            variavel="u_dfqtt"
-                            nQtt={e.n}
-                            valorOriginal={e.valor}
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    <DatasQuantidades
+                      op={parseInt(debouncedOp)}
+                      dados={data[0].envios}
+                      variavelD="u_datafor"
+                      variavelQ="u_dfqtt"
+                    />
                   </div>
                 </div>
               </>

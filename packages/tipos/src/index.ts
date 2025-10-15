@@ -93,14 +93,16 @@ export const NumeroInteiro = z.coerce
   })
   .int({ message: "Tem que ser inteiro...." }) as z.ZodNumber;
 
-export const DateSchema = z.coerce.date().refine(
-  (date) => {
-    const minDate = new Date("1753-01-01");
-    const maxDate = new Date("9999-12-31");
-    return date >= minDate && date <= maxDate;
-  },
-  {
-    message:
-      "Date must be between 1753-01-01 and 9999-12-31 (MSSQL datetime range)",
-  }
+export const DateSchema = z.coerce.date().pipe(
+  z.date().refine(
+    (date) => {
+      const minDate = new Date("1753-01-01");
+      const maxDate = new Date("9999-12-31");
+      return date >= minDate && date <= maxDate;
+    },
+    {
+      message:
+        "Date must be between 1753-01-01 and 9999-12-31 (MSSQL datetime range)",
+    }
+  )
 );

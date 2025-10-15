@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 
 import FotoClient from "./foto-client";
 
+import { cn } from "@/lib/utils";
+
 export const LazyFotoClient = (
   props: React.ComponentProps<typeof import("./foto-client").default>
 ) => {
@@ -25,13 +27,13 @@ export const LazyFotoClient = (
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
-
+  const { cssImage } = props;
   return (
-    <div ref={ref} className="h-16 w-16 flex items-center justify-center">
+    <div ref={ref} className={cn("flex items-center justify-center", cssImage)}>
       {isVisible ? (
         <FotoClient {...props} />
       ) : (
-        <div className="h-16 w-16 bg-gray-200 animate-pulse rounded" />
+        <div className={cn("bg-gray-200 animate-pulse rounded", cssImage)} />
       )}
     </div>
   );

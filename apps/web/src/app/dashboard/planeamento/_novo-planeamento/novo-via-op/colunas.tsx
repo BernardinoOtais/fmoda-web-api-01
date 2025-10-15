@@ -92,15 +92,13 @@ export const colunasNovoPlaneamento = (
       return (
         <div className="flex flex-col items-center justify-center ">
           <p>{departamento}</p>
-          {process.env.NODE_ENV === "production" && (
-            <div className="w-24 h-24 flex items-center justify-center relative">
-              <LazyFotoClient
-                src={foto}
-                alt="Foto Modelo"
-                cssImage="w-24 h-24 object-contain mx-auto"
-              />
-            </div>
-          )}
+          <div className="w-36 h-36 flex items-center justify-center relative">
+            <LazyFotoClient
+              src={foto}
+              alt="Foto Modelo"
+              cssImage="w-36 h-36 object-contain mx-auto"
+            />
+          </div>
           <p>{modelo}</p>
           <p>{descricao}</p>
         </div>

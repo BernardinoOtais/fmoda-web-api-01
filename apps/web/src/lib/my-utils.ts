@@ -40,3 +40,27 @@ export const isParsableNumber = (value: string): boolean => {
   const normalized = value.replace(",", ".").trim();
   return normalized !== "" && !isNaN(Number(normalized));
 };
+
+export const parseDate = (value: string): Date | undefined => {
+  const parts = value.split("/");
+  if (parts.length !== 3) return undefined;
+
+  const day = Number(parts[0]);
+  const month = Number(parts[1]);
+  const year = Number(parts[2]);
+
+  if (
+    !Number.isInteger(day) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(year) ||
+    day < 1 ||
+    day > 31 ||
+    month < 1 ||
+    month > 12
+  ) {
+    return undefined;
+  }
+
+  const date = new Date(year, month - 1, day);
+  return isNaN(date.getTime()) ? undefined : date;
+};

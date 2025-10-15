@@ -92,3 +92,25 @@ export const NumeroInteiroMaiorQueZero = z.coerce
 export const FotoPropSchema = z.object({
   id: z.string().min(1),
 });
+
+export const DataEntreHojeEEUmAnoSchema = z
+  .union([z.string(), z.date()])
+  .transform((val) => (typeof val === "string" ? new Date(val) : val))
+  .refine((date) => !isNaN(date.getTime()), {
+    message: "Invalid date",
+  })
+  .refine(
+    (date) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const nextYear = new Date();
+      nextYear.setFullYear(today.getFullYear() + 1);
+      nextYear.setHours(23, 59, 59, 999);
+
+      return date >= today && date <= nextYear;
+    },
+    {
+      message: "Date must be between today and one year from now",
+    }
+  );

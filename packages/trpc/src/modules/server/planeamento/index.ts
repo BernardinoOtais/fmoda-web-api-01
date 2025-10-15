@@ -5,17 +5,21 @@ import {
   getPlaneamentosDb,
   getOpCamioesEnviosDb,
   postFornecedorDb,
-  postDataDb,
-  postQttDb,
+  getPlaneamentoViaOrcamentoDb,
+  deleteDataEQuantidadeBd,
+  postDePlaneamentoDataEQttDb,
+  patchDePlaneamentoDataEQttDb,
 } from "@repo/db/planeamento";
 import { saveBase64Image } from "@repo/imagens";
 import { PAPEL_ROTA_PLANEAMENTO } from "@repo/tipos/consts";
 import { uploadPhotoSchema } from "@repo/tipos/foto";
 import {
+  DeleteDataEQttPlaneamentoSchema,
   GetPlaneamentosSchemas,
+  GetPlaneamentoViaOrcamentoSchema,
+  PatchtDePlaneamentoDataEQttchema,
   PosNovoPlaneamentoSchema,
-  PostDeDataSchema,
-  PostDeQttSchema,
+  PostDePlaneamentoDataEQttchema,
   PostFornecedorSchema,
 } from "@repo/tipos/planeamento";
 import { OPschema } from "@repo/tipos/qualidade_balancom";
@@ -69,6 +73,21 @@ export const planeamento = createTRPCRouter({
         });
       }
     }),
+  getPlaneamentoViaOrcamento: roleProtectedProcedure(PAPEL_ROTA)
+    .input(GetPlaneamentoViaOrcamentoSchema)
+    .query(async ({ input }) => {
+      try {
+        // await delay(5000); // waits 2 seconds
+        return await getPlaneamentoViaOrcamentoDb(input.ano, input.nFicha);
+      } catch (err) {
+        console.log("O tais error : ", err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao obter palneamento via orçamento...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
   postDePlaneamentos: roleProtectedProcedure(PAPEL_ROTA)
     .input(PosNovoPlaneamentoSchema)
     .mutation(async ({ input }) => {
@@ -103,33 +122,21 @@ export const planeamento = createTRPCRouter({
         });
       }
     }),
-  postDeData: roleProtectedProcedure(PAPEL_ROTA)
-    .input(PostDeDataSchema)
+  deleteDataEQuantidade: roleProtectedProcedure(PAPEL_ROTA)
+    .input(DeleteDataEQttPlaneamentoSchema)
     .mutation(async ({ input }) => {
       try {
-        const { op, variavel, nData, data } = input;
-        await postDataDb(op, variavel, nData, data);
+        await deleteDataEQuantidadeBd(
+          input.op,
+          input.tipoD,
+          input.tipoQ,
+          input.nTipo
+        );
       } catch (err) {
         console.log(err);
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Erro ao inserir data..",
-          cause: err, // optional, for logging/debugging
-        });
-      }
-    }),
-  postDeQtt: roleProtectedProcedure(PAPEL_ROTA)
-    .input(PostDeQttSchema)
-    .mutation(async ({ input }) => {
-      try {
-        const { op, variavel, nQtt, qtt } = input;
-
-        await postQttDb(op, variavel, nQtt, qtt);
-      } catch (err) {
-        console.log(err);
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Erro ao inserir Qtt..",
+          message: "Erro ao Apagar palaneamento...",
           cause: err, // optional, for logging/debugging
         });
       }
@@ -148,9 +155,34 @@ export const planeamento = createTRPCRouter({
         });
       }
     }),
+  postDePlaneamentoDataEQttDb: roleProtectedProcedure(PAPEL_ROTA)
+    .input(PostDePlaneamentoDataEQttchema)
+    .mutation(async ({ input }) => {
+      try {
+        const { op, tipoD, tipoQ, data, qtt } = input;
+        return postDePlaneamentoDataEQttDb(op, tipoD, tipoQ, data, qtt);
+      } catch (err) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao inserir Planeamento...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+  patchPlaneamentoDataEQttDb: roleProtectedProcedure(PAPEL_ROTA)
+    .input(PatchtDePlaneamentoDataEQttchema)
+    .mutation(async ({ input }) => {
+      try {
+        const { op, tipoD, tipoQ, nTipo, data, qtt } = input;
+        console.log("o tais input :", input);
+        return patchDePlaneamentoDataEQttDb(op, tipoD, tipoQ, nTipo, data, qtt);
+      } catch (err) {
+        console.log(err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao alterar Planeamento...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
 });
-
-//postFornecedorDb
-//getOpCamioesEnviosDb
-//postDePlaneamentosDB
-//PostDeQttSchema

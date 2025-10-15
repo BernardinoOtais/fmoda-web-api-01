@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import NovoPlaneamentoDialog from "./_novo-planeamento/novo-planeamento-dialog";
+import NovoPlaneamentoDialogoWrapper from "./_novo-planeamento/novo-planeamento-dialog-wrapper";
 import PlaneamentoConteudo from "./planeamento-conteudo";
 
 import ErrorState from "@/components/ui-personalizado/states/error-state";
@@ -42,7 +42,9 @@ const PlaneamentoLoader = async ({ searchParams }: PlaneamentoProps) => {
 
   return (
     <>
-      {novo === "true" && <NovoPlaneamentoDialog novo={novo} tab={tab} />}
+      {novo === "true" && (
+        <NovoPlaneamentoDialogoWrapper novo={novo} tab={tab} />
+      )}
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense
           fallback={

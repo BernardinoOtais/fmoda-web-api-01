@@ -25,6 +25,8 @@ type DropdownSelectProps = {
   setValue: Dispatch<SetStateAction<string>>;
   dados: AutocompleteStringDto[];
   posting: boolean;
+  placeholder?: string;
+  tituloPesquisa?: string;
 };
 
 const DropdownSelect = ({
@@ -32,11 +34,14 @@ const DropdownSelect = ({
   setValue,
   dados,
   posting,
+  placeholder,
+  tituloPesquisa,
 }: DropdownSelectProps) => {
   const [open, setOpen] = useState(false);
   const selectedLabel =
     dados.find((item) => item.value === valorOriginal)?.label ??
-    "Select framework...";
+    placeholder ??
+    "...";
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -53,7 +58,7 @@ const DropdownSelect = ({
       </PopoverTrigger>
       <PopoverContent className=" p-0">
         <Command>
-          <CommandInput placeholder="Search by label..." />
+          <CommandInput placeholder={tituloPesquisa ?? "..."} />
           <CommandList
             className="max-h-60 "
             onWheel={(e) => {

@@ -15,6 +15,8 @@ import {
 import { RowSelectionState } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
+import { PostPorOp } from "../contex-provider-novo-planeamento";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -26,6 +28,7 @@ import DropdownSelect from "@/components/ui-personalizado/meus-components/dropdo
 
 interface RowWithDepartamento {
   departamento: string;
+  op: string;
 }
 
 interface DataTableProps<TData extends RowWithDepartamento, TValue> {
@@ -39,6 +42,7 @@ interface DataTableProps<TData extends RowWithDepartamento, TValue> {
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
   posting: boolean;
+  setOpsForSchema: React.Dispatch<React.SetStateAction<PostPorOp[]>>;
 }
 
 const INITIAL_COLUMN_VISIBILITY: VisibilityState = {
@@ -57,6 +61,7 @@ export function DataTable<TData extends RowWithDepartamento, TValue>({
   value,
   setValue,
   posting,
+  setOpsForSchema,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -108,9 +113,20 @@ export function DataTable<TData extends RowWithDepartamento, TValue>({
   const [mostraPaginacao, setMostraPaginacao] = useState(
     paginadas <= numeroDeLinhas
   );
+
   useEffect(() => {
     setMostraPaginacao(paginadas <= numeroDeLinhas);
   }, [numeroDeLinhas, paginadas]);
+
+  useEffect(() => {
+    const opSeleccionadas = Object.keys(rowSelection)
+      .map((key) => {
+        const row = data[Number(key)];
+        return row ? { op: Number(row.op) } : null;
+      })
+      .filter((item): item is { op: number } => item !== null);
+    if (opSeleccionadas.length > 0) setOpsForSchema(opSeleccionadas);
+  }, [data, rowSelection, setOpsForSchema]);
 
   return (
     <div className="flex flex-col h-full space-y-2">
@@ -132,6 +148,8 @@ export function DataTable<TData extends RowWithDepartamento, TValue>({
               setValue={setValue}
               dados={fornecedores}
               posting={posting}
+              placeholder="Fornecedor..."
+              tituloPesquisa="Procurar por Fornecedor..."
             />
           </div>
         </div>
