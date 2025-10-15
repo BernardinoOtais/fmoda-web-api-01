@@ -141,9 +141,9 @@ const OpDatasConteudo = () => {
                     valorOriginal={data[0].fornecedor ?? ""}
                   />
                 </div>
-                <div className="flex flex-col lg:flex-row lg:space-x-1 space-y-1 items-end">
-                  <div>
-                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center">
+                <div className="flex flex-col lg:flex-row  items-end justify-center">
+                  <div className="p-1">
+                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
                       {`Camiões...`}
                     </h3>
                     <DatasQuantidades
@@ -153,8 +153,8 @@ const OpDatasConteudo = () => {
                       variavelQ="u_camqtt"
                     />
                   </div>
-                  <div>
-                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center">
+                  <div className="p-1">
+                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
                       {`Envios...`}
                     </h3>
                     <DatasQuantidades
