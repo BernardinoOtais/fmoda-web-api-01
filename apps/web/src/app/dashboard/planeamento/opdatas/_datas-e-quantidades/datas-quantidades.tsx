@@ -109,12 +109,14 @@ const DatasQuantidades = ({
     })
   );
 
+  const lista = dados.filter(
+    (l) => format(l.dataIn, "dd/MM/yyyy") !== "01/01/1900"
+  );
   //apaga deleteDataEQuantidadeBd
   return (
     <div className="flex flex-col space-y-1 items-center border rounded-md p-1">
-      {dados.map((linha) => {
+      {lista.map((linha) => {
         const formattedDate = format(linha.dataIn, "dd/MM/yyyy");
-        if (formattedDate === "01/01/1900") return null;
 
         return (
           <Tooltip key={linha.n}>
@@ -170,15 +172,17 @@ const DatasQuantidades = ({
           </Tooltip>
         );
       })}
-      <InsereDataEQuantidade
-        defaultDate={data}
-        defaulQtt={qtt}
-        n={n}
-        op={op}
-        variavelD={variavelD}
-        variavelQ={variavelQ}
-        resetDados={reset}
-      />
+      {lista.length < 6 && (
+        <InsereDataEQuantidade
+          defaultDate={data}
+          defaulQtt={qtt}
+          n={n}
+          op={op}
+          variavelD={variavelD}
+          variavelQ={variavelQ}
+          resetDados={reset}
+        />
+      )}
     </div>
   );
 };
