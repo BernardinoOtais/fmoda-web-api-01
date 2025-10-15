@@ -102,15 +102,18 @@ export const DataEntreHojeEEUmAnoSchema = z
   .refine(
     (date) => {
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
 
-      const nextYear = new Date();
-      nextYear.setFullYear(today.getFullYear() + 1);
-      nextYear.setHours(23, 59, 59, 999);
+      const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+      firstDayOfYear.setHours(0, 0, 0, 0);
 
-      return date >= today && date <= nextYear;
+      const oneYearFromNow = new Date();
+      oneYearFromNow.setFullYear(today.getFullYear() + 1);
+      oneYearFromNow.setHours(23, 59, 59, 999);
+
+      return date >= firstDayOfYear && date <= oneYearFromNow;
     },
     {
-      message: "Date must be between today and one year from now",
+      message:
+        "Date must be between the first day of the current year and one year from now",
     }
   );
