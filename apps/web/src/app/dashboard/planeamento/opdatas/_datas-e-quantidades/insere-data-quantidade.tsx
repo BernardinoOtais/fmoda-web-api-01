@@ -294,6 +294,7 @@ const InsereDataEQuantidade = ({
     setDataNoComponent(newDate); // ⬅️ Sets component state with the NEW Date reference
     setQttNoComponent(0);
     setErro(false);
+    setRecebeeDadosPai(0);
   };
 
   return (
