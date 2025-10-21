@@ -1,0 +1,16 @@
+{
+  "name": "@repo/pdf",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "pdf2json": "^3.1.4",
+    "pdfreader": "^3.0.7"
+  }
+}

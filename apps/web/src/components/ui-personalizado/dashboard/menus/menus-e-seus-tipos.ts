@@ -5,6 +5,7 @@ import {
   Truck,
   Anvil,
   OctagonX,
+  GitPullRequestCreate,
 } from "lucide-react";
 
 type IconType = React.FC<React.SVGProps<SVGSVGElement>>;
@@ -84,6 +85,12 @@ export const MenusExistentes: MenusTodos = {
         nome: "Op's Datas",
         path: "/dashboard/planeamento/opdatas",
         icon: PlaneIcon,
+        subMenu: false,
+      },
+      {
+        nome: "Imp. PDF",
+        path: "/dashboard/planeamento/pdf",
+        icon: GitPullRequestCreate,
         subMenu: false,
       },
     ],
