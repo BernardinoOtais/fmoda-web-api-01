@@ -6,6 +6,7 @@ import {
   Anvil,
   OctagonX,
   GitPullRequestCreate,
+  Cog,
 } from "lucide-react";
 
 type IconType = React.FC<React.SVGProps<SVGSVGElement>>;
@@ -33,6 +34,7 @@ export type MenusTodos = {
   Embarques: Menu;
   Administrador: Menu;
   Rfid: Menu;
+  Cp: Menu;
 };
 
 export const IconsMenus = {
@@ -42,6 +44,7 @@ export const IconsMenus = {
   Embarques: Truck,
   Administrador: Anvil,
   Rfid: OctagonX,
+  Cp: Cog,
 };
 
 export const MenusExistentes: MenusTodos = {
@@ -131,6 +134,12 @@ export const MenusExistentes: MenusTodos = {
     nome: "Rfid",
     path: "/dashboard/rfid",
     icon: IconsMenus.Rfid,
+    subMenu: false,
+  },
+  Cp: {
+    nome: "Contrôleurs de Production",
+    path: "/dashboard/cp",
+    icon: IconsMenus.Cp,
     subMenu: false,
   },
 };

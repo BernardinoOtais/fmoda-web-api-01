@@ -1,86 +1,7 @@
 // ✅ Use dynamic import for pdf2json (works in ESM / Next.js)
-import { PdfReader } from "pdfreader";
-
-export interface PdfCell {
-  page: number;
-  x: number;
-  y: number;
-  text: string;
-}
-
-export interface Pdf2JsonText {
-  x: number;
-  y: number;
-  w: number;
-  sw: number;
-  A: string;
-  R: { T: string }[];
-}
-
-export interface Pdf2JsonPage {
-  Texts: Pdf2JsonText[];
-  Width?: number;
-  Height?: number;
-}
-
-export interface Pdf2JsonData {
-  Pages: Pdf2JsonPage[];
-  Meta?: Record<string, any>;
-  Width?: number;
-  Height?: number;
-}
-
-/**
- * Parse PDF buffer using pdfreader (first page only)
- */
-export async function parsePdfFirstPage(buffer: Buffer): Promise<PdfCell[]> {
-  const reader = new PdfReader();
-  const items: PdfCell[] = [];
-  let stop = false;
-
-  await new Promise<void>((resolve, reject) => {
-    reader.parseBuffer(buffer, (err, item) => {
-      if (err) reject(err);
-      else if (!item)
-        resolve(); // end of file
-      else if (stop) return;
-      else if ("page" in item) {
-        if (item.page === 2) stop = true; // stop after first page
-      } else if (item.text) {
-        items.push(item as PdfCell);
-      }
-    });
-  });
-
-  return items;
-}
-
-/**
- * Parse PDF buffer using pdf2json (first page only)
- */
-export async function parsePdf2JsonFirstPage(
-  buffer: Buffer
-): Promise<Pdf2JsonText[]> {
-  // ✅ dynamic import to avoid ESM/CJS conflict
-  const { default: PDFParser } = await import("pdf2json");
-  const pdfParser = new PDFParser();
-
-  const pdfData = await new Promise<Pdf2JsonData>((resolve, reject) => {
-    pdfParser.on("pdfParser_dataError", (errData: any) =>
-      reject(errData.parserError)
-    );
-    pdfParser.on("pdfParser_dataReady", (pdfData: any) =>
-      resolve(pdfData as Pdf2JsonData)
-    );
-    pdfParser.parseBuffer(buffer);
-  });
-
-  const firstPage = pdfData.Pages?.[0];
-  return firstPage?.Texts ?? [];
-}
+import { PdfText, Pdf2JsonText, Pdf2JsonData } from "@repo/tipos/pdf";
 
 export async function parsePdf2Json(buffer: Buffer): Promise<Pdf2JsonText[]> {
-  // Dynamic import to avoid ESM/CJS conflicts
   const { default: PDFParser } = await import("pdf2json");
   const pdfParser: InstanceType<typeof PDFParser> = new PDFParser();
 
@@ -120,34 +41,83 @@ export async function parsePdf2Json(buffer: Buffer): Promise<Pdf2JsonText[]> {
   return resultado;
 }
 
-/**
- * Group text elements by approximate Y position (rows)
- */
-export function groupByRows(items: PdfCell[]): string[][] {
-  const grouped: Record<number, PdfCell[]> = {};
+export const extraiTodasEntregas = (
+  data: PdfText[],
+  textoInicial: string,
+  textoFinal: string,
+  inicio: string
+): PdfText[][] => {
+  const sections: PdfText[][] = [];
+
+  // Find the first "ENTREGAS PARCIALES" section
+  let currentStart = data.findIndex((t) =>
+    t.text.toUpperCase().includes(inicio)
+  );
+  if (currentStart === -1) return [];
+
+  // Move to the first PEDIDO after "ENTREGAS PARCIALES"
+  currentStart = data.findIndex(
+    (t, i) => i > currentStart && t.text.toUpperCase().includes(textoInicial)
+  );
+
+  while (currentStart !== -1) {
+    // Find the end marker ("PRECIO COSTE:")
+    const endIndex = data.findIndex(
+      (t, i) => i > currentStart && t.text.toUpperCase().includes(textoFinal)
+    );
+    if (endIndex === -1) break;
+
+    // 🔹 Include "PRECIO COSTE:" and the following text (the price)
+    const nextElement = data[endIndex + 1];
+    const sliceEnd = nextElement ? endIndex + 1 : endIndex;
+
+    // Extract inclusive section
+    const section = data.slice(currentStart, sliceEnd + 1);
+    sections.push(section);
+
+    // Move to the next PEDIDO after this section
+    currentStart = data.findIndex(
+      (t, i) => i > endIndex && t.text.toUpperCase().includes(textoInicial)
+    );
+  }
+
+  return sections;
+};
+
+export const extraiPorcoesNaoInclusive = (
+  data: PdfText[],
+  textoInicial: string,
+  textoFinal: string
+): PdfText[] => {
+  const startIndex = data.findIndex((t) =>
+    t.text.toUpperCase().includes(textoInicial)
+  );
+  const endIndex = data.findIndex((t) =>
+    t.text.toUpperCase().includes(textoFinal)
+  );
+
+  if (
+    startIndex === -1 ||
+    endIndex === -1 ||
+    endIndex <= startIndex + 1 // ensure valid range
+  ) {
+    return [];
+  }
+  return data.slice(startIndex + 1, endIndex);
+};
+
+export const groupItemsByYCoordinate = <T extends { y: number }>(
+  items: T[]
+): Record<number, T[]> => {
+  const rowsMap: Record<number, T[]> = {};
 
   items.forEach((item) => {
-    const y = Math.round(item.y);
-    if (!grouped[y]) grouped[y] = [];
-    grouped[y].push(item);
+    const yKey = Math.round(item.y);
+    if (!rowsMap[yKey]) {
+      rowsMap[yKey] = [];
+    }
+    rowsMap[yKey].push(item);
   });
 
-  return Object.values(grouped)
-    .map((row) =>
-      row
-        .sort((a, b) => a.x - b.x)
-        .map((cell) => cell.text.trim())
-        .filter(Boolean)
-    )
-    .filter((row) => row.length > 0);
-}
-
-/**
- * Combine pdfreader + grouping to get table-like rows from first page
- */
-export async function extractPdfTableFirstPage(
-  buffer: Buffer
-): Promise<string[][]> {
-  const items = await parsePdfFirstPage(buffer);
-  return groupByRows(items);
-}
+  return rowsMap;
+};
