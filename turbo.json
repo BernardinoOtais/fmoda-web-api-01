@@ -9,7 +9,11 @@
     "ACCESS_TOKEN_SECRET",
     "REFRESH_TOKEN_SECRET",
     "LOG_WEB",
-    "LOG_API"
+    "LOG_API",
+    "SSRS_USERNAME",
+    "SSRS_PASSWORD",
+    "SSRS_DOMAIN",
+    "SSRS_WORKSTATION"
   ],
   "tasks": {
     "build": {

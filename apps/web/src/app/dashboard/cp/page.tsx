@@ -1,174 +1,75 @@
-"use client";
+import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
+import { PAPEL_CP } from "@repo/tipos/consts";
+import Link from "next/link";
+import React, { Suspense } from "react";
 
-import { useQuery } from "@repo/trpc";
-import { CalendarIcon, FileTextIcon, Loader2 } from "lucide-react";
-import { useState } from "react";
+import PlaneamentoFornecedorReport from "./planeamento-fornecedor-report";
+import PlaneamentoGeralReport from "./planeamento-geral-report";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-interface ReportParams {
-  dataIni: string;
-  dataFini: string;
-  op: string;
-  po: string;
-  fornecedor: string;
-}
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+const dados = [
+  {
+    chave: "plan",
+    nome: "Planification Générale",
+    desc: "Planification Générale...",
+  },
+  {
+    chave: "planfor",
+    nome: "Planification Par Fournisseur",
+    desc: "Planification Par Fournisseur...",
+  },
+];
 
-async function fetchReport(params: ReportParams): Promise<Blob> {
-  const queryParams = new URLSearchParams();
-  Object.entries(params).forEach(([key, value]) => {
-    if (value) queryParams.append(key, value);
-  });
+const CpReports = async ({ searchParams }: PageProps) => (
+  <Suspense>
+    <CpReportsLoader searchParams={searchParams} />
+  </Suspense>
+);
 
-  const response = await fetch(`/api/report/envios?${queryParams.toString()}`);
+export default CpReports;
 
-  if (!response.ok) {
-    throw new Error("Erro ao gerar relatório");
-  }
+const CpReportsLoader = async ({ searchParams }: PageProps) => {
+  await authorizePapelOrRedirect(PAPEL_CP);
 
-  return response.blob();
-}
+  const { tab } = await searchParams;
+  const tabParam = Array.isArray(tab) ? tab[0] : tab || "plan";
+  const tabRecebida = dados.some((dado) => dado.chave === tabParam)
+    ? tabParam
+    : "plan";
 
-export default function ReportFornecedores() {
-  const [dataIni, setDataIni] = useState("");
-  const [dataFini, setDataFini] = useState("");
-  const [op, setOp] = useState("");
-  const [po, setPo] = useState("");
-  const [fornecedor, setFornecedor] = useState("");
-  const [shouldFetch, setShouldFetch] = useState(false);
-
-  const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["report-fornecedores", dataIni, dataFini, op, po, fornecedor],
-    queryFn: () => fetchReport({ dataIni, dataFini, op, po, fornecedor }),
-    enabled: shouldFetch,
-    retry: 1,
-    staleTime: 0,
-    gcTime: 0,
-  });
-
-  const handleGenerate = () => {
-    setShouldFetch(true);
-    refetch();
+  const renderContent = (tab: string) => {
+    switch (tab) {
+      case "plan":
+        return <PlaneamentoGeralReport />;
+      case "planfor":
+        return <PlaneamentoFornecedorReport />;
+      default:
+        return <div>⚠ Selecione uma opção válida.</div>;
+    }
   };
 
-  // When data is available, open it in a new tab
-  if (data && shouldFetch) {
-    const url = URL.createObjectURL(data);
-    window.open(url, "_blank");
-    setShouldFetch(false);
-
-    // Clean up the URL object after opening
-    setTimeout(() => URL.revokeObjectURL(url), 100);
-  }
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <Card className="w-full max-w-md shadow-md">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold flex items-center gap-2">
-            <FileTextIcon className="h-5 w-5 text-blue-600" />
-            Relatório - Contratos de Fornecedores
-          </CardTitle>
-        </CardHeader>
+    <Tabs value={tabRecebida} className="w-full h-full flex flex-col">
+      <TabsList className="w-full flex-shrink-0">
+        {dados.map((dado) => (
+          <TabsTrigger key={dado.chave} value={dado.chave} asChild>
+            <Link href={`?tab=${dado.chave}`}>{dado.nome}</Link>
+          </TabsTrigger>
+        ))}
+      </TabsList>
 
-        <CardContent className="space-y-4">
-          {isError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-              Erro:{" "}
-              {error instanceof Error ? error.message : "Erro desconhecido"}
-            </div>
-          )}
-
-          <div className="grid gap-2">
-            <Label htmlFor="dataIni">Data Inicial</Label>
-            <div className="relative">
-              <CalendarIcon className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-              <Input
-                id="dataIni"
-                type="date"
-                className="pl-8"
-                value={dataIni}
-                onChange={(e) => setDataIni(e.target.value)}
-                disabled={isLoading}
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="dataFini">Data Final</Label>
-            <div className="relative">
-              <CalendarIcon className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-              <Input
-                id="dataFini"
-                type="date"
-                className="pl-8"
-                value={dataFini}
-                onChange={(e) => setDataFini(e.target.value)}
-                disabled={isLoading}
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="op">OP</Label>
-            <Input
-              id="op"
-              placeholder="Ex: 12345"
-              value={op}
-              onChange={(e) => setOp(e.target.value)}
-              disabled={isLoading}
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="po">PO</Label>
-            <Input
-              id="po"
-              placeholder="Ex: 78910"
-              value={po}
-              onChange={(e) => setPo(e.target.value)}
-              disabled={isLoading}
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="fornecedor">Fornecedor</Label>
-            <Input
-              id="fornecedor"
-              placeholder="Ex: ABC Indústrias"
-              value={fornecedor}
-              onChange={(e) => setFornecedor(e.target.value)}
-              disabled={isLoading}
-            />
-          </div>
-        </CardContent>
-
-        <CardFooter className="flex justify-end">
-          <Button
-            onClick={handleGenerate}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Gerando...
-              </>
-            ) : (
-              "Gerar PDF"
-            )}
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+      <main className="flex-1 overflow-auto">
+        {/* REMOVED: bg-amber-200 */}
+        {dados.map((dado) => (
+          <TabsContent key={dado.chave} value={dado.chave} className="h-full">
+            {renderContent(dado.chave)}
+          </TabsContent>
+        ))}
+      </main>
+    </Tabs>
   );
-}
+};

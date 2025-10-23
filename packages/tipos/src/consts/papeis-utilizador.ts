@@ -5,3 +5,5 @@ export const PAPEL_ROTA_ADMINISTRADOR = "Administrador";
 export const PAPEL_ROTA_QUALIDADE = "Qualidade";
 
 export const PAPEL_ROTA_PLANEAMENTO = "Planeamento";
+
+export const PAPEL_CP = "Cp";
