@@ -6,7 +6,6 @@ import React, { useEffect } from "react";
 const Logout = () => {
   const router = useRouter();
   useEffect(() => {
-    // Immediately log out when component mounts
     const signOut = async () => {
       try {
         await authClient.signOut({

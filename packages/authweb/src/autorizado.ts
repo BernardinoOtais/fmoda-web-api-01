@@ -10,6 +10,7 @@ export async function authorizePapelOrRedirect(papel: string) {
   if (!session) {
     redirect("/auth/logout");
   }
+
   const papeis: string[] = session?.papeis || [];
 
   //console.log("Papeis: ", papeis, papel, papeis.includes(papel));

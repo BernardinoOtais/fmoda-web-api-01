@@ -13,6 +13,7 @@ import {
   ChavePhcSchema,
   DataEntreHojeEEUmAnoSchema,
   NumeroInteiroMaiorQueZero,
+  StringComTamanhoSchema,
 } from "@/comuns";
 import { DateSchema, NumeroInteiro } from "@/index";
 
@@ -177,3 +178,8 @@ export const PatchtDePlaneamentoDataEQttchema = z
       path: ["tipoQ"], // highlights the invalid field
     }
   );
+
+export const PostObsSchema = z.object({
+  bostamp: ChavePhcSchema,
+  obs: StringComTamanhoSchema(100),
+});

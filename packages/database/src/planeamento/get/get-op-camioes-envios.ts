@@ -13,6 +13,7 @@ SELECT
     area = TRIM(bo2.area),
     pedido = TRIM(bo3.u_tpestamp),
     qttTotal = qttTotal.qttTotal,
+    obs = ISNULL(fm_planObs.obs, ''),
     detalhe = ISNULL(detalhePedido.detalhe, '[]'),
     fornecedor = TRIM(bo3.u_nmforn),
     camioes = ISNULL(camioes.camioes, '[]'),
@@ -22,6 +23,7 @@ FROM
     INNER JOIN FMO_PHC..bo2 ON bo.bostamp = bo2.bo2stamp
     INNER JOIN FMO_PHC..bo3 ON bo.bostamp = bo3.bo3stamp
     INNER JOIN FMO_PHC..fref ON bo.fref = fref.fref
+    LEFT JOIN FMO_PHC..fm_planObs on bo.bostamp = fm_planObs.bostamp
     OUTER APPLY (
         SELECT detalhe = (
             SELECT 

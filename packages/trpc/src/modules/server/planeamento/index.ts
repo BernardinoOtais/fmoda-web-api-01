@@ -9,6 +9,7 @@ import {
   deleteDataEQuantidadeBd,
   postDePlaneamentoDataEQttDb,
   patchDePlaneamentoDataEQttDb,
+  postObsDb,
 } from "@repo/db/planeamento";
 import { saveBase64Image } from "@repo/imagens";
 import { PAPEL_ROTA_PLANEAMENTO } from "@repo/tipos/consts";
@@ -21,6 +22,7 @@ import {
   PosNovoPlaneamentoSchema,
   PostDePlaneamentoDataEQttchema,
   PostFornecedorSchema,
+  PostObsSchema,
 } from "@repo/tipos/planeamento";
 import { OPschema } from "@repo/tipos/qualidade_balancom";
 import { TRPCError } from "@trpc/server";
@@ -181,6 +183,21 @@ export const planeamento = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Erro ao alterar Planeamento...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+  postObs: roleProtectedProcedure(PAPEL_ROTA)
+    .input(PostObsSchema)
+    .mutation(async ({ input }) => {
+      try {
+        const { bostamp, obs } = input;
+        return postObsDb(bostamp, obs);
+      } catch (err) {
+        console.log(err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao alterar Obs do Planeamento...",
           cause: err, // optional, for logging/debugging
         });
       }

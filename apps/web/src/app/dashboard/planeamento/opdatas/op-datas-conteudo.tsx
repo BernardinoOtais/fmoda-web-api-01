@@ -5,6 +5,7 @@ import React, { useState } from "react";
 
 import DatasQuantidades from "./_datas-e-quantidades/datas-quantidades";
 import MutateFornecededor from "./mutate-fornecedor";
+import MutateObs from "./mutate-obs";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -141,10 +142,21 @@ const OpDatasConteudo = () => {
                     valorOriginal={data[0].fornecedor ?? ""}
                   />
                 </div>
+                <div className="flex flex-col ">
+                  <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
+                    {`OBS`}
+                  </h3>
+                  <MutateObs
+                    key={debouncedOp}
+                    op={debouncedOp}
+                    stamp={data[0].stamp}
+                    obs={data[0].obs ?? ""}
+                  />
+                </div>
                 <div className="flex flex-col lg:flex-row  items-end justify-center">
                   <div className="p-1">
                     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
-                      {`Camiões...`}
+                      {`Camiões`}
                     </h3>
                     <DatasQuantidades
                       op={parseInt(debouncedOp)}
@@ -155,7 +167,7 @@ const OpDatasConteudo = () => {
                   </div>
                   <div className="p-1">
                     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
-                      {`Envios...`}
+                      {`Envios`}
                     </h3>
                     <DatasQuantidades
                       op={parseInt(debouncedOp)}

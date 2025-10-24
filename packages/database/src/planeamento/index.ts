@@ -9,6 +9,7 @@ import { patchDePlaneamentoDataEQttDb } from "./patch/patch-de-planeamento-data-
 import { postDePlaneamentosDB } from "./post/post-de-palneamentos";
 import { postDePlaneamentoDataEQttDb } from "./post/post-de-planeamento-data-e-qtt";
 import { postFornecedorDb } from "./post/post-fornecedor";
+import { postObsDb } from "./post/post-obs";
 
 export {
   getOpAbertasDb,
@@ -22,4 +23,5 @@ export {
   deleteDataEQuantidadeBd,
   postDePlaneamentoDataEQttDb,
   patchDePlaneamentoDataEQttDb,
+  postObsDb,
 };
