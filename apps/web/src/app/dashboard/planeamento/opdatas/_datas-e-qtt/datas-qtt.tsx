@@ -2,7 +2,7 @@ import { DataQttSchema } from "@repo/tipos/planeamento";
 import { useMutation, useQueryClient } from "@repo/trpc";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 
 import InsereDataQtt from "./insere-data-qtt";
