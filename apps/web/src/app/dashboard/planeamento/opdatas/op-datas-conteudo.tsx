@@ -4,7 +4,6 @@ import { useQuery } from "@repo/trpc";
 import React, { useState } from "react";
 
 import DatasQtt from "./_datas-e-qtt/datas-qtt";
-import DatasQuantidades from "./_datas-e-quantidades/datas-quantidades";
 import MutateFornecedoresValores from "./_fornecedores-valores/mutate-fornecedores-valores";
 import MutateObs from "./mutate-obs";
 

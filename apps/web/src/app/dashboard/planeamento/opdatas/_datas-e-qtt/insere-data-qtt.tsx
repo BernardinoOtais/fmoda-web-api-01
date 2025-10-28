@@ -332,7 +332,7 @@ const InsereDataQtt = ({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Resetar</p>
+              <p>Limpar campos...</p>
             </TooltipContent>
           </Tooltip>
 
