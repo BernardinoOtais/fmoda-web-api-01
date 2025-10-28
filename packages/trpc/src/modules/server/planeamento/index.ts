@@ -10,12 +10,18 @@ import {
   postDePlaneamentoDataEQttDb,
   patchDePlaneamentoDataEQttDb,
   postObsDb,
+  deleteFornecedorValorizadoBd,
+  upsertDescValorDb,
+  upsertDataEValorDb,
+  deleteDataEQttBd,
 } from "@repo/db/planeamento";
 import { saveBase64Image } from "@repo/imagens";
 import { PAPEL_ROTA_PLANEAMENTO } from "@repo/tipos/consts";
 import { uploadPhotoSchema } from "@repo/tipos/foto";
 import {
   DeleteDataEQttPlaneamentoSchema,
+  DeleteDataEQttSchema,
+  DeleteFornecedorValorizadoSchema,
   GetPlaneamentosSchemas,
   GetPlaneamentoViaOrcamentoSchema,
   PatchtDePlaneamentoDataEQttchema,
@@ -23,6 +29,8 @@ import {
   PostDePlaneamentoDataEQttchema,
   PostFornecedorSchema,
   PostObsSchema,
+  UpsertDataQttSchema,
+  UpsertDescValorSchema,
 } from "@repo/tipos/planeamento";
 import { OPschema } from "@repo/tipos/qualidade_balancom";
 import { TRPCError } from "@trpc/server";
@@ -143,6 +151,35 @@ export const planeamento = createTRPCRouter({
         });
       }
     }),
+  deleteDataEQtt: roleProtectedProcedure(PAPEL_ROTA)
+    .input(DeleteDataEQttSchema)
+    .mutation(async ({ input }) => {
+      try {
+        await deleteDataEQttBd(input.idDataQtt);
+      } catch (err) {
+        console.log(err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao apagar...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+  deleteFornecedorValorizado: roleProtectedProcedure(PAPEL_ROTA)
+    .input(DeleteFornecedorValorizadoSchema)
+    .mutation(async ({ input }) => {
+      try {
+        await deleteFornecedorValorizadoBd(input.idValorizado);
+      } catch (err) {
+        console.log(err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro ao Apagar...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+
   patchEstadoItem: roleProtectedProcedure(PAPEL_ROTA)
     .input(uploadPhotoSchema)
     .mutation(async ({ input }) => {
@@ -202,4 +239,45 @@ export const planeamento = createTRPCRouter({
         });
       }
     }),
+  upsertDescValor: roleProtectedProcedure(PAPEL_ROTA)
+    .input(UpsertDescValorSchema)
+    .mutation(async ({ input }) => {
+      try {
+        const { idValorizado, bostamp, nome, nTipo, valorServico } = input;
+        console.log("aqui as cenas");
+        return upsertDescValorDb(
+          idValorizado,
+          bostamp,
+          nome,
+          nTipo,
+          valorServico
+        );
+      } catch (err) {
+        console.log(err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro a alterar ou inserir...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
+  upsertDataEValor: roleProtectedProcedure(PAPEL_ROTA)
+    .input(UpsertDataQttSchema)
+    .mutation(async ({ input }) => {
+      try {
+        const { idDataQtt, bostamp, data, nTipo, qtt } = input;
+        console.log("aqui as cenas");
+        return upsertDataEValorDb(idDataQtt, bostamp, data, nTipo, qtt);
+      } catch (err) {
+        console.log(err);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Erro a alterar ou inserir...",
+          cause: err, // optional, for logging/debugging
+        });
+      }
+    }),
 });
+//upsertDataEValorDb
+
+//deleteDataEQttBd

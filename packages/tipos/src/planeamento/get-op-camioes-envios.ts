@@ -2,6 +2,7 @@ import z from "zod";
 
 import {
   ChavePhcSchema,
+  FloatZeroSchema,
   NumeroInteiroMaiorQueZero,
   StringComTamanhoSchema,
 } from "@/comuns";
@@ -24,6 +25,20 @@ const CamiaoOuEnvioSchema = z.object({
   n: NumeroInteiroMaiorQueZero,
   dataIn: DateSchema,
   valor: NumeroOuZero,
+});
+
+export const FornecedorValorSchema = z.object({
+  idValorizado: NumeroInteiroMaiorQueZero,
+  bostamp: ChavePhcSchema,
+  nome: StringComTamanhoSchema(55),
+  valorServico: FloatZeroSchema,
+});
+
+export const DataQttSchema = z.object({
+  idDataQtt: NumeroInteiroMaiorQueZero,
+  bostamp: ChavePhcSchema,
+  data: DateSchema,
+  qtt: NumeroOuZero,
 });
 
 export const FornecedorSchema = StringComTamanhoSchema(200, 0).optional();
@@ -70,4 +85,34 @@ export const OpCamioesEnviosSchema = z.object({
       }
     })
     .pipe(z.array(CamiaoOuEnvioSchema)),
+  fornecedorValor: z
+    .string()
+    .transform((val) => {
+      try {
+        return JSON.parse(val) as unknown[];
+      } catch {
+        return [];
+      }
+    })
+    .pipe(z.array(FornecedorValorSchema)),
+  dCamioes: z
+    .string()
+    .transform((val) => {
+      try {
+        return JSON.parse(val) as unknown[];
+      } catch {
+        return [];
+      }
+    })
+    .pipe(z.array(DataQttSchema)),
+  dFaturas: z
+    .string()
+    .transform((val) => {
+      try {
+        return JSON.parse(val) as unknown[];
+      } catch {
+        return [];
+      }
+    })
+    .pipe(z.array(DataQttSchema)),
 });

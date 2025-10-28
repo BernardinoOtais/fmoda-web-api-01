@@ -17,7 +17,10 @@ SELECT
     detalhe = ISNULL(detalhePedido.detalhe, '[]'),
     fornecedor = TRIM(bo3.u_nmforn),
     camioes = ISNULL(camioes.camioes, '[]'),
-    envios = ISNULL(envios.envios, '[]')
+    envios = ISNULL(envios.envios, '[]'),
+    fornecedorValor = ISNULL(fornecedorValor.fornecedorValor, '[]'),
+	dCamioes = ISNULL(dCamioes.dCamioes,'[]'),
+    dFaturas = ISNULL(dFaturas.dFaturas,'[]')
 FROM 
     FMO_PHC..bo
     INNER JOIN FMO_PHC..bo2 ON bo.bostamp = bo2.bo2stamp
@@ -93,7 +96,59 @@ FROM
             FMO_PHC..bi
         WHERE
             bi.bostamp = bo.bostamp
-    )qttTotal
+    ) qttTotal
+    OUTER APPLY(
+        SELECT fornecedorValor = (
+			select 
+				b.idValorizado,
+				bostamp = trim(a.bostamp), 
+				nome = trim(b.nome),
+				b.valorServico
+			from	
+				FMO_PHC..fm_opDescValorizado a
+			join 
+				FMO_PHC..fm_descValorizado b on a.idValorizado = b.idValorizado
+			where 
+                b.idTipo = 1 and a.bostamp = bo.bostamp
+            FOR JSON PATH
+        )
+    ) fornecedorValor
+	OUTER APPLY(
+		SELECT dCamioes = (
+			SELECT 
+				b.idDataQtt,
+				bostamp = trim(a.bostamp), 
+				data =b.data,
+				qtt = b.qtt
+			FROM 
+				FMO_PHC..fm_opDataQtt a
+			join 
+				FMO_PHC..fm_dataQtt b on a.idDataQtt = b.idDataQtt
+			WHERE 
+				a.bostamp = bo.bostamp and b.idTipo = 2 /* camioes */
+            ORDER BY    
+                b.data
+			FOR JSON PATH
+		)
+	) dCamioes
+	OUTER APPLY(
+		SELECT dFaturas = (
+			SELECT 
+				b.idDataQtt,
+				bostamp = trim(a.bostamp), 
+				data =b.data,
+				qtt = b.qtt
+			FROM 
+				FMO_PHC..fm_opDataQtt a
+			join 
+				FMO_PHC..fm_dataQtt b on a.idDataQtt = b.idDataQtt
+			WHERE 
+				a.bostamp = bo.bostamp and b.idTipo = 3 /* Faturas */
+            ORDER BY    
+                b.data
+			FOR JSON PATH
+		)
+	)dFaturas
 WHERE 
     bo.ndos = 1 
     AND bo.obrano = ${op}`;

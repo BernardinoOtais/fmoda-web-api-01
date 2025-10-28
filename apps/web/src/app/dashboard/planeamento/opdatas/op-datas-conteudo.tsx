@@ -3,8 +3,9 @@ import { OPschema } from "@repo/tipos/qualidade_balancom";
 import { useQuery } from "@repo/trpc";
 import React, { useState } from "react";
 
+import DatasQtt from "./_datas-e-qtt/datas-qtt";
 import DatasQuantidades from "./_datas-e-quantidades/datas-quantidades";
-import MutateFornecededor from "./mutate-fornecedor";
+import MutateFornecedoresValores from "./_fornecedores-valores/mutate-fornecedores-valores";
 import MutateObs from "./mutate-obs";
 
 import { Input } from "@/components/ui/input";
@@ -132,14 +133,43 @@ const OpDatasConteudo = () => {
                     </Table>
                   </div>
                 ))}
+
+                <div className="flex flex-col lg:flex-row  items-end justify-center">
+                  <div className="p-1">
+                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
+                      {`Camiões`}
+                    </h3>
+                    <DatasQtt
+                      dados={data[0].dCamioes}
+                      op={parseInt(debouncedOp)}
+                      bostamp={data[0].stamp}
+                      tipo={2}
+                    />
+                  </div>
+                  <div className="p-1">
+                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
+                      {`Envios`}
+                    </h3>
+                    <DatasQtt
+                      dados={data[0].dFaturas}
+                      op={parseInt(debouncedOp)}
+                      bostamp={data[0].stamp}
+                      tipo={3}
+                    />
+                  </div>
+                </div>
                 <div className="flex flex-col ">
                   <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
-                    {`Fornecedores`}
+                    {`Fornecedores e Valores`}
                   </h3>
-                  <MutateFornecededor
+                  {data[0].fornecedor !== "" && (
+                    <div className="mx-auto">{`Antigo: ${data[0].fornecedor}`}</div>
+                  )}
+                  <MutateFornecedoresValores
                     key={debouncedOp}
-                    op={debouncedOp}
-                    valorOriginal={data[0].fornecedor ?? ""}
+                    dados={data[0].fornecedorValor}
+                    op={parseInt(debouncedOp)}
+                    bostamp={data[0].stamp}
                   />
                 </div>
                 <div className="flex flex-col ">
@@ -152,30 +182,6 @@ const OpDatasConteudo = () => {
                     stamp={data[0].stamp}
                     obs={data[0].obs ?? ""}
                   />
-                </div>
-                <div className="flex flex-col lg:flex-row  items-end justify-center">
-                  <div className="p-1">
-                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
-                      {`Camiões`}
-                    </h3>
-                    <DatasQuantidades
-                      op={parseInt(debouncedOp)}
-                      dados={data[0].camioes}
-                      variavelD="u_datacam"
-                      variavelQ="u_camqtt"
-                    />
-                  </div>
-                  <div className="p-1">
-                    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center ">
-                      {`Envios`}
-                    </h3>
-                    <DatasQuantidades
-                      op={parseInt(debouncedOp)}
-                      dados={data[0].envios}
-                      variavelD="u_datafor"
-                      variavelQ="u_dfqtt"
-                    />
-                  </div>
                 </div>
               </>
             )}

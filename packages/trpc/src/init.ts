@@ -17,6 +17,10 @@ const t = initTRPC.create({
    * @see https://trpc.io/docs/server/data-transformers
    */
   transformer: superjson,
+  errorFormatter({ shape, error }) {
+    console.log("tRPC validation error:", error);
+    return shape;
+  },
 });
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;

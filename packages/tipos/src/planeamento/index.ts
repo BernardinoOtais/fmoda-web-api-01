@@ -1,7 +1,9 @@
 import z from "zod";
 
 import {
+  DataQttSchema,
   FornecedorSchema,
+  FornecedorValorSchema,
   OpCamioesEnviosSchema,
 } from "./get-op-camioes-envios";
 import {
@@ -12,6 +14,7 @@ import {
 import {
   ChavePhcSchema,
   DataEntreHojeEEUmAnoSchema,
+  FloatSchema,
   NumeroInteiroMaiorQueZero,
   StringComTamanhoSchema,
 } from "@/comuns";
@@ -83,6 +86,11 @@ export type PosNovosPlaneamentosDto = z.infer<typeof PosNovoPlaneamentoSchema>;
 // Schema for array results (from Prisma $queryRaw)
 export const OpCamioesEnviosArraySchema = z.array(OpCamioesEnviosSchema);
 
+//Fornecedor Preco
+export type FornecedorValorDto = z.infer<typeof FornecedorValorSchema>;
+
+export type DataQttSchema = z.infer<typeof DataQttSchema>;
+
 // TypeScript type
 export type OpCamioesEnvios = z.infer<typeof OpCamioesEnviosSchema>;
 
@@ -124,6 +132,13 @@ export const DeleteDataEQttPlaneamentoSchema = z
       path: ["tipoQ"], // highlights the invalid field
     }
   );
+export const DeleteFornecedorValorizadoSchema = z.object({
+  idValorizado: NumeroInteiroMaiorQueZero,
+});
+
+export const DeleteDataEQttSchema = z.object({
+  idDataQtt: NumeroInteiroMaiorQueZero,
+});
 
 export const PostDePlaneamentoDataEQttchema = z
   .object({
@@ -182,4 +197,20 @@ export const PatchtDePlaneamentoDataEQttchema = z
 export const PostObsSchema = z.object({
   bostamp: ChavePhcSchema,
   obs: StringComTamanhoSchema(100),
+});
+
+export const UpsertDescValorSchema = z.object({
+  idValorizado: NumeroInteiroMaiorQueZero.nullable(),
+  bostamp: ChavePhcSchema,
+  nome: StringComTamanhoSchema(55),
+  nTipo: z.union([z.literal(1)]), // ✅ Only allows 2 or 3 as numbers
+  valorServico: FloatSchema,
+});
+
+export const UpsertDataQttSchema = z.object({
+  idDataQtt: NumeroInteiroMaiorQueZero.nullable(),
+  bostamp: ChavePhcSchema,
+  data: DateSchema,
+  nTipo: z.union([z.literal(2), z.literal(3)]),
+  qtt: NumeroInteiro,
 });
