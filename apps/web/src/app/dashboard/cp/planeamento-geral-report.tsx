@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PDFViewer } from "@/components/ui-personalizado/meus-components/pdf-viewer";
 
 const reportSchema = z.object({
   dataIni: z.string().min(1, "Data inicial é obrigatória"),
@@ -196,11 +197,7 @@ export default function PlaneamentoGeralReport() {
 
       <div className="mt-1 w-full flex-1 min-h-0 ">
         {pdfUrl ? (
-          <iframe
-            src={pdfUrl}
-            className="w-full h-full"
-            style={{ border: "none" }}
-          />
+          <PDFViewer pdfUrl={pdfUrl} />
         ) : (
           <p className="text-center">...</p>
         )}

@@ -130,26 +130,31 @@ export const trataPedidoPrincipal = (dadod: Record<number, PdfText[]>) => {
 
   if (qttLinhas < 3) return [];
 
-  let tamanhos: PdfText[] = [];
-  let linhasPedidoCor: PdfText[][] = [];
+  let tamanhos: { tam: string; ordem: number }[] = [];
+
+  const linhasPedidoCor: PdfText[][] = [];
+
   let total: PdfText[] = [];
 
-  /*
-  const cabecalho = lines[0];
+  lines.forEach((l, i) => {
+    if (i === 0)
+      tamanhos =
+        l
+          ?.filter((_, i) => i !== 0 && i !== l.length - 1)
+          .map((c, i) => ({ tam: c.text, ordem: i + 1 })) ?? [];
 
-  const listaTamanhos =
-    cabecalho
-      ?.filter((_, i) => i !== 0 && i !== cabecalho.length - 1)
-      .map((c, i) => ({ tam: c.text, ordem: i + 1 })) ?? [];
+    if (i !== 0 && qttLinhas - 1 !== i) {
+      linhasPedidoCor.push(l);
+    }
+    if (i === qttLinhas - 1) total = l;
+  });
 
-  if (listaTamanhos.length === 0) return [];
-
-  const linhasPedidoCor =
-    lines?.filter((_, i) => i !== 0 && i !== lines.length - 1).map((c) => c) ??
-    [];
-
-
-  const total = lines[qttLinhas - 1];
-
-  */
+  console.log(
+    "tamanhos :",
+    tamanhos,
+    "linhasPedidoCor: ",
+    linhasPedidoCor,
+    "total : ",
+    total
+  );
 };

@@ -3,7 +3,6 @@ import { administrador } from "@/modules/server/administrador";
 import { embarques_configorar } from "@/modules/server/embarques/configurar";
 import { embarques_idEnvio } from "@/modules/server/embarques/id-envio";
 import { embarques } from "@/modules/server/embarques/raiz";
-import { qualidade_foto } from "@/modules/server/foto/qualidade";
 import { fotosGeraisFmoda } from "@/modules/server/fotos/gerais";
 import { planeamento } from "@/modules/server/planeamento";
 import { qualidade_balancom_op_composicao } from "@/modules/server/qualidade/balanco-op-composicao";
@@ -24,8 +23,6 @@ export const appRouter = createTRPCRouter({
   qualidade_balancom_op,
 
   qualidade_balancom_op_composicao,
-
-  qualidadeFoto: qualidade_foto,
 
   planeamento,
 

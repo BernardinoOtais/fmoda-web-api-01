@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PDFViewer } from "@/components/ui-personalizado/meus-components/pdf-viewer";
 
 const reportSchema = z.object({
   dataIni: z.string().min(1, "Data inicial é obrigatória"),
@@ -100,6 +101,7 @@ const PlaneamentoFornecedorReport = () => {
   const onSubmit = async () => {
     await refetch();
   };
+
   return (
     <div className="flex flex-col h-full p-1 w-full items-center">
       <Card className="w-full max-w-max shadow-md flex-shrink-0 p-1">
@@ -197,11 +199,7 @@ const PlaneamentoFornecedorReport = () => {
 
       <div className="mt-1 w-full flex-1 min-h-0 ">
         {pdfUrl ? (
-          <iframe
-            src={pdfUrl}
-            className="w-full h-full"
-            style={{ border: "none" }}
-          />
+          <PDFViewer pdfUrl={pdfUrl} />
         ) : (
           <p className="text-center">...</p>
         )}
