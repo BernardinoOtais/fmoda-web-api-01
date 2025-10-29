@@ -1,4 +1,3 @@
-// ✅ Use dynamic import for pdf2json (works in ESM / Next.js)
 import { PdfText, Pdf2JsonText, Pdf2JsonData } from "@repo/tipos/pdf";
 
 export async function parsePdf2Json(buffer: Buffer): Promise<Pdf2JsonText[]> {
@@ -120,4 +119,37 @@ export const groupItemsByYCoordinate = <T extends { y: number }>(
   });
 
   return rowsMap;
+};
+
+export const trataPedidoPrincipal = (dadod: Record<number, PdfText[]>) => {
+  const lines = Object.entries(dadod)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([, v]) => v);
+
+  const qttLinhas = lines.length;
+
+  if (qttLinhas < 3) return [];
+
+  let tamanhos: PdfText[] = [];
+  let linhasPedidoCor: PdfText[][] = [];
+  let total: PdfText[] = [];
+
+  /*
+  const cabecalho = lines[0];
+
+  const listaTamanhos =
+    cabecalho
+      ?.filter((_, i) => i !== 0 && i !== cabecalho.length - 1)
+      .map((c, i) => ({ tam: c.text, ordem: i + 1 })) ?? [];
+
+  if (listaTamanhos.length === 0) return [];
+
+  const linhasPedidoCor =
+    lines?.filter((_, i) => i !== 0 && i !== lines.length - 1).map((c) => c) ??
+    [];
+
+
+  const total = lines[qttLinhas - 1];
+
+  */
 };

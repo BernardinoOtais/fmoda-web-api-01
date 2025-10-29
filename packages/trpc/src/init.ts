@@ -88,3 +88,26 @@ export const roleProtectedProcedure = (requiredPapel: string) =>
 
     return next({ ctx: { ...ctx, auth: session } });
   });
+
+export const roleProtectedProcedureQualquerUser = () =>
+  baseProcedure.use(async ({ ctx, next }) => {
+    const start = Date.now();
+
+    const session = await getSession();
+
+    if (!session) {
+      const duration = Date.now() - start;
+      loggerWeb.warn("Authentication Failed", {
+        duration: `${duration}ms`,
+        reason: "No session found",
+        securityEvent: true,
+      });
+
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Proibido....",
+      });
+    }
+
+    return next({ ctx: { ...ctx, auth: session } });
+  });

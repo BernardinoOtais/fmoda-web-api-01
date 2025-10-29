@@ -3,6 +3,7 @@ import {
   extraiTodasEntregas,
   extraiPorcoesNaoInclusive,
   groupItemsByYCoordinate,
+  trataPedidoPrincipal,
 } from "@repo/pdf";
 import { PdfText, Pdf2JsonText } from "@repo/tipos/pdf";
 import { NextResponse } from "next/server";
@@ -25,21 +26,30 @@ export async function POST(request: Request) {
       text: decodeURIComponent(t.R.map((r) => r.T ?? "").join(" ")),
     }));
 
-    const pedidoTotalRaw = extraiPorcoesNaoInclusive(
+    const pedidoPrincipal = extraiPorcoesNaoInclusive(
       decoded,
       "TOTAL PEDIDO",
       "UNID. LOT."
     );
 
-    const allSections = extraiTodasEntregas(
+    const entregasParciais = extraiTodasEntregas(
       decoded,
       "PEDIDO",
       "PRECIO COSTE:",
       "ENTREGAS PARCIALES"
     );
 
-    const rowsMap = allSections.map((a) => groupItemsByYCoordinate(a));
-    return NextResponse.json(rowsMap);
+    const entregasParciaisAgrupadas = entregasParciais.map((a) =>
+      groupItemsByYCoordinate(a)
+    );
+
+    const pedidoPrincipalAgrupada = groupItemsByYCoordinate(pedidoPrincipal);
+
+    trataPedidoPrincipal(pedidoPrincipalAgrupada);
+
+    return NextResponse.json({
+      pedidoPrincipalAgrupada,
+    });
   } catch (error) {
     console.error("PDF2JSON parse error:", error);
     const message =
