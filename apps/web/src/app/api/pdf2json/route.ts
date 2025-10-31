@@ -4,6 +4,8 @@ import {
   extraiPorcoesNaoInclusive,
   groupItemsByYCoordinate,
   trataPedidoPrincipal,
+  extraiPorcoesInclusive,
+  getValuesBeneathOptimized,
 } from "@repo/pdf";
 import { PdfText, Pdf2JsonText } from "@repo/tipos/pdf";
 import { NextResponse } from "next/server";
@@ -26,6 +28,40 @@ export async function POST(request: Request) {
       text: decodeURIComponent(t.R.map((r) => r.T ?? "").join(" ")),
     }));
 
+    const cabecalhoPedido = extraiPorcoesInclusive(
+      decoded,
+      "Nº PED.",
+      "TOTAL PEDIDO"
+    );
+
+    const cabecalho = getValuesBeneathOptimized(cabecalhoPedido);
+
+    if (cabecalho.dataEntrega !== null) {
+      const preco = extraiPorcoesInclusive(
+        decoded,
+        "PRECIO COSTE:",
+        "página ",
+        true
+      );
+
+      console.log("dados : ", preco);
+      const precoPeca = preco[1]?.text;
+
+      if (!precoPeca)
+        return NextResponse.json(
+          { error: "Tem que ter preço" },
+          { status: 400 }
+        );
+      const valorPrecoPeca = precoPeca.replace(" EUR", "");
+      const precoFinal = transformaTextoEmNumero(valorPrecoPeca, "float");
+      if (precoFinal === null)
+        return NextResponse.json(
+          { error: "Erro ao transforma preço em número" },
+          { status: 400 }
+        );
+      console.log("O tais preco : ", precoFinal);
+    }
+
     const pedidoPrincipal = extraiPorcoesNaoInclusive(
       decoded,
       "TOTAL PEDIDO",
@@ -45,10 +81,10 @@ export async function POST(request: Request) {
 
     const pedidoPrincipalAgrupada = groupItemsByYCoordinate(pedidoPrincipal);
 
-    trataPedidoPrincipal(pedidoPrincipalAgrupada);
+    const encomenda = trataPedidoPrincipal(pedidoPrincipalAgrupada);
 
     return NextResponse.json({
-      pedidoPrincipalAgrupada,
+      encomenda,
     });
   } catch (error) {
     console.error("PDF2JSON parse error:", error);
@@ -59,3 +95,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
+
+const transformaTextoEmNumero = (
+  n?: string,
+  tipo: "int" | "float" = "int"
+): number | null => {
+  if (!n) return null;
+
+  const cleaned = n.replace(/\./g, "").replace(",", ".");
+
+  const parsed = tipo === "int" ? parseInt(cleaned, 10) : parseFloat(cleaned);
+
+  return Number.isNaN(parsed) ? null : parsed;
+};

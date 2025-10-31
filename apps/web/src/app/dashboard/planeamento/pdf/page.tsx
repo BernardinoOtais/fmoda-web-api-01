@@ -44,7 +44,7 @@ export default function ImportarPdf() {
     if (!file) return;
     mutate(file);
   };
-
+  console.log(JSON.stringify(data, null, 2));
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       {/* Upload Card */}
@@ -67,7 +67,7 @@ export default function ImportarPdf() {
         </CardContent>
       </Card>
 
-      <div>{JSON.stringify(data)}</div>
+      <div>{JSON.stringify(data, null, 2)}</div>
     </div>
   );
 }

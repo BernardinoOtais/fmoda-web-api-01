@@ -96,11 +96,6 @@ export type OpCamioesEnvios = z.infer<typeof OpCamioesEnviosSchema>;
 
 export const FornecedorSchemaParaUsar = FornecedorSchema;
 
-export const PostFornecedorSchema = z.object({
-  fornecedor: FornecedorSchema,
-  op: NumeroInteiroMaiorQueZero,
-});
-
 export const PostDeDataSchema = z.object({
   op: NumeroInteiroMaiorQueZero,
   variavel: z.enum(["u_datafor", "u_datacam"]),
@@ -115,23 +110,6 @@ export const PostDeQttSchema = z.object({
   qtt: NumeroInteiro,
 });
 
-export const DeleteDataEQttPlaneamentoSchema = z
-  .object({
-    op: NumeroInteiroMaiorQueZero,
-    tipoD: z.enum(["u_datafor", "u_datacam"]),
-    tipoQ: z.enum(["u_dfqtt", "u_camqtt"]),
-    nTipo: NumeroInteiroMaiorQueZero,
-  })
-  .refine(
-    (data) =>
-      (data.tipoD === "u_datafor" && data.tipoQ === "u_dfqtt") ||
-      (data.tipoD === "u_datacam" && data.tipoQ === "u_camqtt"),
-    {
-      message:
-        "tipoQ deve corresponder ao tipoD (u_datafor → u_dfqtt, u_datacam → u_camqtt)",
-      path: ["tipoQ"], // highlights the invalid field
-    }
-  );
 export const DeleteFornecedorValorizadoSchema = z.object({
   idValorizado: NumeroInteiroMaiorQueZero,
 });
@@ -139,25 +117,6 @@ export const DeleteFornecedorValorizadoSchema = z.object({
 export const DeleteDataEQttSchema = z.object({
   idDataQtt: NumeroInteiroMaiorQueZero,
 });
-
-export const PostDePlaneamentoDataEQttchema = z
-  .object({
-    op: NumeroInteiroMaiorQueZero,
-    tipoD: z.enum(["u_datafor", "u_datacam"]),
-    tipoQ: z.enum(["u_dfqtt", "u_camqtt"]),
-    data: DateSchema,
-    qtt: NumeroInteiro,
-  })
-  .refine(
-    (data) =>
-      (data.tipoD === "u_datafor" && data.tipoQ === "u_dfqtt") ||
-      (data.tipoD === "u_datacam" && data.tipoQ === "u_camqtt"),
-    {
-      message:
-        "tipoQ deve corresponder ao tipoD (u_datafor → u_dfqtt, u_datacam → u_camqtt)",
-      path: ["tipoQ"], // highlights the invalid field
-    }
-  );
 
 //planeamento via op
 export const GetPlaneamentoViaOrcamentoSchema =
@@ -173,26 +132,6 @@ export const OpDatasNovoPlanemanetoSchema = z.object({
   qtt: NumeroInteiro,
   n: NumeroInteiro.optional(),
 });
-
-export const PatchtDePlaneamentoDataEQttchema = z
-  .object({
-    op: NumeroInteiroMaiorQueZero,
-    tipoD: z.enum(["u_datafor", "u_datacam"]),
-    tipoQ: z.enum(["u_dfqtt", "u_camqtt"]),
-    nTipo: NumeroInteiroMaiorQueZero,
-    data: DateSchema,
-    qtt: NumeroInteiro,
-  })
-  .refine(
-    (data) =>
-      (data.tipoD === "u_datafor" && data.tipoQ === "u_dfqtt") ||
-      (data.tipoD === "u_datacam" && data.tipoQ === "u_camqtt"),
-    {
-      message:
-        "tipoQ deve corresponder ao tipoD (u_datafor → u_dfqtt, u_datacam → u_camqtt)",
-      path: ["tipoQ"], // highlights the invalid field
-    }
-  );
 
 export const PostObsSchema = z.object({
   bostamp: ChavePhcSchema,

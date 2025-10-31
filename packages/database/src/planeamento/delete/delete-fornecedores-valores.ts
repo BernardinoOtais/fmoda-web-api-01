@@ -1,7 +1,8 @@
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
 export const deleteFornecedorValorizadoBd = async (
-  idValorizado: number
+  idValorizado: number,
+  userName: string
 ) => prismaQualidade.$queryRaw`
-  exec FMO_PHC..fm_web_planeamento_delete_DescValorizado ${idValorizado}
+  exec FMO_PHC..fm_web_planeamento_delete_DescValorizado ${idValorizado}, ${userName}
 `;

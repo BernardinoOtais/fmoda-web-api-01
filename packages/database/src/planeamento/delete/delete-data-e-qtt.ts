@@ -5,7 +5,8 @@
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
 export const deleteDataEQttBd = async (
-  idDataQtt: number
+  idDataQtt: number,
+  userName: string
 ) => prismaQualidade.$queryRaw`
-  exec FMO_PHC..fm_web_planeamento_delete_DataQtt ${idDataQtt}
+  exec FMO_PHC..fm_web_planeamento_delete_DataQtt ${idDataQtt}, ${userName}
 `;

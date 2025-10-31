@@ -4,30 +4,20 @@ import {
   postDePlaneamentosDB,
   getPlaneamentosDb,
   getOpCamioesEnviosDb,
-  postFornecedorDb,
   getPlaneamentoViaOrcamentoDb,
-  deleteDataEQuantidadeBd,
-  postDePlaneamentoDataEQttDb,
-  patchDePlaneamentoDataEQttDb,
   postObsDb,
   deleteFornecedorValorizadoBd,
   upsertDescValorDb,
   upsertDataEValorDb,
   deleteDataEQttBd,
 } from "@repo/db/planeamento";
-import { saveBase64Image } from "@repo/imagens";
 import { PAPEL_ROTA_PLANEAMENTO } from "@repo/tipos/consts";
-import { uploadPhotoSchema } from "@repo/tipos/foto";
 import {
-  DeleteDataEQttPlaneamentoSchema,
   DeleteDataEQttSchema,
   DeleteFornecedorValorizadoSchema,
   GetPlaneamentosSchemas,
   GetPlaneamentoViaOrcamentoSchema,
-  PatchtDePlaneamentoDataEQttchema,
   PosNovoPlaneamentoSchema,
-  PostDePlaneamentoDataEQttchema,
-  PostFornecedorSchema,
   PostObsSchema,
   UpsertDataQttSchema,
   UpsertDescValorSchema,
@@ -112,50 +102,12 @@ export const planeamento = createTRPCRouter({
         });
       }
     }),
-  postFornecedor: roleProtectedProcedure(PAPEL_ROTA)
-    .input(PostFornecedorSchema)
-    .mutation(async ({ input }) => {
-      try {
-        const { fornecedor, op } = input;
-        if (!fornecedor || !op)
-          throw new TRPCError({
-            code: "PARSE_ERROR",
-            message: "Erro ao inserir fornecedor..",
-          });
-        await postFornecedorDb(fornecedor, op.toString());
-      } catch (err) {
-        console.log(err);
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Erro ao inserir fornecedor..",
-          cause: err, // optional, for logging/debugging
-        });
-      }
-    }),
-  deleteDataEQuantidade: roleProtectedProcedure(PAPEL_ROTA)
-    .input(DeleteDataEQttPlaneamentoSchema)
-    .mutation(async ({ input }) => {
-      try {
-        await deleteDataEQuantidadeBd(
-          input.op,
-          input.tipoD,
-          input.tipoQ,
-          input.nTipo
-        );
-      } catch (err) {
-        console.log(err);
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Erro ao Apagar palaneamento...",
-          cause: err, // optional, for logging/debugging
-        });
-      }
-    }),
   deleteDataEQtt: roleProtectedProcedure(PAPEL_ROTA)
     .input(DeleteDataEQttSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
-        await deleteDataEQttBd(input.idDataQtt);
+        const userName = ctx.auth.user.name;
+        await deleteDataEQttBd(input.idDataQtt, userName);
       } catch (err) {
         console.log(err);
         throw new TRPCError({
@@ -167,9 +119,10 @@ export const planeamento = createTRPCRouter({
     }),
   deleteFornecedorValorizado: roleProtectedProcedure(PAPEL_ROTA)
     .input(DeleteFornecedorValorizadoSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
-        await deleteFornecedorValorizadoBd(input.idValorizado);
+        const userName = ctx.auth.user.name;
+        await deleteFornecedorValorizadoBd(input.idValorizado, userName);
       } catch (err) {
         console.log(err);
         throw new TRPCError({
@@ -179,57 +132,13 @@ export const planeamento = createTRPCRouter({
         });
       }
     }),
-
-  patchEstadoItem: roleProtectedProcedure(PAPEL_ROTA)
-    .input(uploadPhotoSchema)
-    .mutation(async ({ input }) => {
-      try {
-        const { base64, filename } = input;
-        return saveBase64Image(base64, filename);
-      } catch (err) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Erro ao inserir foto...",
-          cause: err, // optional, for logging/debugging
-        });
-      }
-    }),
-  postDePlaneamentoDataEQttDb: roleProtectedProcedure(PAPEL_ROTA)
-    .input(PostDePlaneamentoDataEQttchema)
-    .mutation(async ({ input }) => {
-      try {
-        const { op, tipoD, tipoQ, data, qtt } = input;
-        return postDePlaneamentoDataEQttDb(op, tipoD, tipoQ, data, qtt);
-      } catch (err) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Erro ao inserir Planeamento...",
-          cause: err, // optional, for logging/debugging
-        });
-      }
-    }),
-  patchPlaneamentoDataEQttDb: roleProtectedProcedure(PAPEL_ROTA)
-    .input(PatchtDePlaneamentoDataEQttchema)
-    .mutation(async ({ input }) => {
-      try {
-        const { op, tipoD, tipoQ, nTipo, data, qtt } = input;
-        console.log("o tais input :", input);
-        return patchDePlaneamentoDataEQttDb(op, tipoD, tipoQ, nTipo, data, qtt);
-      } catch (err) {
-        console.log(err);
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Erro ao alterar Planeamento...",
-          cause: err, // optional, for logging/debugging
-        });
-      }
-    }),
   postObs: roleProtectedProcedure(PAPEL_ROTA)
     .input(PostObsSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
+        const userName = ctx.auth.user.name;
         const { bostamp, obs } = input;
-        return postObsDb(bostamp, obs);
+        return postObsDb(bostamp, obs, userName);
       } catch (err) {
         console.log(err);
         throw new TRPCError({
@@ -241,8 +150,9 @@ export const planeamento = createTRPCRouter({
     }),
   upsertDescValor: roleProtectedProcedure(PAPEL_ROTA)
     .input(UpsertDescValorSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
+        const userName = ctx.auth.user.name;
         const { idValorizado, bostamp, nome, nTipo, valorServico } = input;
         console.log("aqui as cenas");
         return upsertDescValorDb(
@@ -250,7 +160,8 @@ export const planeamento = createTRPCRouter({
           bostamp,
           nome,
           nTipo,
-          valorServico
+          valorServico,
+          userName
         );
       } catch (err) {
         console.log(err);
@@ -263,11 +174,19 @@ export const planeamento = createTRPCRouter({
     }),
   upsertDataEValor: roleProtectedProcedure(PAPEL_ROTA)
     .input(UpsertDataQttSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
+        const userName = ctx.auth.user.name;
         const { idDataQtt, bostamp, data, nTipo, qtt } = input;
         console.log("aqui as cenas");
-        return upsertDataEValorDb(idDataQtt, bostamp, data, nTipo, qtt);
+        return upsertDataEValorDb(
+          idDataQtt,
+          bostamp,
+          data,
+          nTipo,
+          qtt,
+          userName
+        );
       } catch (err) {
         console.log(err);
         throw new TRPCError({
@@ -278,6 +197,3 @@ export const planeamento = createTRPCRouter({
       }
     }),
 });
-//upsertDataEValorDb
-
-//deleteDataEQttBd
