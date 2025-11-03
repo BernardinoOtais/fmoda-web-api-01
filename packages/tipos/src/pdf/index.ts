@@ -1,8 +1,10 @@
 export const NPEDIDO = "Nº PED.";
 export const TOTAL_PEDIDO = "TOTAL PEDIDO";
-
+export const UNID_LOTE = "UNID. LOT.";
+export const PEDIDO = "PEDIDO";
 export const PRECIO_COSTE = "PRECIO COSTE:";
 export const PAGINA = "página ";
+export const ENTREGAS_PARCIALES = "ENTREGAS PARCIALES";
 export type PdfText = {
   x: number;
   y: number;
@@ -77,4 +79,5 @@ export enum ErroImportarPedido {
   ERRO_COR_OU_TOTAL_INVALIDO = "Cor ou total inválido",
   ERRO_QTT_INVALIDO = "Quantidade inválida",
   ERRO_TOTAL_GERAL_INVALIDO = "Total geral inválido",
+  PEDIDO_PARCIAL_TEM_QUE_TER_MAIS_QUE_UMA_ENTREGA = "Pedido parcial tem que ter mais que uma entrega",
 }

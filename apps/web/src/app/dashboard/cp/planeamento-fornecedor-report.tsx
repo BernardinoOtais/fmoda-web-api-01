@@ -157,13 +157,30 @@ const PlaneamentoFornecedorReport = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="fornecedor"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fournisseur sous contrat</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Ex: Hanadil"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
                 name="fornecedorBo"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fournisseur</FormLabel>
+                    <FormLabel>Fournisseur prévu</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex: Hanadil"

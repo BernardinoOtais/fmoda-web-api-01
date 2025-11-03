@@ -32,6 +32,7 @@ const reportSchema = z.object({
   op: z.string().optional(),
   po: z.string().optional(),
   fornecedor: z.string().optional(),
+  forPlan: z.string().optional(),
 });
 
 type ReportParams = z.infer<typeof reportSchema>;
@@ -64,6 +65,7 @@ export default function PlaneamentoGeralReport() {
       dataIni: "",
       dataFini: "",
       fornecedor: "",
+      forPlan: "",
       op: "",
       po: "",
     },
@@ -161,7 +163,25 @@ export default function PlaneamentoGeralReport() {
                 name="fornecedor"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fournisseur</FormLabel>
+                    <FormLabel>Fournisseur sous contrat</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Ex: Hanadil"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="forPlan"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fournisseur prévu</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex: Hanadil"
