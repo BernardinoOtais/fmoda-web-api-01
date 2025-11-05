@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -11,19 +11,7 @@ interface ReportViewerProps {
 const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
   const isMobile = useIsMobile();
   const extension = format === "EXCELOPENXML" ? "xlsx" : "pdf";
-  const [fileName, setFileName] = useState(`report.${extension}`);
-
-  useEffect(() => {
-    // Try to extract filename from URL
-    const urlPart = fileUrl.split("/").pop() || "";
-    let baseName = urlPart.split("?")[0];
-
-    // Remove any existing .pdf/.xls/.xlsx extension before adding our own
-    baseName = baseName?.replace(/\.(pdf|xls|xlsx)$/i, "");
-
-    // Set clean filename with correct extension
-    setFileName(`${baseName || "report"}.${extension}`);
-  }, [fileUrl, format, extension]);
+  const fileName = `report.${extension}`;
 
   useEffect(() => {
     if (isMobile) {
@@ -36,7 +24,6 @@ const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
     }
   }, [isMobile, fileUrl, fileName]);
 
-  // ✅ Mobile: show only a status message
   if (isMobile) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-muted-foreground text-sm">
@@ -45,7 +32,6 @@ const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
     );
   }
 
-  // ✅ Desktop: Excel = download link
   if (format === "EXCELOPENXML") {
     return (
       <div className="flex flex-col items-center justify-center h-full">
@@ -64,7 +50,6 @@ const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
     );
   }
 
-  // ✅ Desktop: PDF = inline iframe
   return (
     <iframe
       src={fileUrl}
