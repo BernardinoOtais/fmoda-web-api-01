@@ -9,6 +9,7 @@ import {
   UNID_LOTE,
   PEDIDO,
   ENTREGAS_PARCIALES,
+  ResultadoPedido,
 } from "@repo/tipos/pdf";
 
 import {
@@ -94,9 +95,40 @@ export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
   if (tamanhoPedidosParciais < 2)
     return ErroImportarPedido.PEDIDO_PARCIAL_TEM_QUE_TER_MAIS_QUE_UMA_ENTREGA;
 
-  const pedidoEntregasParciaisAgrupado = entregasParciais.map((e) =>
-    tratoPedidosParciais(groupItemsByYCoordinate(e))
-  );
+  const results: {
+    pedido: string;
+    nParcial: number;
+    dataParcial: Date;
+    precoParcial: number;
+    parcial: ResultadoPedido;
+  }[] = [];
+  let foundString: ErroImportarPedido | null = null;
 
-  return "Nao cabec";
+  for (const e of entregasParciais) {
+    const result = tratoPedidosParciais(groupItemsByYCoordinate(e));
+
+    if (typeof result === "string") {
+      foundString = result;
+      break;
+    }
+
+    results.push(result);
+  }
+
+  if (foundString) return foundString;
+
+  if (results.length === 0)
+    return ErroImportarPedido.ERRO_NO_PARCIAL_TEM_QUE_EXISTIR_PELO_MENOS_UMA_ENTREGA;
+
+  return {
+    detalhesPeca: {
+      nPedido: cabecalhoDados.Pedido,
+      modelo: cabecalhoDados.Modelo,
+      descModelo: cabecalhoDados.DescModelo,
+      temporada: cabecalhoDados.Temporada,
+      dataEntrega: cabecalhoDados.dataEntrega,
+      pedido: encomenda,
+      parciais: results,
+    },
+  };
 };

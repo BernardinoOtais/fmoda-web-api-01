@@ -51,7 +51,7 @@ export const OpCamioesEnviosSchema = z.object({
   foto: StringComTamanhoSchema(500, 3),
   modelo: StringComTamanhoSchema(25, 0).optional(),
   area: StringComTamanhoSchema(25, 3),
-  pedido: StringComTamanhoSchema(25, 3),
+  pedido: StringComTamanhoSchema(25, 1),
   obs: StringComTamanhoSchema(200),
   qttTotal: NumeroInteiroMaiorQueZero,
   detalhe: z

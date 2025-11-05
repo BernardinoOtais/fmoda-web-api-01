@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@repo/trpc";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,15 +24,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PDFViewer } from "@/components/ui-personalizado/meus-components/pdf-viewer";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import ReportViewer from "@/components/ui-personalizado/meus-components/report-viewer";
 
 const reportSchema = z.object({
-  dataIni: z.string().min(1, "Data inicial é obrigatória"),
-  dataFini: z.string().min(1, "Data final é obrigatória"),
+  format: z.enum(["PDF", "EXCELOPENXML"]),
+  forPlan: z.string().optional(),
   op: z.string().optional(),
   po: z.string().optional(),
-  fornecedor: z.string().optional(),
-  forPlan: z.string().optional(),
 });
 
 type ReportParams = z.infer<typeof reportSchema>;
@@ -57,14 +56,12 @@ async function fetchReport(params: ReportParams): Promise<Blob> {
 }
 
 export default function PlaneamentoGeralReport() {
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [ficheiro, setficheiro] = useState<string | null>(null);
 
   const form = useForm<ReportParams>({
     resolver: zodResolver(reportSchema),
     defaultValues: {
-      dataIni: "",
-      dataFini: "",
-      fornecedor: "",
+      format: "PDF",
       forPlan: "",
       op: "",
       po: "",
@@ -75,14 +72,8 @@ export default function PlaneamentoGeralReport() {
   const params = form.watch();
 
   useEffect(() => {
-    setPdfUrl(null);
-  }, [
-    params.dataIni,
-    params.dataFini,
-    params.fornecedor,
-    params.op,
-    params.po,
-  ]);
+    setficheiro(null);
+  }, [params.forPlan, params.op, params.po, params.format]);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["report-planeamento", params],
@@ -94,7 +85,7 @@ export default function PlaneamentoGeralReport() {
   useEffect(() => {
     if (!data) return;
     const url = URL.createObjectURL(data);
-    setPdfUrl(url);
+    setficheiro(url);
     return () => URL.revokeObjectURL(url);
   }, [data]);
 
@@ -103,85 +94,25 @@ export default function PlaneamentoGeralReport() {
   };
 
   return (
-    <div className="flex flex-col h-full p-1 w-full items-center">
-      <Card className="w-full max-w-max shadow-md flex-shrink-0 p-1">
+    <div className="flex flex-col h-full p-1 w-full items-center space-y-2">
+      <Card className=" shadow-md flex-shrink-0 p-1 w-[400px]">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold flex text-center  gap-2 mx-auto">
+          <CardTitle className="text-xl font-semibold flex text-center  w-full gap-2 mx-auto">
             Rapport - Fournisseurs Général
           </CardTitle>
         </CardHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardContent className="flex lg:flex-row gap-1 flex-col">
-              <FormField
-                control={form.control}
-                name="dataIni"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date de début</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <CalendarIcon className="absolute left-2 top-2.5 h-4 w-4" />
-                        <Input
-                          type="date"
-                          className="pl-8"
-                          disabled={isLoading}
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="dataFini"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date de fin</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <CalendarIcon className="absolute left-2 top-2.5 h-4 w-4" />
-                        <Input
-                          type="date"
-                          className="pl-8"
-                          disabled={isLoading}
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="fornecedor"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fournisseur sous contrat</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Ex: Hanadil"
-                        disabled={isLoading}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <CardContent className=" space-y-2 flex-col">
+              {/* 🆕 Radio group for format */}
 
               <FormField
                 control={form.control}
                 name="forPlan"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fournisseur prévu</FormLabel>
+                    <FormLabel>Fournisseur</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Ex: Hanadil"
@@ -190,6 +121,35 @@ export default function PlaneamentoGeralReport() {
                       />
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="format"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Format</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        className="flex space-x-4"
+                      >
+                        <FormItem className="flex items-center space-x-1">
+                          <FormControl>
+                            <RadioGroupItem value="PDF" id="r-pdf" />
+                          </FormControl>
+                          <FormLabel htmlFor="r-pdf">PDF</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-1">
+                          <FormControl>
+                            <RadioGroupItem value="EXCELOPENXML" id="r-excel" />
+                          </FormControl>
+                          <FormLabel htmlFor="r-excel">Excel</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
                   </FormItem>
                 )}
               />
@@ -215,9 +175,9 @@ export default function PlaneamentoGeralReport() {
         </Form>
       </Card>
 
-      <div className="mt-1 w-full flex-1 min-h-0 ">
-        {pdfUrl ? (
-          <PDFViewer pdfUrl={pdfUrl} />
+      <div className="w-full flex-1 min-h-0 ">
+        {ficheiro ? (
+          <ReportViewer fileUrl={ficheiro} format={params.format} />
         ) : (
           <p className="text-center">...</p>
         )}

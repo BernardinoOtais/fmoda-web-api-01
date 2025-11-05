@@ -325,17 +325,56 @@ export const tratoPedidosParciais = (dados: Record<number, PdfText[]>) => {
 
   const terceiraLinha = dados[Number(keys[2])];
 
+  const pedido = terceiraLinha?.[0]?.text;
+
+  const pedidoLimpo = pedido?.replace(/\s*\/.*$/, "");
+
+  const nParcial = terceiraLinha?.[1]?.text;
+  const nParcialLimpo = Number(nParcial?.match(/\d+/)?.[0] ?? 0);
+
+  const dataParcial = terceiraLinha?.[4]?.text;
+
+  const dataParcialTratada = parseDDMMYYYY(dataParcial);
+
+  if (!pedidoLimpo || nParcialLimpo === 0 || !dataParcialTratada)
+    return ErroImportarPedido.ERRO_NA_PRIMEIRA_LINHA_DO_PARCIAL;
+
   const selectedKeys = keys.slice(3, qttLinhas - 1);
   const result: Record<number, PdfText[]> = Object.fromEntries(
     selectedKeys.map((k) => [Number(k), dados[Number(k)]])
   ) as Record<number, PdfText[]>;
 
-  if (!result || result === undefined) return;
+  if (!result || result === undefined)
+    return ErroImportarPedido.ERRO_NA_QUANTIDADE_DO_PARCIA;
 
-  const coisas = trataPedidoPrincipal(result);
-  console.log(coisas);
+  const parcial = trataPedidoPrincipal(result);
 
-  const ultimaLinhaPreco = dados[Number(keys[qttLinhas - 1])];
+  if (typeof parcial === "string") return parcial;
 
-  //console.log(ultimaLinhaPreco);
+  const ultimaLinhaPreco = dados[Number(keys[qttLinhas - 1])]?.[1]?.text;
+
+  const valorPrecoPeca = ultimaLinhaPreco?.replace(" EUR", "");
+
+  const precoFinal = transformaTextoEmNumero(valorPrecoPeca, "float");
+
+  if (precoFinal === null)
+    return ErroImportarPedido.ERRO_TEM_QUE_TER_PRECO_NO_PARCIAL;
+
+  return {
+    pedido: pedidoLimpo,
+    nParcial: nParcialLimpo,
+    dataParcial: dataParcialTratada,
+    precoParcial: precoFinal,
+    parcial,
+  };
 };
+
+function parseDDMMYYYY(dateStr: string | undefined): Date | undefined {
+  if (!dateStr) return undefined;
+
+  const [day, month, year] = dateStr.split("/");
+
+  if (!day || !month || !year) return undefined;
+
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+}

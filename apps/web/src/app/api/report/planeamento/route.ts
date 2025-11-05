@@ -13,35 +13,25 @@ export async function GET(req: NextRequest) {
     await getSessionFromRequestValidaPapeis(req, papeis);
 
     const { searchParams } = new URL(req.url);
-    const dataIni = searchParams.get("dataIni");
-    const dataFini = searchParams.get("dataFini");
-    const op = searchParams.get("op") ?? "";
-    const po = searchParams.get("po") ?? "";
-    const fornecedor = searchParams.get("fornecedor") ?? "";
-    const forPlan = searchParams.get("forPlan") ?? "";
 
-    if (!dataIni || !dataFini) {
-      return NextResponse.json(
-        { error: "Os parâmetros dataIni e dataFini são obrigatórios." },
-        { status: 400 }
-      );
-    }
+    const op = searchParams.get("op") ?? "";
+    const format = searchParams.get("format") ?? "PDF";
+    const po = searchParams.get("po") ?? "";
+    const forPlan = searchParams.get("forPlan") ?? "";
 
     const ssrsBase = "http://10.0.0.13/ReportServer";
 
     const params = new URLSearchParams({
       "rs:Command": "Render",
-      "rs:Format": "PDF",
-      dataIni: dataIni,
-      dataFini: dataFini,
+      "rs:Format": format === "PDF" ? "PDF" : "EXCELOPENXML",
+      forPlan: forPlan,
       op: op,
       po: po,
-      fornecedor: fornecedor,
-      forPlan: forPlan,
     });
 
-    const ssrsUrl = `${ssrsBase}?/op%20contratos%20fornecedores/op%20contratos%20fornecedores%20v2&${params.toString()}`;
+    const ssrsUrl = `${ssrsBase}?/op%20contratos%20fornecedores/planeamento&${params.toString()}`;
 
+    console.log("url : ", ssrsUrl);
     const result = await new Promise<Buffer>((resolve, reject) => {
       httpntlm.get(
         {

@@ -1,3 +1,5 @@
+import z from "zod";
+
 export const NPEDIDO = "Nº PED.";
 export const TOTAL_PEDIDO = "TOTAL PEDIDO";
 export const UNID_LOTE = "UNID. LOT.";
@@ -68,6 +70,7 @@ export enum ErroImportarPedido {
   ERRO_NO_CABECALHO_LISTA_VAZIA = "Cabeçalho devolve lista vazia",
   ERRO_TEM_QUE_TER_PRECO_ENTREGA_UNICA = "Tem que ter preço entrega única",
   ERRO_TEM_QUE_TER_PRECO_ENTREGA_UNICA_E_TRANSFORMAVEL = "Tem que ter preço entrega única e tranformavel..",
+  ERRO_TEM_QUE_TER_PRECO_NO_PARCIAL = "Tem que ter preço no parcial",
   ERRO_TEM_QUE_TER_MAIS_3_LINHAS = "Tem que ter mais que 3 linhas",
   ERRO_GRADE_DE_TAMAMHOS_TEM_QUE_EXISTIR = "Grade de tamanhos tem que existir",
   ERRO_NAO_TEM_LINHAS_NA_COR = "Não tem linhas na cor...",
@@ -80,4 +83,35 @@ export enum ErroImportarPedido {
   ERRO_QTT_INVALIDO = "Quantidade inválida",
   ERRO_TOTAL_GERAL_INVALIDO = "Total geral inválido",
   PEDIDO_PARCIAL_TEM_QUE_TER_MAIS_QUE_UMA_ENTREGA = "Pedido parcial tem que ter mais que uma entrega",
+  ERRO_NA_PRIMEIRA_LINHA_DO_PARCIAL = "Erro na primeira linha do parcial",
+  ERRO_NA_QUANTIDADE_DO_PARCIA = "Erro na quatidade do parcial",
+  ERRO_NO_PARCIAL_TEM_QUE_EXISTIR_PELO_MENOS_UMA_ENTREGA = "No parcial tem que existir pelo menos uma entrega",
 }
+
+//zod type
+const DetalhesPecaSchema = z.discriminatedUnion("tipo", [
+  z.object({
+    tipo: z.literal("simples"),
+    detalhesPeca: z.object({
+      preco: z.number(),
+      nPedido: z.string().nullable(),
+      modelo: z.string().nullable(),
+      descModelo: z.string().nullable(),
+      temporada: z.string().nullable(),
+      dataEntrega: z.string(),
+      // pedido: ResultadoPedidoSchema,
+    }),
+  }),
+  z.object({
+    tipo: z.literal("parcial"),
+    detalhesPeca: z.object({
+      nPedido: z.string().nullable(),
+      modelo: z.string().nullable(),
+      descModelo: z.string().nullable(),
+      temporada: z.string().nullable(),
+      dataEntrega: z.null(),
+      //pedido: ResultadoPedidoSchema,
+      //parciais: z.array(/* ... */),
+    }),
+  }),
+]);
