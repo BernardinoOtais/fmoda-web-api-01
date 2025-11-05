@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import ReportViewer from "@/components/ui-personalizado/meus-components/report-viewer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const reportSchema = z.object({
   format: z.enum(["PDF", "EXCELOPENXML"]),
@@ -51,12 +52,13 @@ async function fetchReport(params: ReportParams): Promise<Blob> {
     }
   );
 
-  if (!response.ok) throw new Error("Erro ao gerar relatório");
+  if (!response.ok) throw new Error("Erreur lors de la génération du rapport");
   return response.blob();
 }
 
-export default function PlaneamentoGeralReport() {
-  const [ficheiro, setficheiro] = useState<string | null>(null);
+export default function RapportFournisseursGeneral() {
+  const [fichier, setFichier] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const form = useForm<ReportParams>({
     resolver: zodResolver(reportSchema),
@@ -72,22 +74,55 @@ export default function PlaneamentoGeralReport() {
   const params = form.watch();
 
   useEffect(() => {
-    setficheiro(null);
+    setFichier(null);
   }, [params.forPlan, params.op, params.po, params.format]);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["report-planeamento", params],
+    queryKey: [
+      "rapport-fournisseurs-general",
+      params.format,
+      params.forPlan,
+      params.op,
+      params.po,
+    ],
     queryFn: () => fetchReport(params),
     enabled: false,
     retry: 1,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
     if (!data) return;
+
+    setFichier(null);
+
     const url = URL.createObjectURL(data);
-    setficheiro(url);
-    return () => URL.revokeObjectURL(url);
-  }, [data]);
+    const currentFormat = params.format;
+    const extension = currentFormat === "EXCELOPENXML" ? "xlsx" : "pdf";
+    const nomFichier = `rapport.${extension}`;
+
+    // ✅ only set file for PDF on desktop
+    if (!isMobile && currentFormat === "PDF") {
+      setFichier(url);
+    }
+
+    // ✅ only auto-download when mobile or Excel
+    if (isMobile || currentFormat === "EXCELOPENXML") {
+      const lien = document.createElement("a");
+      lien.href = url;
+      lien.download = nomFichier;
+      lien.click();
+      // cleanup the URL after download
+      URL.revokeObjectURL(url);
+    }
+
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [data, isMobile, params.format]);
 
   const onSubmit = async () => {
     await refetch();
@@ -95,18 +130,16 @@ export default function PlaneamentoGeralReport() {
 
   return (
     <div className="flex flex-col h-full p-1 w-full items-center space-y-2">
-      <Card className=" shadow-md flex-shrink-0 p-1 w-[400px]">
+      <Card className="shadow-md flex-shrink-0 p-1 w-[400px]">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold flex text-center  w-full gap-2 mx-auto">
-            Rapport - Fournisseurs Général
+          <CardTitle className="text-xl font-semibold flex text-center w-full gap-2 mx-auto">
+            Rapport – Fournisseurs Général
           </CardTitle>
         </CardHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardContent className=" space-y-2 flex-col">
-              {/* 🆕 Radio group for format */}
-
+            <CardContent className="space-y-2 flex-col">
               <FormField
                 control={form.control}
                 name="forPlan"
@@ -115,7 +148,7 @@ export default function PlaneamentoGeralReport() {
                     <FormLabel>Fournisseur</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Ex: Hanadil"
+                        placeholder="Ex : Hanadil"
                         disabled={isLoading}
                         {...field}
                       />
@@ -167,7 +200,7 @@ export default function PlaneamentoGeralReport() {
                     ...
                   </>
                 ) : (
-                  "Report"
+                  "Générer le rapport"
                 )}
               </Button>
             </CardFooter>
@@ -175,9 +208,18 @@ export default function PlaneamentoGeralReport() {
         </Form>
       </Card>
 
-      <div className="w-full flex-1 min-h-0 ">
-        {ficheiro ? (
-          <ReportViewer fileUrl={ficheiro} format={params.format} />
+      <div className="w-full flex-1 min-h-0">
+        {/* 👇 Affiche le PDF uniquement sur ordinateur */}
+        {fichier && !isMobile && params.format === "PDF" ? (
+          <ReportViewer fileUrl={fichier} format="PDF" />
+        ) : fichier ? (
+          <p className="text-center text-muted-foreground">
+            {params.format === "EXCELOPENXML"
+              ? "Téléchargement du rapport Excel..."
+              : isMobile
+                ? "Téléchargement du rapport PDF..."
+                : ""}
+          </p>
         ) : (
           <p className="text-center">...</p>
         )}

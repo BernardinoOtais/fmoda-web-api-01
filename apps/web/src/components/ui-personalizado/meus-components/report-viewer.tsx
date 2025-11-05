@@ -1,55 +1,18 @@
 "use client";
-import React from "react";
 
-import { useIsMobile } from "@/hooks/use-mobile";
+import React from "react";
 
 interface ReportViewerProps {
   fileUrl: string;
   format: "PDF" | "EXCELOPENXML";
 }
 
+/**
+ * Displays the PDF inline inside an iframe.
+ * (Excel and mobile download logic are handled in the parent.)
+ */
 const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
-  const isMobile = useIsMobile();
-  const extension = format === "EXCELOPENXML" ? "xlsx" : "pdf";
-  const fileName = `report.${extension}`;
-
-  if (isMobile) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <a
-          href={fileUrl}
-          download={fileName}
-          className="
-      text-base font-medium underline underline-offset-4
-      text-foreground hover:text-muted-foreground hover:underline
-      dark:text-foreground dark:hover:text-muted-foreground
-      transition-colors cursor-pointer
-    "
-        >
-          Download {format === "EXCELOPENXML" ? "Excel" : "PDF"} Report
-        </a>
-      </div>
-    );
-  }
-
-  if (format === "EXCELOPENXML") {
-    return (
-      <div className="flex flex-col items-center justify-center ">
-        <a
-          href={fileUrl}
-          download={fileName}
-          className="
-      text-base font-medium underline underline-offset-4
-      text-foreground hover:text-muted-foreground hover:underline
-      dark:text-foreground dark:hover:text-muted-foreground
-      transition-colors cursor-pointer
-    "
-        >
-          Download Excel Report
-        </a>
-      </div>
-    );
-  }
+  if (format !== "PDF") return null;
 
   return (
     <iframe
