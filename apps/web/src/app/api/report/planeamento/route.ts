@@ -67,12 +67,26 @@ export async function GET(req: NextRequest) {
       );
     });
 
+    let contentType: string;
+    let fileName: string;
+
+    if (format === "EXCELOPENXML") {
+      contentType =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      fileName = "contratos-fornecedores.xlsx";
+    } else {
+      contentType = "application/pdf";
+      fileName = "contratos-fornecedores.pdf";
+    }
+
     return new NextResponse(new Uint8Array(result), {
       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": 'inline; filename="contratos-fornecedores.pdf"',
+        "Content-Type": contentType,
+        "Content-Disposition": `attachment; filename="${fileName}"`,
+        "Content-Length": result.length.toString(),
       },
     });
+    // ---------------------------------------------
   } catch (error) {
     const message = (error as Error).message;
     const status = message.includes("Unauthorized")
