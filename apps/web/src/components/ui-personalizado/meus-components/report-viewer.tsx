@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -10,8 +10,13 @@ interface ReportViewerProps {
 
 const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
   const isMobile = useIsMobile();
+
   const extension = format === "EXCELOPENXML" ? "xlsx" : "pdf";
-  const fileName = `report.${extension}`;
+  const [fileName, setFileName] = useState(`report.${extension}`);
+
+  useEffect(() => {
+    setFileName(`report.${extension}`);
+  }, [extension, format]);
 
   if (isMobile) {
     return (
