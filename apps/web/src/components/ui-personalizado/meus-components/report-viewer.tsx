@@ -14,26 +14,29 @@ const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
   const [fileName, setFileName] = useState(`report.${extension}`);
 
   useEffect(() => {
-    setFileName(`report.${extension}`);
-  }, [extension, format]);
+    // Try to extract filename from URL
+    const urlPart = fileUrl.split("/").pop() || "";
+    let baseName = urlPart.split("?")[0];
+
+    // Remove any existing .pdf/.xls/.xlsx extension before adding our own
+    baseName = baseName?.replace(/\.(pdf|xls|xlsx)$/i, "");
+
+    // Set clean filename with correct extension
+    setFileName(`${baseName || "report"}.${extension}`);
+  }, [fileUrl, format, extension]);
 
   useEffect(() => {
     if (isMobile) {
       const link = document.createElement("a");
-
-      let cleanName = fileName;
-      if (!cleanName.endsWith(`.${extension}`)) {
-        cleanName = `${cleanName.split(".")[0]}.${extension}`;
-      }
-
       link.href = fileUrl;
-      link.download = cleanName;
+      link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
-  }, [isMobile, fileUrl, fileName, extension]);
+  }, [isMobile, fileUrl, fileName]);
 
+  // ✅ Mobile: show only a status message
   if (isMobile) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-muted-foreground text-sm">
@@ -42,6 +45,7 @@ const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
     );
   }
 
+  // ✅ Desktop: Excel = download link
   if (format === "EXCELOPENXML") {
     return (
       <div className="flex flex-col items-center justify-center h-full">
@@ -60,6 +64,7 @@ const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
     );
   }
 
+  // ✅ Desktop: PDF = inline iframe
   return (
     <iframe
       src={fileUrl}
