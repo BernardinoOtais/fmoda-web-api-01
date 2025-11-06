@@ -13,7 +13,7 @@ export async function authorizePapelOrRedirect(papel: string) {
 
   const papeis: string[] = session?.papeis || [];
 
-  //console.log("Papeis: ", papeis, papel, papeis.includes(papel));
+  console.log("Papeis: ", papeis, papel, papeis.includes(papel));
   if (papel === "") return;
 
   //console.log("Papeis: ", papeis, papel, papeis.includes(papel));

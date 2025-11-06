@@ -10,6 +10,7 @@ import {
   PAPEL_ROTA_PLANEAMENTO,
   PAPEL_CP,
   AREA_MARROCOS,
+  PAPEL_JOANA,
 } from "./papeis-utilizador";
 import { PermiteSubcontainer } from "./permite-sub-container";
 
@@ -22,6 +23,7 @@ export {
   ContainersExistentes,
   PAPEL_CP,
   AREA_MARROCOS,
+  PAPEL_JOANA,
 };
 
 export type { Container, TodosOsContainers };

@@ -7,6 +7,7 @@ import {
   OctagonX,
   GitPullRequestCreate,
   Cog,
+  Bug,
 } from "lucide-react";
 
 type IconType = React.FC<React.SVGProps<SVGSVGElement>>;
@@ -35,6 +36,7 @@ export type MenusTodos = {
   Administrador: Menu;
   Rfid: Menu;
   Cp: Menu;
+  Joana: Menu;
 };
 
 export const IconsMenus = {
@@ -45,6 +47,7 @@ export const IconsMenus = {
   Administrador: Anvil,
   Rfid: OctagonX,
   Cp: Cog,
+  joana: Bug,
 };
 
 export const MenusExistentes: MenusTodos = {
@@ -141,5 +144,35 @@ export const MenusExistentes: MenusTodos = {
     path: "/dashboard/cp",
     icon: IconsMenus.Cp,
     subMenu: false,
+  },
+  Joana: {
+    nome: "Joana",
+    path: "/dashboard/joana",
+    icon: IconsMenus.joana,
+    subMenu: true,
+    subMenuItems: [
+      {
+        nome: "Entradas MC MA",
+        path: "/dashboard/joana/EnMCMA",
+        subMenu: false,
+      },
+      {
+        nome: "Estamparia e Bordados",
+        path: "/dashboard/joana/EstEBord",
+        subMenu: false,
+      },
+
+      {
+        nome: "Envíos a Marrocos",
+        path: "/dashboard/joana/EnvMarrocos",
+        subMenu: false,
+      },
+
+      {
+        nome: "Faturação",
+        path: "/dashboard/joana/faturas",
+        subMenu: false,
+      },
+    ],
   },
 };
