@@ -104,18 +104,15 @@ export default function RapportFournisseursGeneral() {
     const extension = currentFormat === "EXCELOPENXML" ? "xlsx" : "pdf";
     const nomFichier = `rapport.${extension}`;
 
-    // ✅ only set file for PDF on desktop
     if (!isMobile && currentFormat === "PDF") {
       setFichier(url);
     }
 
-    // ✅ only auto-download when mobile or Excel
     if (isMobile || currentFormat === "EXCELOPENXML") {
       const lien = document.createElement("a");
       lien.href = url;
       lien.download = nomFichier;
       lien.click();
-      // cleanup the URL after download
       URL.revokeObjectURL(url);
     }
 

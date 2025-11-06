@@ -9,6 +9,7 @@ import {
   PAPEL_ROTA_QUALIDADE,
   PAPEL_ROTA_PLANEAMENTO,
   PAPEL_CP,
+  AREA_MARROCOS,
 } from "./papeis-utilizador";
 import { PermiteSubcontainer } from "./permite-sub-container";
 
@@ -20,6 +21,7 @@ export {
   PermiteSubcontainer,
   ContainersExistentes,
   PAPEL_CP,
+  AREA_MARROCOS,
 };
 
 export type { Container, TodosOsContainers };

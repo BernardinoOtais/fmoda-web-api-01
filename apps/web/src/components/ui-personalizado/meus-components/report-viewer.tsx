@@ -7,10 +7,6 @@ interface ReportViewerProps {
   format: "PDF" | "EXCELOPENXML";
 }
 
-/**
- * Displays the PDF inline inside an iframe.
- * (Excel and mobile download logic are handled in the parent.)
- */
 const ReportViewer = ({ fileUrl, format }: ReportViewerProps) => {
   if (format !== "PDF") return null;
 

@@ -1,5 +1,13 @@
 import z from "zod";
 
+import { DateSchema } from "..";
+
+import {
+  FloatSchema,
+  NumeroInteiroMaiorQueZero,
+  StringComTamanhoSchema,
+} from "@/comuns";
+
 export const NPEDIDO = "Nº PED.";
 export const TOTAL_PEDIDO = "TOTAL PEDIDO";
 export const UNID_LOTE = "UNID. LOT.";
@@ -35,14 +43,43 @@ export type Pdf2JsonData = {
   Height?: number;
 };
 
-export type CorQtts = { tam: string; qtt: number; ordem: number };
-export type QttPorCor = { cor: string; qtts: CorQtts[]; total: number };
-export type Tamanhos = { tam: string; ordem: number };
+export const CorQttsSchema = z.object({
+  tam: StringComTamanhoSchema(10, 1),
+  qtt: NumeroInteiroMaiorQueZero,
+  ordem: NumeroInteiroMaiorQueZero,
+});
 
-export type ResultadoPedido = {
-  pedidoCores: QttPorCor[];
-  total: { qtts: CorQtts[]; total: number };
-};
+export const QttPorCorSchema = z.object({
+  cor: StringComTamanhoSchema(25, 1),
+  qtts: z.array(CorQttsSchema),
+  total: NumeroInteiroMaiorQueZero,
+});
+
+export const TamanhosSchema = z.object({
+  tam: StringComTamanhoSchema(10, 1),
+  ordem: NumeroInteiroMaiorQueZero,
+});
+
+export const ResultadoPedidoSchema = z.object({
+  pedidoCores: z.array(QttPorCorSchema),
+  total: z.object({
+    qtts: z.array(CorQttsSchema),
+    total: NumeroInteiroMaiorQueZero,
+  }),
+});
+
+export const DadosParciaisSchema = z.object({
+  pedido: StringComTamanhoSchema(25, 1),
+  nParcial: NumeroInteiroMaiorQueZero,
+  dataParcial: DateSchema,
+  precoParcial: FloatSchema,
+  parcial: z.array(ResultadoPedidoSchema),
+});
+// Infer TypeScript types from schemas
+export type CorQtts = z.infer<typeof CorQttsSchema>;
+export type QttPorCor = z.infer<typeof QttPorCorSchema>;
+export type Tamanhos = z.infer<typeof TamanhosSchema>;
+export type ResultadoPedido = z.infer<typeof ResultadoPedidoSchema>;
 
 export const LISTAVALORES: Keyword[] = [
   "Nº PED.",
@@ -89,29 +126,30 @@ export enum ErroImportarPedido {
 }
 
 //zod type
+
 const DetalhesPecaSchema = z.discriminatedUnion("tipo", [
   z.object({
     tipo: z.literal("simples"),
     detalhesPeca: z.object({
-      preco: z.number(),
-      nPedido: z.string().nullable(),
-      modelo: z.string().nullable(),
-      descModelo: z.string().nullable(),
-      temporada: z.string().nullable(),
-      dataEntrega: z.string(),
-      // pedido: ResultadoPedidoSchema,
+      preco: FloatSchema,
+      nPedido: StringComTamanhoSchema(25, 1),
+      modelo: StringComTamanhoSchema(25, 1),
+      descModelo: StringComTamanhoSchema(120, 1),
+      temporada: StringComTamanhoSchema(10, 1),
+      dataEntrega: DateSchema,
+      pedido: ResultadoPedidoSchema,
     }),
   }),
   z.object({
     tipo: z.literal("parcial"),
     detalhesPeca: z.object({
-      nPedido: z.string().nullable(),
-      modelo: z.string().nullable(),
-      descModelo: z.string().nullable(),
-      temporada: z.string().nullable(),
-      dataEntrega: z.null(),
-      //pedido: ResultadoPedidoSchema,
-      //parciais: z.array(/* ... */),
+      nPedido: StringComTamanhoSchema(25, 1),
+      modelo: StringComTamanhoSchema(25, 1),
+      descModelo: StringComTamanhoSchema(120, 1),
+      temporada: StringComTamanhoSchema(10, 1),
+      dataEntrega: DateSchema,
+      pedido: ResultadoPedidoSchema,
+      parciais: z.array(DadosParciaisSchema),
     }),
   }),
 ]);

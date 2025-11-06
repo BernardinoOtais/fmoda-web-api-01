@@ -3,6 +3,7 @@ import {
   PAPEL_CP,
   PAPEL_ROTA_ADMINISTRADOR,
   PAPEL_ROTA_PLANEAMENTO,
+  AREA_MARROCOS,
 } from "@repo/tipos/consts";
 import httpntlm from "httpntlm";
 import { NextRequest, NextResponse } from "next/server";
@@ -24,6 +25,7 @@ export async function GET(req: NextRequest) {
     const params = new URLSearchParams({
       "rs:Command": "Render",
       "rs:Format": format === "PDF" ? "PDF" : "EXCELOPENXML",
+      area: AREA_MARROCOS,
       forPlan: forPlan,
       op: op,
       po: po,
