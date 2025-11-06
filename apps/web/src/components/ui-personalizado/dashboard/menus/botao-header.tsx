@@ -23,7 +23,7 @@ const BotaoHeader = () => {
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">Fmoda</span>
-            <span className="truncate text-xs">Indústria têxtiel S.A.</span>
+            <span className="truncate text-xs">Indústria têxtil S.A.</span>
           </div>
         </div>
       </Link>
