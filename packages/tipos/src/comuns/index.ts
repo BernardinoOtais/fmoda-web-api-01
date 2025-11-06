@@ -1,5 +1,20 @@
 import { z } from "zod";
 
+type PrismaDecimalLike = {
+  toNumber(): number;
+  _isDecimal: true;
+};
+
+function isPrismaDecimal(val: unknown): val is PrismaDecimalLike {
+  return (
+    typeof val === "object" &&
+    val !== null &&
+    "_isDecimal" in val &&
+    typeof (val as { _isDecimal?: unknown })._isDecimal === "boolean" &&
+    typeof (val as { toNumber?: unknown }).toNumber === "function"
+  );
+}
+
 export const InteiroNaoNegativoSchema = z.coerce
   .number({
     error: (issue) =>
@@ -41,6 +56,9 @@ export const FloatZeroSchema = z.preprocess(
       if (trimmed === "") return undefined;
       const parsed = parseFloat(trimmed.replace(",", "."));
       return isNaN(parsed) ? undefined : parsed;
+    }
+    if (isPrismaDecimal(val)) {
+      return val.toNumber();
     }
 
     if (typeof val === "number") return val;

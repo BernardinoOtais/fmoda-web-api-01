@@ -21,7 +21,8 @@
     "./android/cortes/envios": "./dist/android/cortes/envios/index.js",
     "./android/cortes/envios/lotes": "./dist/android/cortes/envios/lotes/index.js",
     "./android/cortes/fim": "./dist/android/cortes/fim/index.js",
-    "./planeamento": "./dist/planeamento/index.js"
+    "./planeamento": "./dist/planeamento/index.js",
+    "./joana/emmcma": "./dist/joana/entradas-mc-ma/index.js"
   },
   "scripts": {
     "db:generate": "npm run db:generate:auth && npm run db:generate:envios && npm run db:generate:qualidade && npm run db:generate:androidMarrocos && npm run db:generate:androidCortes",
