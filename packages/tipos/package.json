@@ -25,7 +25,8 @@
     "./tradutor": "./dist/api/tradutor/index.js",
     "./planeamento": "./dist/planeamento/index.js",
     "./pdf": "./dist/pdf/index.js",
-    "./joana/emmcma": "./dist/joana/entradas-mc-ma/index.js"
+    "./joana/emmcma": "./dist/joana/entradas-mc-ma/index.js",
+    "./joana/esteborda": "./dist/joana/est-e-borda/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
