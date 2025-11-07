@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useMemo } from "react";
+
 import {
   Table,
   TableHeader,
@@ -19,14 +20,14 @@ import {
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  groupedColumns?: string[];
+  groupedColumns?: (keyof TData)[];
   emptyMessage?: string;
 };
 
-function computeRowSpans<TData extends Record<string, any>>(
+function computeRowSpans<TData>(
   data: TData[],
-  columnId: string,
-  parentColumnId?: string
+  columnId: keyof TData,
+  parentColumnId?: keyof TData
 ): Record<number, number> {
   const spans: Record<number, number> = {};
 
@@ -63,11 +64,11 @@ function computeRowSpans<TData extends Record<string, any>>(
   return spans;
 }
 
-const DataTable = <TData extends Record<string, any>, TValue>({
+const DataTable = <TData, TValue>({
   columns,
   data,
-  groupedColumns = ["op", "ref"],
-  emptyMessage = "No data available",
+  groupedColumns = [],
+  emptyMessage = "Nada a apresentar...",
 }: DataTableProps<TData, TValue>) => {
   const safeData = useMemo(() => (Array.isArray(data) ? data : []), [data]);
 
@@ -77,17 +78,18 @@ const DataTable = <TData extends Record<string, any>, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // Compute all row spans
   const columnSpans = useMemo(() => {
     const spans: Record<string, Record<number, number>> = {};
+
     groupedColumns.forEach((col, i) => {
       const parent = i > 0 ? groupedColumns[i - 1] : undefined;
-      spans[col] = computeRowSpans(safeData, col, parent);
+      spans[String(col)] = computeRowSpans(safeData, col, parent);
     });
+
     return spans;
   }, [safeData, groupedColumns]);
 
-  const getGroupedCellStyles = (colId: string, index: number): string => {
+  const getGroupedCellStyles = (index: number): string => {
     const shades = ["bg-muted/40", "bg-muted/25", "bg-muted/10"];
     const bg = shades[index] ?? "bg-muted/40";
     return `font-medium border-r border-border ${bg} align-middle`;
@@ -102,7 +104,7 @@ const DataTable = <TData extends Record<string, any>, TValue>({
   }
 
   return (
-    <Table className="w-full">
+    <Table className="w-full border border-border rounded-md p-2 border-collapse shadow-sm bg-background">
       <TableHeader className="bg-muted/50">
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
@@ -130,18 +132,18 @@ const DataTable = <TData extends Record<string, any>, TValue>({
             className="border-b border-border hover:bg-muted/30 transition-colors"
           >
             {row.getVisibleCells().map((cell) => {
-              const colId = cell.column.id;
+              const colId = cell.column.id as keyof TData;
               const groupedIndex = groupedColumns.indexOf(colId);
 
               if (groupedIndex !== -1) {
-                const span = columnSpans[colId]?.[rowIndex] ?? 1;
+                const span = columnSpans[String(colId)]?.[rowIndex] ?? 1;
                 if (span === 0) return null;
 
                 return (
                   <TableCell
                     key={cell.id}
                     rowSpan={span}
-                    className={getGroupedCellStyles(colId, groupedIndex)}
+                    className={`${getGroupedCellStyles(groupedIndex)} px-4 py-2`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

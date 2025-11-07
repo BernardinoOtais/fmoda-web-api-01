@@ -19,7 +19,7 @@ const EntradasMCMA = () => {
       <Suspense
         fallback={
           <LoadingState
-            title="A carregar Bms..."
+            title="A carregar Malhas.."
             description="Pode demorar alguns segundos.."
           />
         }
@@ -28,7 +28,7 @@ const EntradasMCMA = () => {
           fallback={
             <ErrorState
               title="Erro!!"
-              description="Não foi possível carregar Bms..."
+              description="Não foi possível carregar as Malhas..."
             />
           }
         >
