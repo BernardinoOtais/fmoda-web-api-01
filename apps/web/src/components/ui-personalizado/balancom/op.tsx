@@ -15,7 +15,7 @@ const Op = ({ bmOp }: OpProps) => {
   return (
     <div className="space-y-2">
       {bmOp?.map((op) => {
-        //console.log(op.foto);
+        // console.log(op.foto);
         return (
           <Card
             key={op.op}

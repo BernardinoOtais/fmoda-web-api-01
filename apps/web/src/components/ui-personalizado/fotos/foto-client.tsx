@@ -16,6 +16,7 @@ const FotoClient = ({ src, alt, cssImage, ...rest }: FotoClientProps) => {
   const trpc = useTRPC();
 
   const fotoParaGet = src.replace(/\\/g, /* "%2F"*/ "/");
+
   const { data, isLoading, error } = useQuery(
     trpc.fotosGeraisFmoda.getFoto.queryOptions({ id: fotoParaGet })
   );

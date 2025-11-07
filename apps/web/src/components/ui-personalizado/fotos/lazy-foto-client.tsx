@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 export const LazyFotoClient = (
   props: React.ComponentProps<typeof import("./foto-client").default>
 ) => {
+  console.log("A tais foto : ", props.src);
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
