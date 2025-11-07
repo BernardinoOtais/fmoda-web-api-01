@@ -1,100 +1,165 @@
+"use client";
+
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React from "react";
+import React, { useMemo } from "react";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
 
-import { Table } from "@/components/ui/table";
-
-type DataTableProps<TData extends Record<string, any>, TValue> = {
+type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  groupedColumns?: string[];
+  emptyMessage?: string;
 };
+
+function computeRowSpans<TData extends Record<string, any>>(
+  data: TData[],
+  columnId: string,
+  parentColumnId?: string
+): Record<number, number> {
+  const spans: Record<number, number> = {};
+
+  for (let i = 0; i < data.length; i++) {
+    const currentValue = data[i]?.[columnId];
+    const parentValue = parentColumnId ? data[i]?.[parentColumnId] : undefined;
+
+    const isDuplicate =
+      i > 0 &&
+      data[i - 1]?.[columnId] === currentValue &&
+      (!parentColumnId || data[i - 1]?.[parentColumnId] === parentValue);
+
+    if (isDuplicate) {
+      spans[i] = 0;
+      continue;
+    }
+
+    let span = 1;
+    for (let j = i + 1; j < data.length; j++) {
+      const matchesValue = data[j]?.[columnId] === currentValue;
+      const matchesParent =
+        !parentColumnId || data[j]?.[parentColumnId] === parentValue;
+
+      if (matchesValue && matchesParent) {
+        span++;
+      } else {
+        break;
+      }
+    }
+
+    spans[i] = span;
+  }
+
+  return spans;
+}
 
 const DataTable = <TData extends Record<string, any>, TValue>({
   columns,
-  data = [],
+  data,
+  groupedColumns = ["op", "ref"],
+  emptyMessage = "No data available",
 }: DataTableProps<TData, TValue>) => {
+  const safeData = useMemo(() => (Array.isArray(data) ? data : []), [data]);
+
   const table = useReactTable({
-    data,
+    data: safeData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const safeData = Array.isArray(data) ? data : [];
+  // Compute all row spans
+  const columnSpans = useMemo(() => {
+    const spans: Record<string, Record<number, number>> = {};
+    groupedColumns.forEach((col, i) => {
+      const parent = i > 0 ? groupedColumns[i - 1] : undefined;
+      spans[col] = computeRowSpans(safeData, col, parent);
+    });
+    return spans;
+  }, [safeData, groupedColumns]);
 
-  // Precompute row spans for the "op" column
-  const rowSpans: Record<number, number> = {};
-  for (let i = 0; i < safeData.length; i++) {
-    const current = safeData[i]?.op;
-    if (i > 0 && safeData[i - 1]?.op === current) {
-      rowSpans[i] = 0; // skip duplicate
-    } else {
-      let span = 1;
-      for (
-        let j = i + 1;
-        j < safeData.length && safeData[j]?.op === current;
-        j++
-      ) {
-        span++;
-      }
-      rowSpans[i] = span;
-    }
+  const getGroupedCellStyles = (colId: string, index: number): string => {
+    const shades = ["bg-muted/40", "bg-muted/25", "bg-muted/10"];
+    const bg = shades[index] ?? "bg-muted/40";
+    return `font-medium border-r border-border ${bg} align-middle`;
+  };
+
+  if (safeData.length === 0) {
+    return (
+      <div className="w-full border border-border rounded-md p-8 text-center text-muted-foreground bg-muted/10">
+        {emptyMessage}
+      </div>
+    );
   }
 
   return (
-    <Table className="w-full border border-border rounded-md text-sm">
-      <thead className="bg-muted/50">
+    <Table className="w-full">
+      <TableHeader className="bg-muted/50">
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} className="border-b border-border">
+          <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <th
+              <TableHead
                 key={header.id}
-                className="px-4 py-2 text-left font-semibold text-foreground"
+                className="px-4 py-2 text-left font-semibold text-foreground border-b border-border"
               >
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                )}
-              </th>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+              </TableHead>
             ))}
-          </tr>
+          </TableRow>
         ))}
-      </thead>
+      </TableHeader>
 
-      <tbody>
-        {table.getRowModel().rows.map((row, i) => (
-          <tr
+      <TableBody>
+        {table.getRowModel().rows.map((row, rowIndex) => (
+          <TableRow
             key={row.id}
-            className="border-b border-border hover:bg-muted/40 transition-colors"
+            className="border-b border-border hover:bg-muted/30 transition-colors"
           >
             {row.getVisibleCells().map((cell) => {
-              if (cell.column.id === "op") {
-                const span = rowSpans[i];
+              const colId = cell.column.id;
+              const groupedIndex = groupedColumns.indexOf(colId);
+
+              if (groupedIndex !== -1) {
+                const span = columnSpans[colId]?.[rowIndex] ?? 1;
                 if (span === 0) return null;
 
                 return (
-                  <td
+                  <TableCell
                     key={cell.id}
                     rowSpan={span}
-                    className="px-4 py-2 font-medium border-r border-border bg-muted/30 align-middle"
+                    className={getGroupedCellStyles(colId, groupedIndex)}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                  </TableCell>
                 );
               }
 
               return (
-                <td key={cell.id} className="px-4 py-2 border-r border-border">
+                <TableCell
+                  key={cell.id}
+                  className="px-4 py-2 border-r border-border"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                </TableCell>
               );
             })}
-          </tr>
+          </TableRow>
         ))}
-      </tbody>
+      </TableBody>
     </Table>
   );
 };
