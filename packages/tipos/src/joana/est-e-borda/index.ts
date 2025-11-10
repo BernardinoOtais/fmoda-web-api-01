@@ -25,7 +25,7 @@ export const FornecedoresSchema = z
 export const DetalheSchema = z
   .array(
     z.object({
-      fornecedor: z.array(FornecedorDetalheSchema).default([]),
+      enviadoRecebidoFornecedor: z.array(FornecedorDetalheSchema).default([]),
       totais: z
         .array(
           z.object({
