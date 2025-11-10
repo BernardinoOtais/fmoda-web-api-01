@@ -42,7 +42,9 @@ const ColunasMalhaMaMc = (): ColumnDef<EstampadoEBordadoDto>[] => [
                     <span>{row.original.nomeEnviado}</span>
                     <div>{JSON.stringify(f.enviado)}</div>
 
-                    <span>{row.original.nomeRecebido}</span>
+                    <span className="font-bold">
+                      {row.original.nomeRecebido}
+                    </span>
 
                     <div>{JSON.stringify(f.recebido)}</div>
                   </div>
