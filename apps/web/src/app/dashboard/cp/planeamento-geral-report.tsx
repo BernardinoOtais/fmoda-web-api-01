@@ -206,17 +206,28 @@ export default function RapportFournisseursGeneral() {
       </Card>
 
       <div className="w-full flex-1 min-h-0">
-        {/* 👇 Affiche le PDF uniquement sur ordinateur */}
-        {fichier && !isMobile && params.format === "PDF" ? (
-          <ReportViewer fileUrl={fichier} format="PDF" />
-        ) : fichier ? (
-          <p className="text-center text-muted-foreground">
-            {params.format === "EXCELOPENXML"
-              ? "Téléchargement du rapport Excel..."
-              : isMobile
-                ? "Téléchargement du rapport PDF..."
-                : ""}
-          </p>
+        {fichier ? (
+          <>
+            <iframe
+              src={params.format === "PDF" && !isMobile ? fichier : undefined}
+              className={`w-full h-full transition-opacity duration-200 ${
+                params.format === "PDF" && !isMobile
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
+              }`}
+              style={{ border: "none" }}
+              title="PDF Report"
+            />
+            {params.format !== "PDF" || isMobile ? (
+              <p className="text-center text-muted-foreground">
+                {params.format === "EXCELOPENXML"
+                  ? "Téléchargement du rapport Excel..."
+                  : isMobile
+                    ? "Téléchargement du rapport PDF..."
+                    : ""}
+              </p>
+            ) : null}
+          </>
         ) : (
           <p className="text-center">...</p>
         )}

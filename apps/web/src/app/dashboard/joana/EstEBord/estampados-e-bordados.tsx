@@ -3,11 +3,11 @@ import { useSuspenseQuery } from "@repo/trpc";
 import React, { useMemo, useState } from "react";
 
 import ColunasMalhaMaMc from "./_tabela/colunas";
+import DataTable from "./_tabela/data-table";
 
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
-import DataTable from "./_tabela/data-table";
 
 const EstampadosEBordados = () => {
   const [search, setSearch] = useState("");
