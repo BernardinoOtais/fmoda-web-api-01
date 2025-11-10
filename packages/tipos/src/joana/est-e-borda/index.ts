@@ -50,17 +50,18 @@ const safeJsonArray = <T extends z.ZodTypeAny>(schema: T) =>
     return val;
   }, schema);
 
-export const EstampadosEBordadosSchema = z.array(
-  z.object({
-    op: z.coerce.number(),
-    foto: StringComTamanhoSchema(500, 3),
-    enviado: StringComTamanhoSchema(19, 1),
-    nomeEnviado: StringComTamanhoSchema(60, 1),
-    recebido: StringComTamanhoSchema(19, 1),
-    nomeRecebido: StringComTamanhoSchema(60, 1),
-    fornecedores: safeJsonArray(FornecedoresSchema),
-    detalhe: safeJsonArray(DetalheSchema),
-  })
-);
+export const EstampadoEBordadoSchema = z.object({
+  op: z.coerce.number(),
+  foto: StringComTamanhoSchema(500, 3),
+  enviado: StringComTamanhoSchema(19, 1),
+  nomeEnviado: StringComTamanhoSchema(60, 1),
+  recebido: StringComTamanhoSchema(19, 1),
+  nomeRecebido: StringComTamanhoSchema(60, 1),
+  fornecedores: safeJsonArray(FornecedoresSchema),
+  detalhe: safeJsonArray(DetalheSchema),
+});
+export const EstampadosEBordadosSchema = z.array(EstampadoEBordadoSchema);
 
 export type EstampadosEBordadosDto = z.infer<typeof EstampadosEBordadosSchema>;
+
+export type EstampadoEBordadoDto = z.infer<typeof EstampadoEBordadoSchema>;
