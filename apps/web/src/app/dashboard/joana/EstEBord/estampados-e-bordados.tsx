@@ -2,9 +2,12 @@
 import { useSuspenseQuery } from "@repo/trpc";
 import React, { useMemo, useState } from "react";
 
+import ColunasMalhaMaMc from "./_tabela/colunas";
+
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
+import DataTable from "./_tabela/data-table";
 
 const EstampadosEBordados = () => {
   const [search, setSearch] = useState("");
@@ -23,6 +26,8 @@ const EstampadosEBordados = () => {
     return data.filter((item) => String(item.op).toLowerCase().includes(term));
   }, [data, debouncedSearch]);
 
+  const colunas = ColunasMalhaMaMc;
+
   return (
     <>
       <header>
@@ -40,7 +45,11 @@ const EstampadosEBordados = () => {
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
           <div className="flex w-full flex-col items-center gap-1 overflow-auto">
-            {JSON.stringify(filteredData, null, 2)}
+            <DataTable
+              columns={colunas()}
+              data={filteredData}
+              groupedColumns={["op"]}
+            />
           </div>
         </div>
       </main>
