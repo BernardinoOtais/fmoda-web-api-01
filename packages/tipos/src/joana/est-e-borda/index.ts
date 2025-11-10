@@ -2,7 +2,6 @@ import z from "zod";
 
 import { StringComTamanhoSchema } from "@/comuns";
 
-// 🧩 Common schemas
 const QuantidadeSchema = z.object({
   ordem: z.coerce.number(),
   tam: StringComTamanhoSchema(10, 1),
@@ -15,7 +14,6 @@ const FornecedorDetalheSchema = z.object({
   recebido: z.array(QuantidadeSchema).default([]),
 });
 
-// 🧾 Top-level group schemas
 export const FornecedoresSchema = z
   .array(
     z.object({
@@ -40,7 +38,6 @@ export const DetalheSchema = z
   )
   .default([]);
 
-// 🧠 JSON parsing helper
 const safeJsonArray = <T extends z.ZodTypeAny>(schema: T) =>
   z.preprocess((val) => {
     if (typeof val === "string") {
@@ -53,7 +50,6 @@ const safeJsonArray = <T extends z.ZodTypeAny>(schema: T) =>
     return val;
   }, schema);
 
-// 🏗️ Final schema
 export const EstampadosEBordadosSchema = z.array(
   z.object({
     op: z.coerce.number(),
