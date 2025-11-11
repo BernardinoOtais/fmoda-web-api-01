@@ -81,7 +81,7 @@ const ColunasMalhaMaMc = (): ColumnDef<EstampadoEBordadoDto>[] => [
                         </TableHeader>
                         <TableBody>
                           <TableRow>
-                            {f.enviado.map((row) => (
+                            {f.recebido.map((row) => (
                               <TableCell key={row.tam}>{row.qtt}</TableCell>
                             ))}
                           </TableRow>
