@@ -48,7 +48,7 @@ const EstampadosEBordados = () => {
             <DataTable
               columns={colunas()}
               data={filteredData}
-              groupedColumns={["op"]}
+              groupedColumns={["op", "tipoServico"]}
             />
           </div>
         </div>

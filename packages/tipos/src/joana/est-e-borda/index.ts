@@ -54,6 +54,7 @@ const safeJsonArray = <T extends z.ZodTypeAny>(schema: T) =>
 export const EstampadoEBordadoSchema = z.object({
   op: z.coerce.number(),
   foto: StringComTamanhoSchema(500, 3),
+  tipoServico: StringComTamanhoSchema(100, 1),
   enviado: StringComTamanhoSchema(19, 1),
   nomeEnviado: StringComTamanhoSchema(60, 1),
   recebido: StringComTamanhoSchema(19, 1),
