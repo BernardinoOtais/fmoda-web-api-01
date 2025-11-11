@@ -24,7 +24,7 @@ const ColunasMalhaMaMc = (): ColumnDef<EstampadoEBordadoDto>[] => [
             <LazyFotoClient
               src={row.original.foto || ""}
               alt="Foto Modelo"
-              cssImage="w-20 h-20 object-contain rounded-md border border-border"
+              cssImage="w-40 h-40 object-contain rounded-md border border-border"
             />
           )}
         </div>
