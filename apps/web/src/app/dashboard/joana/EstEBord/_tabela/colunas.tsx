@@ -96,7 +96,7 @@ const ColunasMalhaMaMc = (): ColumnDef<EstampadoEBordadoDto>[] => [
                       </div>
 
                       {/* Recebido Section */}
-                      <div className="space-y-2">
+                      <div className="">
                         <h4 className="text-sm font-semibold text-muted-foreground">
                           {`${row.original.nomeRecebido} Recebido:`}
                         </h4>
@@ -180,7 +180,7 @@ const ColunasMalhaMaMc = (): ColumnDef<EstampadoEBordadoDto>[] => [
                         </div>
 
                         {/* Recebido Section */}
-                        <div className="space-y-2">
+                        <div className="">
                           <h4 className="text-sm font-semibold text-muted-foreground">
                             {`${row.original.nomeRecebido} Recebido:`}
                           </h4>
