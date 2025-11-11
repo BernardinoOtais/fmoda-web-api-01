@@ -2,6 +2,14 @@ import { EstampadoEBordadoDto } from "@repo/tipos/joana/esteborda";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const ColunasMalhaMaMc = (): ColumnDef<EstampadoEBordadoDto>[] => [
   {
@@ -33,22 +41,55 @@ const ColunasMalhaMaMc = (): ColumnDef<EstampadoEBordadoDto>[] => [
           <div className="flex flex-col gap-1">
             {detalhe.map((d, i) => (
               <div key={i} className="flex flex-col items-center">
-                {d.enviadoRecebidoFornecedor.map((f) => (
-                  <div
-                    key={f.fornecedor}
-                    className="flex flex-col items-center"
-                  >
-                    <span className="font-extrabold">{f.fornecedor}</span>
-                    <span>{row.original.nomeEnviado}</span>
-                    <div>{JSON.stringify(f.enviado)}</div>
+                {d.enviadoRecebidoFornecedor.map((f) => {
+                  return (
+                    <div
+                      key={f.fornecedor}
+                      className="flex flex-col items-center"
+                    >
+                      <span className="font-extrabold">{f.fornecedor}</span>
+                      <span className="font-bold">
+                        {row.original.nomeEnviado}
+                      </span>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            {f.enviado.map((fc) => (
+                              <TableHead key={fc.tam}>{fc.tam}</TableHead>
+                            ))}
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            {f.enviado.map((row) => (
+                              <TableCell key={row.tam}>{row.qtt}</TableCell>
+                            ))}
+                          </TableRow>
+                        </TableBody>
+                      </Table>
 
-                    <span className="font-bold">
-                      {row.original.nomeRecebido}
-                    </span>
-
-                    <div>{JSON.stringify(f.recebido)}</div>
-                  </div>
-                ))}
+                      <span className="font-bold">
+                        {row.original.nomeRecebido}
+                      </span>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            {f.recebido.map((fc) => (
+                              <TableHead key={fc.tam}>{fc.tam}</TableHead>
+                            ))}
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            {f.enviado.map((row) => (
+                              <TableCell key={row.tam}>{row.qtt}</TableCell>
+                            ))}
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+                  );
+                })}
               </div>
             ))}
           </div>

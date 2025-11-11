@@ -5,6 +5,7 @@ import { StringComTamanhoSchema } from "@/comuns";
 const QuantidadeSchema = z.object({
   ordem: z.coerce.number(),
   tam: StringComTamanhoSchema(10, 1),
+  qttT: z.coerce.number(),
   qtt: z.coerce.number(),
 });
 

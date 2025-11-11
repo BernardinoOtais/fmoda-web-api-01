@@ -152,19 +152,23 @@ export const MenusExistentes: MenusTodos = {
     subMenu: true,
     subMenuItems: [
       {
+        nome: "Corte por Op",
+        path: "/dashboard/joana/CortePorOp",
+        subMenu: false,
+      },
+      {
         nome: "Entradas MC MA",
         path: "/dashboard/joana/EnMCMA",
         subMenu: false,
       },
       {
-        nome: "Estamparia e Bordados",
-        path: "/dashboard/joana/EstEBord",
-        subMenu: false,
-      },
-
-      {
         nome: "Envíos a Marrocos",
         path: "/dashboard/joana/EnvMarrocos",
+        subMenu: false,
+      },
+      {
+        nome: "Estamparia e Bordados",
+        path: "/dashboard/joana/EstEBord",
         subMenu: false,
       },
 
