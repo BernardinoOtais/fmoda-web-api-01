@@ -4,6 +4,7 @@ import { embarques_configorar } from "@/modules/server/embarques/configurar";
 import { embarques_idEnvio } from "@/modules/server/embarques/id-envio";
 import { embarques } from "@/modules/server/embarques/raiz";
 import { fotosGeraisFmoda } from "@/modules/server/fotos/gerais";
+import { joanaCortesPorOp } from "@/modules/server/joana/cortes-por-op";
 import { joanaEntradasMcMa } from "@/modules/server/joana/entradas-mc-ma";
 import { joanaEstampadosEBordados } from "@/modules/server/joana/est-e-borda";
 import { planeamento } from "@/modules/server/planeamento";
@@ -33,6 +34,8 @@ export const appRouter = createTRPCRouter({
   joanaEntradasMcMa,
 
   joanaEstampadosEBordados,
+
+  joanaCortesPorOp,
 });
 
 export type AppRouter = typeof appRouter;

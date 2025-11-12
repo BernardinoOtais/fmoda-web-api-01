@@ -106,3 +106,15 @@ export const DateSchema = z.coerce.date().pipe(
     }
   )
 );
+
+export const safeJsonArray = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess((val) => {
+    if (typeof val === "string") {
+      try {
+        return JSON.parse(val);
+      } catch {
+        return [];
+      }
+    }
+    return val;
+  }, schema);

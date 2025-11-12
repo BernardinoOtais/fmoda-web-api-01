@@ -1,6 +1,7 @@
 import z from "zod";
 
 import { StringComTamanhoSchema } from "@/comuns";
+import { safeJsonArray } from "@/index";
 
 const QuantidadeSchema = z.object({
   ordem: z.coerce.number(),
@@ -38,18 +39,6 @@ export const DetalheSchema = z
     })
   )
   .default([]);
-
-const safeJsonArray = <T extends z.ZodTypeAny>(schema: T) =>
-  z.preprocess((val) => {
-    if (typeof val === "string") {
-      try {
-        return JSON.parse(val);
-      } catch {
-        return [];
-      }
-    }
-    return val;
-  }, schema);
 
 export const EstampadoEBordadoSchema = z.object({
   op: z.coerce.number(),

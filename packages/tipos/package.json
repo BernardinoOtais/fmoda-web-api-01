@@ -26,7 +26,8 @@
     "./planeamento": "./dist/planeamento/index.js",
     "./pdf": "./dist/pdf/index.js",
     "./joana/emmcma": "./dist/joana/entradas-mc-ma/index.js",
-    "./joana/esteborda": "./dist/joana/est-e-borda/index.js"
+    "./joana/esteborda": "./dist/joana/est-e-borda/index.js",
+    "./joana/corteporop": "./dist/joana/cortes-por-op/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
