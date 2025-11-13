@@ -54,13 +54,16 @@ const CortesPorOpConteudo = () => {
             {filtered.map((op) => (
               <Card
                 key={op.bostamp}
-                className="w-full max-w-3xl md:max-w-4xl lg:max-w-6xl mx-auto gap-1 p-1"
+                className="w-full max-w-4xl md:max-w-5xl lg:max-w-7xl mx-auto gap-1 p-1"
               >
-                <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 p-1 gap-1">
+                <CardContent className="grid grid-cols-1 lg:grid-cols-2 p-1 gap-1">
                   {/* Element 1 */}
                   <div className="flex flex-col items-center justify-center border border-border rounded-md p-1 order-1">
                     <span>
                       Op: <span className="font-bold">{op.obrano}</span>
+                    </span>
+                    <span>
+                      Cliente: <span className="font-bold">{op.cliente}</span>
                     </span>
                     <span className="text-center ">{op.design}</span>
                     <span className="text-center">
@@ -104,12 +107,48 @@ const CortesPorOpConteudo = () => {
                         </TableRow>
                       </TableBody>
                     </Table>
-                  </div>
+                    {op.cortes.length > 1 && (
+                      <Fragment>
+                        {<span className="font-bold">Totais</span>}
 
-                  <div className="flex items-center flex-col justify-center border border-border rounded-md p-1 order-3 sm:col-span-2 lg:col-span-2">
+                        {op.total.map((t) => (
+                          <Fragment key={t.ref}>
+                            <span className="font-bold text-center text-xs">
+                              {t.design}
+                            </span>
+                            <Table className=" border border-border rounded-md border-collapse w-full">
+                              <TableHeader className="bg-muted/50">
+                                <TableRow>
+                                  {t.cortado.map((p) => (
+                                    <TableHead
+                                      key={p.tam}
+                                      className="border border-border text-center"
+                                    >
+                                      {p.tam}
+                                    </TableHead>
+                                  ))}
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                <TableRow>
+                                  {t.cortado.map((p) => (
+                                    <TableCell
+                                      key={p.tam}
+                                      className="border border-border text-center"
+                                    >
+                                      {p.qtt}
+                                    </TableCell>
+                                  ))}
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </Fragment>
+                        ))}
+                      </Fragment>
+                    )}
                     <span className="font-bold">Cortado</span>
                     {op.cortes.map((c) => (
-                      <Card key={c.fornecedor} className="gap-1 p-1">
+                      <Fragment key={c.fornecedor}>
                         <span className="font-bold text-center">
                           {c.fornecedor}
                         </span>
@@ -118,7 +157,7 @@ const CortesPorOpConteudo = () => {
                             <span className="font-bold text-center text-xs">
                               {p.design}
                             </span>
-                            <Table className=" border border-border rounded-md border-collapse">
+                            <Table className=" border border-border rounded-md border-collapse w-full">
                               <TableHeader className="bg-muted/50">
                                 <TableRow>
                                   {p.cortado.map((p) => (
@@ -146,48 +185,8 @@ const CortesPorOpConteudo = () => {
                             </Table>
                           </Fragment>
                         ))}
-                      </Card>
-                    ))}
-                    {op.cortes.length > 1 && (
-                      <Fragment>
-                        {<span className="font-bold">Totais</span>}
-                        <Card className="gap-1 p-1">
-                          {op.total.map((t) => (
-                            <Fragment key={t.ref}>
-                              <span className="font-bold text-center text-xs">
-                                {t.design}
-                              </span>
-                              <Table className=" border border-border rounded-md border-collapse">
-                                <TableHeader className="bg-muted/50">
-                                  <TableRow>
-                                    {t.cortado.map((p) => (
-                                      <TableHead
-                                        key={p.tam}
-                                        className="border border-border text-center"
-                                      >
-                                        {p.tam}
-                                      </TableHead>
-                                    ))}
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  <TableRow>
-                                    {t.cortado.map((p) => (
-                                      <TableCell
-                                        key={p.tam}
-                                        className="border border-border text-center"
-                                      >
-                                        {p.qtt}
-                                      </TableCell>
-                                    ))}
-                                  </TableRow>
-                                </TableBody>
-                              </Table>
-                            </Fragment>
-                          ))}
-                        </Card>
                       </Fragment>
-                    )}
+                    ))}
                   </div>
                 </CardContent>
               </Card>

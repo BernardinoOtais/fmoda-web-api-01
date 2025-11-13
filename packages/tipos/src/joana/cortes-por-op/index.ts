@@ -26,6 +26,7 @@ const FornecedoresCortadoSchema = z.array(FornecedorCortadoSchema);
 export const CortePorOpSchema = z.object({
   bostamp: ChavePhcSchema,
   obrano: z.coerce.number(),
+  cliente: StringComTamanhoSchema(25, 1),
   design: StringComTamanhoSchema(60, 1),
   cor: StringComTamanhoSchema(25, 1),
   foto: StringComTamanhoSchema(500, 3),
