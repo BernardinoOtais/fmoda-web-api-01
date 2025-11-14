@@ -110,33 +110,36 @@ const CortesPorOpConteudo = () => {
                     {op.cortes.length > 1 && (
                       <Fragment>
                         {<span className="font-bold">Totais</span>}
-
-                        {op.total.map((t) => (
-                          <Fragment key={t.ref}>
-                            <span className="font-bold text-center text-xs">
-                              {t.design}
+                        {groupByCortado(op.total).map((group, idx) => (
+                          <Fragment key={idx}>
+                            <span className="font-bold text-center text-xs flex flex-col">
+                              {group.designs.map((d) => (
+                                <span key={d}>{d}</span>
+                              ))}
                             </span>
-                            <Table className=" border border-border rounded-md border-collapse w-full">
+
+                            <Table className="border border-border rounded-md border-collapse w-full">
                               <TableHeader className="bg-muted/50">
                                 <TableRow>
-                                  {t.cortado.map((p) => (
+                                  {group.cortado?.map((item) => (
                                     <TableHead
-                                      key={p.tam}
+                                      key={item.tam}
                                       className="border border-border text-center"
                                     >
-                                      {p.tam}
+                                      {item.tam}
                                     </TableHead>
                                   ))}
                                 </TableRow>
                               </TableHeader>
+
                               <TableBody>
                                 <TableRow>
-                                  {t.cortado.map((p) => (
+                                  {group.cortado?.map((item) => (
                                     <TableCell
-                                      key={p.tam}
+                                      key={item.tam}
                                       className="border border-border text-center"
                                     >
-                                      {p.qtt}
+                                      {item.qtt}
                                     </TableCell>
                                   ))}
                                 </TableRow>
@@ -152,7 +155,98 @@ const CortesPorOpConteudo = () => {
                         <span className="font-bold text-center">
                           {c.fornecedor}
                         </span>
-                        {c.parte.map((p) => (
+                        {groupByCortado(c.parte).map((group, idx) => (
+                          <Fragment key={idx}>
+                            <span className="font-bold text-center text-xs flex flex-col">
+                              {group.designs.map((d) => (
+                                <span key={d}>{d}</span>
+                              ))}
+                            </span>
+
+                            <Table className="border border-border rounded-md border-collapse w-full">
+                              <TableHeader className="bg-muted/50">
+                                <TableRow>
+                                  {group.cortado?.map((item) => (
+                                    <TableHead
+                                      key={item.tam}
+                                      className="border border-border text-center"
+                                    >
+                                      {item.tam}
+                                    </TableHead>
+                                  ))}
+                                </TableRow>
+                              </TableHeader>
+
+                              <TableBody>
+                                <TableRow>
+                                  {group.cortado?.map((item) => (
+                                    <TableCell
+                                      key={item.tam}
+                                      className="border border-border text-center"
+                                    >
+                                      {item.qtt}
+                                    </TableCell>
+                                  ))}
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </Fragment>
+                        ))}
+                      </Fragment>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </main>
+    </>
+  );
+};
+
+export default CortesPorOpConteudo;
+
+function groupByCortado(
+  partes: {
+    ref: string;
+    design: string;
+    cortado?: { tam: string; ordem: number; qtt: number }[];
+  }[]
+) {
+  const groups: Record<
+    string,
+    {
+      ref: string;
+      design: string;
+      cortado: { tam: string; ordem: number; qtt: number }[];
+    }[]
+  > = {};
+
+  for (const p of partes) {
+    // Always use a defined array
+    const cortadoArr = p.cortado ?? [];
+
+    const key = JSON.stringify(
+      [...cortadoArr].sort((a, b) => a.ordem - b.ordem)
+    );
+
+    if (!groups[key]) groups[key] = [];
+
+    groups[key].push({
+      ...p,
+      cortado: cortadoArr,
+    });
+  }
+
+  return Object.values(groups).map((group) => ({
+    designs: group.map((g) => g.design),
+    cortado: group[0]?.cortado,
+  }));
+}
+/*
+
+            {c.parte.map((p) => (
                           <Fragment key={p.design}>
                             <span className="font-bold text-center text-xs">
                               {p.design}
@@ -185,17 +279,5 @@ const CortesPorOpConteudo = () => {
                             </Table>
                           </Fragment>
                         ))}
-                      </Fragment>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </main>
-    </>
-  );
-};
 
-export default CortesPorOpConteudo;
+*/
