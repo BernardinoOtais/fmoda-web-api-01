@@ -1,18 +1,12 @@
 "use client";
-
 import { useSuspenseQuery } from "@repo/trpc";
 import React, { useState, useEffect, Fragment } from "react";
 
+import TabelaTamanhosQtt from "../_joana-aux/componentes/tabela-tamanhos-qtt";
+import { groupByCortado } from "../_joana-aux/fun/group-by-ref";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
@@ -21,10 +15,9 @@ const CortesPorOpConteudo = () => {
   const trpc = useTRPC();
 
   const [searchOp, setSearchOp] = useState<string>("");
-  const debouncedOp = useDebounce(searchOp, 400);
+  const debouncedOp = useDebounce(searchOp, 1500);
   const opValue = debouncedOp.trim() === "" ? null : Number(debouncedOp);
 
-  // Main query with dynamic op value
   const { data } = useSuspenseQuery(
     trpc.joanaCortesPorOp.getCortesPorOp.queryOptions({ op: opValue })
   );
@@ -81,32 +74,8 @@ const CortesPorOpConteudo = () => {
                   <div className="flex items-center justify-center border border-border flex-col rounded-md p-1 order-2">
                     <span className="font-bold">Pedido</span>
 
-                    <Table className="w-full border border-border rounded-md border-collapse">
-                      <TableHeader className="bg-muted/50">
-                        <TableRow>
-                          {op.pedido.map((p) => (
-                            <TableHead
-                              key={p.tam}
-                              className="border border-border text-center"
-                            >
-                              {p.tam}
-                            </TableHead>
-                          ))}
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          {op.pedido.map((p) => (
-                            <TableCell
-                              key={p.tam}
-                              className="border border-border text-center"
-                            >
-                              {p.qtt}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                    <TabelaTamanhosQtt dados={op.pedido} />
+
                     {op.cortes.length > 1 && (
                       <Fragment>
                         {<span className="font-bold">Totais</span>}
@@ -117,34 +86,9 @@ const CortesPorOpConteudo = () => {
                                 <span key={d}>{d}</span>
                               ))}
                             </span>
-
-                            <Table className="border border-border rounded-md border-collapse w-full">
-                              <TableHeader className="bg-muted/50">
-                                <TableRow>
-                                  {group.cortado?.map((item) => (
-                                    <TableHead
-                                      key={item.tam}
-                                      className="border border-border text-center"
-                                    >
-                                      {item.tam}
-                                    </TableHead>
-                                  ))}
-                                </TableRow>
-                              </TableHeader>
-
-                              <TableBody>
-                                <TableRow>
-                                  {group.cortado?.map((item) => (
-                                    <TableCell
-                                      key={item.tam}
-                                      className="border border-border text-center"
-                                    >
-                                      {item.qtt}
-                                    </TableCell>
-                                  ))}
-                                </TableRow>
-                              </TableBody>
-                            </Table>
+                            {group.cortado && (
+                              <TabelaTamanhosQtt dados={group.cortado} />
+                            )}
                           </Fragment>
                         ))}
                       </Fragment>
@@ -162,34 +106,9 @@ const CortesPorOpConteudo = () => {
                                 <span key={d}>{d}</span>
                               ))}
                             </span>
-
-                            <Table className="border border-border rounded-md border-collapse w-full">
-                              <TableHeader className="bg-muted/50">
-                                <TableRow>
-                                  {group.cortado?.map((item) => (
-                                    <TableHead
-                                      key={item.tam}
-                                      className="border border-border text-center"
-                                    >
-                                      {item.tam}
-                                    </TableHead>
-                                  ))}
-                                </TableRow>
-                              </TableHeader>
-
-                              <TableBody>
-                                <TableRow>
-                                  {group.cortado?.map((item) => (
-                                    <TableCell
-                                      key={item.tam}
-                                      className="border border-border text-center"
-                                    >
-                                      {item.qtt}
-                                    </TableCell>
-                                  ))}
-                                </TableRow>
-                              </TableBody>
-                            </Table>
+                            {group.cortado && (
+                              <TabelaTamanhosQtt dados={group.cortado} />
+                            )}
                           </Fragment>
                         ))}
                       </Fragment>
@@ -206,78 +125,3 @@ const CortesPorOpConteudo = () => {
 };
 
 export default CortesPorOpConteudo;
-
-function groupByCortado(
-  partes: {
-    ref: string;
-    design: string;
-    cortado?: { tam: string; ordem: number; qtt: number }[];
-  }[]
-) {
-  const groups: Record<
-    string,
-    {
-      ref: string;
-      design: string;
-      cortado: { tam: string; ordem: number; qtt: number }[];
-    }[]
-  > = {};
-
-  for (const p of partes) {
-    // Always use a defined array
-    const cortadoArr = p.cortado ?? [];
-
-    const key = JSON.stringify(
-      [...cortadoArr].sort((a, b) => a.ordem - b.ordem)
-    );
-
-    if (!groups[key]) groups[key] = [];
-
-    groups[key].push({
-      ...p,
-      cortado: cortadoArr,
-    });
-  }
-
-  return Object.values(groups).map((group) => ({
-    designs: group.map((g) => g.design),
-    cortado: group[0]?.cortado,
-  }));
-}
-/*
-
-            {c.parte.map((p) => (
-                          <Fragment key={p.design}>
-                            <span className="font-bold text-center text-xs">
-                              {p.design}
-                            </span>
-                            <Table className=" border border-border rounded-md border-collapse w-full">
-                              <TableHeader className="bg-muted/50">
-                                <TableRow>
-                                  {p.cortado.map((p) => (
-                                    <TableHead
-                                      key={p.tam}
-                                      className="border border-border text-center"
-                                    >
-                                      {p.tam}
-                                    </TableHead>
-                                  ))}
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                <TableRow>
-                                  {p.cortado.map((p) => (
-                                    <TableCell
-                                      key={p.tam}
-                                      className="border border-border text-center"
-                                    >
-                                      {p.qtt}
-                                    </TableCell>
-                                  ))}
-                                </TableRow>
-                              </TableBody>
-                            </Table>
-                          </Fragment>
-                        ))}
-
-*/

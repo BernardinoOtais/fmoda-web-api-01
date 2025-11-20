@@ -33,6 +33,7 @@ export async function NavMain() {
 
   if (menusMapeados.length === 0) redirect("/");
 
+  //console.log("menusMapeados : ", JSON.stringify(menusMapeados, null, 2));
   //await espera(3);
 
   return (

@@ -42,6 +42,9 @@ export const DetalheSchema = z
 
 export const EstampadoEBordadoSchema = z.object({
   op: z.coerce.number(),
+  cliente: StringComTamanhoSchema(25, 1),
+  design: StringComTamanhoSchema(60, 1),
+  cor: StringComTamanhoSchema(25, 1),
   foto: StringComTamanhoSchema(500, 3),
   tipoServico: StringComTamanhoSchema(100, 1),
   enviado: StringComTamanhoSchema(19, 1),
@@ -56,3 +59,7 @@ export const EstampadosEBordadosSchema = z.array(EstampadoEBordadoSchema);
 export type EstampadosEBordadosDto = z.infer<typeof EstampadosEBordadosSchema>;
 
 export type EstampadoEBordadoDto = z.infer<typeof EstampadoEBordadoSchema>;
+
+export const OpSchema = z.object({
+  op: z.number().nullable(),
+});

@@ -10,18 +10,24 @@ const TamanhoOrdemQttSchema = z.object({
 });
 const PedidoSchema = z.array(TamanhoOrdemQttSchema);
 
+const TamanhosQuantidadeSchema = z.array(TamanhoOrdemQttSchema);
+
 const ParteSchema = z.object({
   ref: StringComTamanhoSchema(19, 1),
   design: StringComTamanhoSchema(60, 1),
-  cortado: z.array(TamanhoOrdemQttSchema),
+  cortado: TamanhosQuantidadeSchema,
 });
+
+const PartesSchema = z.array(ParteSchema);
 
 const FornecedorCortadoSchema = z.object({
   fornecedor: StringComTamanhoSchema(200, 1),
-  parte: z.array(ParteSchema),
+  parte: PartesSchema,
 });
 
 const FornecedoresCortadoSchema = z.array(FornecedorCortadoSchema);
+
+const ListaPartesSchema = safeJsonArray(z.array(ParteSchema));
 
 export const CortePorOpSchema = z.object({
   bostamp: ChavePhcSchema,
@@ -32,12 +38,16 @@ export const CortePorOpSchema = z.object({
   foto: StringComTamanhoSchema(500, 3),
   pedido: safeJsonArray(PedidoSchema),
   cortes: safeJsonArray(FornecedoresCortadoSchema),
-  total: safeJsonArray(z.array(ParteSchema)),
+  total: ListaPartesSchema,
 });
 
 export const FornecedoresCortesSchema = z.array(CortePorOpSchema);
 
 export type FornecedoresCortesDto = z.infer<typeof FornecedoresCortesSchema>;
+
+export type TamanhosQuantidadeDto = z.infer<typeof TamanhosQuantidadeSchema>;
+
+export type PartesDto = z.infer<typeof PartesSchema>;
 
 export const OpSchema = z.object({
   op: z.number().nullable(),

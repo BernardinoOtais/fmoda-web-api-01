@@ -11,7 +11,9 @@ import { getQueryClient, trpc } from "@/trpc/server";
 const EstampariaEBordados = () => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(
-    trpc.joanaEstampadosEBordados.getEstampadosEBordados.queryOptions()
+    trpc.joanaEstampadosEBordados.getEstampadosEBordados.queryOptions({
+      op: null,
+    })
   );
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

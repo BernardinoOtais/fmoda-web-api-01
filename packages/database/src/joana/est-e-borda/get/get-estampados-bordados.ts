@@ -5,12 +5,13 @@ import {
 
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
-export const getEstampadosBordadosDb =
-  async (): Promise<EstampadosEBordadosDto> => {
-    const dados = await prismaQualidade.$queryRaw<EstampadosEBordadosDto>`
-    exec FMO_PHC..fm_web_joana_get_EstampariaBordados
+export const getEstampadosBordadosDb = async (
+  op: number | null
+): Promise<EstampadosEBordadosDto> => {
+  const dados = await prismaQualidade.$queryRaw<EstampadosEBordadosDto>`
+    exec FMO_PHC..fm_web_joana_get_EstampariaBordados ${op}
   `;
 
-    const dadosFinais = EstampadosEBordadosSchema.parse(dados);
-    return dadosFinais;
-  };
+  const dadosFinais = EstampadosEBordadosSchema.parse(dados);
+  return dadosFinais;
+};
