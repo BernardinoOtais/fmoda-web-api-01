@@ -1,64 +1,59 @@
 import z from "zod";
 
-import { StringComTamanhoSchema } from "@/comuns";
+import { ChavePhcSchema, StringComTamanhoSchema } from "@/comuns";
 import { safeJsonArray } from "@/index";
 
-const QuantidadeSchema = z.object({
-  ordem: z.coerce.number(),
+const TamanhoOrdemQttSchema = z.object({
   tam: StringComTamanhoSchema(10, 1),
-  qttT: z.coerce.number(),
+  ordem: z.coerce.number(),
   qtt: z.coerce.number(),
 });
-
-const FornecedorDetalheSchema = z.object({
+const TamanhosQuantidadeSchema = z.array(TamanhoOrdemQttSchema);
+const FornecedorSchema = z.object({
   fornecedor: StringComTamanhoSchema(200, 1),
-  enviado: z.array(QuantidadeSchema).default([]),
-  recebido: z.array(QuantidadeSchema).default([]),
+  enviado: TamanhosQuantidadeSchema,
+  recebido: TamanhosQuantidadeSchema,
 });
 
-export const FornecedoresSchema = z
-  .array(
-    z.object({
-      fornecedor: StringComTamanhoSchema(200, 1),
-    })
-  )
-  .default([]);
+const TotaisSchema = z.object({
+  enviado: TamanhosQuantidadeSchema,
+  recebido: TamanhosQuantidadeSchema,
+});
 
-export const DetalheSchema = z
-  .array(
-    z.object({
-      enviadoRecebidoFornecedor: z.array(FornecedorDetalheSchema).default([]),
-      totais: z
-        .array(
-          z.object({
-            enviado: z.array(QuantidadeSchema).default([]),
-            recebido: z.array(QuantidadeSchema).default([]),
-          })
-        )
-        .default([]),
-    })
-  )
-  .default([]);
+const FornecedoresEstBordSchema = z.array(FornecedorSchema);
+
+const BordadosEEstampadosSchema = z.array(
+  z.object({
+    tipoServico: StringComTamanhoSchema(100, 1),
+    detalhe: z.array(
+      z.object({
+        enviado: StringComTamanhoSchema(19, 1),
+        nomeEnviado: StringComTamanhoSchema(60, 1),
+        recebido: StringComTamanhoSchema(19, 1),
+        nomeRecebido: StringComTamanhoSchema(60, 1),
+        fornecedores: FornecedoresEstBordSchema,
+        totais: z.array(TotaisSchema),
+      })
+    ),
+  })
+);
 
 export const EstampadoEBordadoSchema = z.object({
-  op: z.coerce.number(),
+  bostamp: ChavePhcSchema,
+  obrano: z.coerce.number(),
   cliente: StringComTamanhoSchema(25, 1),
   design: StringComTamanhoSchema(60, 1),
   cor: StringComTamanhoSchema(25, 1),
   foto: StringComTamanhoSchema(500, 3),
-  tipoServico: StringComTamanhoSchema(100, 1),
-  enviado: StringComTamanhoSchema(19, 1),
-  nomeEnviado: StringComTamanhoSchema(60, 1),
-  recebido: StringComTamanhoSchema(19, 1),
-  nomeRecebido: StringComTamanhoSchema(60, 1),
-  fornecedores: safeJsonArray(FornecedoresSchema),
-  detalhe: safeJsonArray(DetalheSchema),
+  bordadosEEstampados: safeJsonArray(BordadosEEstampadosSchema),
 });
 export const EstampadosEBordadosSchema = z.array(EstampadoEBordadoSchema);
 
 export type EstampadosEBordadosDto = z.infer<typeof EstampadosEBordadosSchema>;
 
 export type EstampadoEBordadoDto = z.infer<typeof EstampadoEBordadoSchema>;
+
+export type FornecedoresEstBordDto = z.infer<typeof FornecedoresEstBordSchema>;
 
 export const OpSchema = z.object({
   op: z.number().nullable(),
