@@ -78,16 +78,22 @@ const EstampadosEBordados = () => {
                           <Card key={de.enviado + de.recebido}>
                             <CardContent>
                               {de.fornecedores.length > 1 && (
-                                <Fragment>
-                                  {<span className="font-bold">Totais</span>}
+                                <div className="flex flex-col">
+                                  {
+                                    <span className="font-bold text-center ">
+                                      Totais
+                                    </span>
+                                  }
 
                                   {de.totais.map((t, i) => (
                                     <div key={i}>
-                                      <TabelaTamanhosQtt dados={t.enviado} />
-                                      <TabelaTamanhosQtt dados={t.recebido} />
+                                      <TabelaTamanhosQtt
+                                        dados={t.enviado}
+                                        dados2={t.recebido}
+                                      />
                                     </div>
                                   ))}
-                                </Fragment>
+                                </div>
                               )}
 
                               {de.fornecedores.map((f) => (
@@ -98,16 +104,18 @@ const EstampadosEBordados = () => {
                                   <span className="font-bold text-center">
                                     {f.fornecedor}
                                   </span>
-                                  <span className="font-bold text-center text-xs ">
-                                    {de.nomeEnviado}
+                                  <span className="text-center text-xs">
+                                    <strong>Enviado:</strong> {de.nomeEnviado}
                                   </span>
 
-                                  <TabelaTamanhosQtt dados={f.enviado} />
-                                  <span className="font-bold text-center text-xs ">
-                                    {de.nomeRecebido}
+                                  <span className="text-center text-xs">
+                                    <strong>Recebido:</strong> {de.nomeRecebido}
                                   </span>
 
-                                  <TabelaTamanhosQtt dados={f.recebido} />
+                                  <TabelaTamanhosQtt
+                                    dados={f.enviado}
+                                    dados2={f.recebido}
+                                  />
                                 </div>
                               ))}
                             </CardContent>
