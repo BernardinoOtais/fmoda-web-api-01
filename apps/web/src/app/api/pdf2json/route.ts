@@ -3,6 +3,18 @@ import { transformaPedidoEmJson } from "@repo/pdf";
 import { PAPEL_ROTA_ADMINISTRADOR } from "@repo/tipos/consts";
 import { NextResponse } from "next/server";
 
+/**
+ * Handle POST requests that convert an uploaded PDF file to JSON for administrator users.
+ *
+ * Expects a multipart/form-data request with a `file` field (the PDF). Requires an authenticated
+ * session carrying the administrator route role; unauthorized requests are rejected before processing.
+ *
+ * @param request - Incoming HTTP request whose form data must include a `file` (PDF) to convert
+ * @returns A JSON HTTP response:
+ *          - On success: an object with `encomenda` containing the parsed JSON representation of the PDF.
+ *          - On client error (missing file or invalid PDF content): `{ error: string }` with status 400.
+ *          - On server error: `{ error: string }` with status 500.
+ */
 export async function POST(request: Request) {
   try {
     const papeis = [PAPEL_ROTA_ADMINISTRADOR];
