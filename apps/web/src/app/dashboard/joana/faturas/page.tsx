@@ -24,7 +24,7 @@ type Item = {
 };
 
 // 2) Define columns
-export const columns: ColumnDef<Item>[] = [
+const columns: ColumnDef<Item>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -197,17 +197,3 @@ const DataTable = <TData, TValue>({
     </div>
   );
 };
-
-/*
-
-              {renderDetail && openRow === index && (
-                <TableRow key={`${row.id}-detail`}>
-                  <TableCell colSpan={row.getVisibleCells().length}>
-                    <div className="p-4 text-sm">
-                      {renderDetail(row.original)}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-
-*/
