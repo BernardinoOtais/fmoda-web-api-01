@@ -24,6 +24,14 @@ type DataTableProps<TData, TValue> = {
   emptyMessage?: string;
 };
 
+/**
+ * Compute vertical rowSpan values for a column so consecutive rows with the same value (optionally within the same parent group) can be merged.
+ *
+ * @param data - Array of row objects to analyze.
+ * @param columnId - Key of the column to compute spans for.
+ * @param parentColumnId - Optional key of a parent/grouping column; spans only combine when parent values match.
+ * @returns A mapping from row index to the rowSpan number for that row; a value of `0` indicates the cell should be omitted because it is merged into a previous row.
+ */
 function computeRowSpans<TData>(
   data: TData[],
   columnId: keyof TData,
