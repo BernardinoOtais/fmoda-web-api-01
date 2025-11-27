@@ -4,6 +4,12 @@ import { PAPEL_RFID } from "@repo/tipos/consts";
 import { PostRfidFinalSchema } from "@repo/tipos/rfid";
 import { NextResponse } from "next/server";
 
+/**
+ * Handle POST requests that validate the caller's RFID role, validate and persist an RFID JSON payload, and return the operation result.
+ *
+ * @param req - Incoming HTTP request containing the RFID payload as JSON
+ * @returns JSON with `{ result }` on success, or `{ error: message }` with a 500 status on failure
+ */
 export async function POST(req: Request) {
   try {
     const papeis = [PAPEL_RFID];

@@ -8,6 +8,11 @@ import {
 import httpntlm from "httpntlm";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Handles GET requests by retrieving a SSRS report (PDF or Excel) and returning it as a downloadable file.
+ *
+ * @returns A NextResponse containing the report bytes with headers `Content-Type`, `Content-Disposition` (attachment with filename), and `Content-Length`; on error, a JSON NextResponse with `error` and `details` and an appropriate HTTP status.
+ */
 export async function GET(req: NextRequest) {
   try {
     const papeis = [PAPEL_CP, PAPEL_ROTA_ADMINISTRADOR, PAPEL_ROTA_PLANEAMENTO];

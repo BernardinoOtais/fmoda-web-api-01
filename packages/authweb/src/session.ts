@@ -18,6 +18,11 @@ export const getSessionFromRequestSoComACabeca = async (headers: Headers) => {
   return await auth.api.getSession({ headers });
 };
 
+/**
+ * Signs out the current user session.
+ *
+ * Uses headers from the current Next.js request environment and calls the authentication API to terminate the session.
+ */
 export async function logoutAction() {
   const cenas = await headers();
   await auth.api.signOut({

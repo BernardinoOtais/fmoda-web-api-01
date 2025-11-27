@@ -109,6 +109,15 @@ const InsereCsvFormEvoluido = ({
     return <div>Error: {JSON.stringify(error)}</div>;
   }
 
+  /**
+   * Submit the provided RFID form values to the server and handle UI state and notifications.
+   *
+   * Performs the POST mutation with `values`, sets loading/disabled states while the request is in progress,
+   * shows success or error toasts based on the mutation result, resets the form on failure, and restores
+   * the component to its initial state by calling `resetAll()` when finished.
+   *
+   * @param values - The form payload to send (conforms to `PostRfidFinalDto`)
+   */
   async function onSubmit(values: PostRfidFinalDto) {
     setBDisabled(true);
     setBotaoAlteraIsloading(true);
