@@ -11,6 +11,11 @@ import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-cl
 import SwitchFechado from "@/components/ui-personalizado/meus-components/switch-fechado";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type EstampadosEBordadosProps = { veEscondidas: boolean };
 const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
@@ -120,12 +125,22 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
               >
                 <CardContent className="grid grid-cols-1 lg:grid-cols-2 p-1 gap-1">
                   <div className="flex flex-col items-center justify-center border border-border rounded-md p-1 order-1">
-                    <span
-                      className=" cursor-pointer"
-                      onClick={() => escondeOuMostra({ bostamp: op.bostamp })}
-                    >
-                      Op: <span className="font-bold">{op.obrano}</span>
-                    </span>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span
+                          className=" cursor-pointer"
+                          onClick={() =>
+                            escondeOuMostra({ bostamp: op.bostamp })
+                          }
+                        >
+                          Op: <span className="font-bold">{op.obrano}</span>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{veEscondidas ? "Mostra op" : "Esconde Op"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+
                     <span>
                       Cliente: <span className="font-bold">{op.cliente}</span>
                     </span>
