@@ -11,3 +11,5 @@ export const PAPEL_CP = "Cp";
 export const AREA_MARROCOS = "Marrocos";
 
 export const PAPEL_JOANA = "Joana";
+
+export const PAPEL_RFID = "Rfid";

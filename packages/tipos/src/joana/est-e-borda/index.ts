@@ -57,4 +57,8 @@ export type FornecedoresEstBordDto = z.infer<typeof FornecedoresEstBordSchema>;
 
 export const OpSchema = z.object({
   op: z.number().nullable(),
+  veEscondidas: z.boolean().nullable(),
+});
+export const EscondeMostraSchema = z.object({
+  bostamp: ChavePhcSchema,
 });

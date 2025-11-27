@@ -1,8 +1,12 @@
+import { getSessionFromRequestValidaPapeis } from "@repo/authweb/session";
 import { transformaPedidoEmJson } from "@repo/pdf";
+import { PAPEL_ROTA_ADMINISTRADOR } from "@repo/tipos/consts";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
+    const papeis = [PAPEL_ROTA_ADMINISTRADOR];
+    await getSessionFromRequestValidaPapeis(request, papeis);
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 

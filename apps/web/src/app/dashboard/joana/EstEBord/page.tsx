@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
+import { Metadata } from "next";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -8,13 +9,37 @@ import ErrorState from "@/components/ui-personalizado/states/error-state";
 import LoadingState from "@/components/ui-personalizado/states/loading-state";
 import { getQueryClient, trpc } from "@/trpc/server";
 
-const EstampariaEBordados = () => {
+export const metadata: Metadata = {
+  title: "Estampados e Bordados",
+};
+
+type EstampariaEBordadosProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+const EstampariaEBordados = ({ searchParams }: EstampariaEBordadosProps) => {
+  return (
+    <Suspense>
+      <EstampariaEBordadosWrapper searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+export default EstampariaEBordados;
+
+const EstampariaEBordadosWrapper = async ({
+  searchParams,
+}: EstampariaEBordadosProps) => {
   const queryClient = getQueryClient();
+  const { esc } = await searchParams;
+  const veEscondidas = esc === "true";
   void queryClient.prefetchQuery(
     trpc.joanaEstampadosEBordados.getEstampadosEBordados.queryOptions({
       op: null,
+      veEscondidas: veEscondidas,
     })
   );
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense
@@ -33,11 +58,9 @@ const EstampariaEBordados = () => {
             />
           }
         >
-          <EstampadosEBordados />
+          <EstampadosEBordados veEscondidas={veEscondidas} />
         </ErrorBoundary>
       </Suspense>
     </HydrationBoundary>
   );
 };
-
-export default EstampariaEBordados;
