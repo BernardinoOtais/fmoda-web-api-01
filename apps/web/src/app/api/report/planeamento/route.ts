@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   try {
     const papeis = [PAPEL_CP, PAPEL_ROTA_ADMINISTRADOR, PAPEL_ROTA_PLANEAMENTO];
     await getSessionFromRequestValidaPapeis(req, papeis);
-
+    //console.log("req     : ", req);
     const { searchParams } = new URL(req.url);
 
     const op = searchParams.get("op") ?? "";
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     const ssrsUrl = `${ssrsBase}?/op%20contratos%20fornecedores/planeamento&${params.toString()}`;
 
-    console.log("url : ", ssrsUrl);
+    // console.log("url : ", ssrsUrl);
     const result = await new Promise<Buffer>((resolve, reject) => {
       httpntlm.get(
         {

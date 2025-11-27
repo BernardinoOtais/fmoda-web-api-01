@@ -11,6 +11,7 @@ import { planeamento } from "@/modules/server/planeamento";
 import { qualidade_balancom_op_composicao } from "@/modules/server/qualidade/balanco-op-composicao";
 import { qualidade_balancom } from "@/modules/server/qualidade/balancom";
 import { qualidade_balancom_op } from "@/modules/server/qualidade/balancom-op";
+import { rfid } from "@/modules/server/rfid";
 
 export const appRouter = createTRPCRouter({
   administrador: administrador,
@@ -36,6 +37,8 @@ export const appRouter = createTRPCRouter({
   joanaEstampadosEBordados,
 
   joanaCortesPorOp,
+
+  rfid,
 });
 
 export type AppRouter = typeof appRouter;

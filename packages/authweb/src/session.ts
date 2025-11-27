@@ -13,6 +13,11 @@ export const getSessionFromRequest = async (request: Request) => {
   });
 };
 
+export const getSessionFromRequestSoComACabeca = async (headers: Headers) => {
+  console.log("Header recebido :    ", { headers });
+  return await auth.api.getSession({ headers });
+};
+
 export async function logoutAction() {
   const cenas = await headers();
   await auth.api.signOut({

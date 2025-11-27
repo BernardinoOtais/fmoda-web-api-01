@@ -11,6 +11,7 @@ import {
   PAPEL_CP,
   AREA_MARROCOS,
   PAPEL_JOANA,
+  PAPEL_RFID,
 } from "./papeis-utilizador";
 import { PermiteSubcontainer } from "./permite-sub-container";
 
@@ -24,6 +25,7 @@ export {
   PAPEL_CP,
   AREA_MARROCOS,
   PAPEL_JOANA,
+  PAPEL_RFID,
 };
 
 export type { Container, TodosOsContainers };
