@@ -7,15 +7,15 @@ import TabelaTamanhosQtt from "../_joana-aux/componentes/tabela-tamanhos-qtt";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
-import SwitchFechado from "@/components/ui-personalizado/meus-components/switch-fechado";
-import useDebounce from "@/hooks/use-debounce";
-import { useTRPC } from "@/trpc/client";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
+import SwitchFechado from "@/components/ui-personalizado/meus-components/switch-fechado";
+import useDebounce from "@/hooks/use-debounce";
+import { useTRPC } from "@/trpc/client";
 
 type EstampadosEBordadosProps = { veEscondidas: boolean };
 const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
@@ -137,7 +137,7 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
                         </span>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{veEscondidas ? "Mostra op" : "Esconde Op"}</p>
+                        <p>{veEscondidas ? "_Mostra op_" : "_Esconde Op_"}</p>
                       </TooltipContent>
                     </Tooltip>
 
