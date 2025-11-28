@@ -42,7 +42,6 @@ const TabelaTamanhosQtt = ({ dados, dados2 }: TabelaTamanhosQttProps) => {
         <TableRow>
           {dados2 && (
             <TableCell>
-              {" "}
               <span className="text-xs font-semibold">Env.</span>
             </TableCell>
           )}

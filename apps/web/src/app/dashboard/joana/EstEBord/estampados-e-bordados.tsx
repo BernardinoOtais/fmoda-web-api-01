@@ -87,6 +87,7 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
       }
     )
   );
+
   const [filtered, setFiltered] = useState(data);
 
   useEffect(() => {
@@ -128,6 +129,7 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <span
+                          role="button"
                           className=" cursor-pointer"
                           onClick={() =>
                             escondeOuMostra({ bostamp: op.bostamp })

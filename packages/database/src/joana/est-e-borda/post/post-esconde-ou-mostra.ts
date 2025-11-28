@@ -5,7 +5,10 @@ import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 export const postEscondeMostraBordadosEstampadosBd = async (
   bostamp: string,
   userName: string
-) =>
-  await prismaQualidade.$queryRaw`
+) => {
+  console.log(bostamp);
+  console.log(userName);
+  return await prismaQualidade.$queryRaw`
     exec FMO_PHC..fm_web_joana_post_upsert_bit_op ${bostamp}, 7,${userName}
   `;
+};

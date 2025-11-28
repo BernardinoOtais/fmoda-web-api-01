@@ -64,3 +64,9 @@ export const parseDate = (value: string): Date | undefined => {
   const date = new Date(year, month - 1, day);
   return isNaN(date.getTime()) ? undefined : date;
 };
+
+export const formatMoneyPT = (value: number) =>
+  new Intl.NumberFormat("pt-PT", {
+    style: "currency",
+    currency: "EUR",
+  }).format(value);
