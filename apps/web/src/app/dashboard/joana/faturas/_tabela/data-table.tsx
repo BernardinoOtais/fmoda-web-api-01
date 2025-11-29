@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useMemo } from "react";
+import React, { Fragment, useMemo } from "react";
 
 import {
   Table,
@@ -15,6 +15,7 @@ import {
   TableRow,
   TableHead,
   TableCell,
+  TableFooter,
 } from "@/components/ui/table";
 import { formatMoneyPT } from "@/lib/my-utils";
 
@@ -26,14 +27,15 @@ type DataTableProps<TData, TValue> = {
   totalSum: number;
 };
 
-// 1️⃣ Helper: Compute rowspan for grouped columns
+type RowWithTotal = { total: number };
+
 function computeRowSpans<TData>(
   data: TData[],
   columnId: keyof TData,
   parentColumnId?: keyof TData
 ): Record<number, number> {
   const spans: Record<number, number> = {};
-
+  //console.log("dados a tratar : ", data);
   for (let i = 0; i < data.length; i++) {
     const currentValue = data[i]?.[columnId];
     const parentValue = parentColumnId ? data[i]?.[parentColumnId] : undefined;
@@ -62,6 +64,7 @@ function computeRowSpans<TData>(
     spans[i] = span;
   }
 
+  //console.log("spans : ", spans);
   return spans;
 }
 
@@ -91,30 +94,65 @@ const DataTable = <TData, TValue>({
     return spans;
   }, [safeData, groupedColumns]);
 
-  const getGroupedCellStyles = (index: number) => {
-    const shades = ["bg-muted/40", "bg-muted/25", "bg-muted/10"];
-    const bg = shades[index] ?? "bg-muted/40";
-    return `font-medium border-r border-border ${bg} align-middle`;
-  };
-
   if (safeData.length === 0) {
     return (
-      <div className="w-full border border-border rounded-md p-8 text-center text-muted-foreground bg-muted/10">
+      <div className="w-full border border-border rounded-md text-center ">
         {emptyMessage}
       </div>
     );
   }
 
+  const getTotalIndexes = (
+    spans: Record<number, number> | undefined
+  ): number[] => {
+    if (!spans) return [];
+
+    const totals: number[] = [];
+
+    for (const [idxStr, span] of Object.entries(spans)) {
+      const idx = Number(idxStr);
+
+      if (span > 1) {
+        totals.push(idx + span - 1);
+      }
+    }
+
+    return totals;
+  };
+
+  const getGroupStart = (
+    spans: Record<number, number> | undefined,
+    endIndex: number
+  ) => {
+    if (!spans) return null;
+
+    for (const [idxStr, span] of Object.entries(spans)) {
+      const idx = Number(idxStr);
+
+      if (span > 1 && idx + span - 1 === endIndex) {
+        return idx;
+      }
+    }
+
+    return null;
+  };
+
+  const listaIndexTotaisLista =
+    groupedColumns.length === 0 || groupedColumns[0] === undefined
+      ? []
+      : getTotalIndexes(columnSpans[groupedColumns[0] as string] ?? {});
+
+  //console.log(listaIndexTotaisLista);
   return (
-    <Table className="w-full border border-border rounded-md p-2 border-collapse shadow-sm bg-background">
+    <Table className="w-full border border-border rounded-md border-collapse ">
       {/* Header */}
-      <TableHeader className="bg-muted/50">
+      <TableHeader className="bg-muted">
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <TableHead
                 key={header.id}
-                className="text-center font-semibold text-foreground border-b border-border"
+                className="text-center font-semibold border border-border h-7"
               >
                 {header.isPlaceholder
                   ? null
@@ -130,65 +168,101 @@ const DataTable = <TData, TValue>({
 
       {/* Body */}
       <TableBody>
-        {table.getRowModel().rows.map((row, rowIndex) => (
-          <TableRow
-            key={row.id}
-            className="border-b border-border hover:bg-muted/30 transition-colors"
-          >
-            {row.getVisibleCells().map((cell) => {
-              const colId = cell.column.id as keyof TData;
-              const groupedIndex = groupedColumns.indexOf(colId);
+        {table.getRowModel().rows.map((row, rowIndex) => {
+          return (
+            <Fragment key={row.id}>
+              <TableRow className="border border-border ">
+                {row.getVisibleCells().map((cell) => {
+                  const colId = cell.column.id as keyof TData;
+                  const groupedIndex = groupedColumns.indexOf(colId);
 
-              if (groupedIndex !== -1) {
-                const span = columnSpans[String(colId)]?.[rowIndex] ?? 1;
-                if (span === 0) return null;
+                  if (groupedIndex !== -1) {
+                    const span = columnSpans[String(colId)]?.[rowIndex] ?? 1;
+                    if (span === 0) return null;
 
-                return (
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        rowSpan={span}
+                        className="border border-border "
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  }
+
+                  const value = flexRender(
+                    cell.column.columnDef.cell,
+                    cell.getContext()
+                  );
+
+                  const formatted =
+                    typeof value === "number"
+                      ? value.toLocaleString("pt-PT", {
+                          minimumFractionDigits: 2,
+                        })
+                      : value;
+
+                  return (
+                    <TableCell
+                      key={cell.id}
+                      className="border-r border-border text-center"
+                    >
+                      {formatted}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              {listaIndexTotaisLista.includes(rowIndex) && (
+                <TableRow className="bg-muted/30 font-semibold  h-2">
                   <TableCell
-                    key={cell.id}
-                    rowSpan={span}
-                    className={`${getGroupedCellStyles(groupedIndex)} px-4 py-2`}
+                    colSpan={6}
+                    className="text-right px-2 py-0 border-r border-border"
                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    T. do grupo:
                   </TableCell>
-                );
-              }
 
-              const value = flexRender(
-                cell.column.columnDef.cell,
-                cell.getContext()
-              );
+                  <TableCell className="text-center p-0">
+                    {(() => {
+                      const spans = columnSpans[groupedColumns[0] as string];
+                      const startIndex = getGroupStart(spans, rowIndex);
 
-              // 3️⃣ Format numbers/money in pt-PT
-              const formatted =
-                typeof value === "number"
-                  ? value.toLocaleString("pt-PT", { minimumFractionDigits: 2 })
-                  : value;
+                      if (startIndex == null) return null;
 
-              return (
-                <TableCell
-                  key={cell.id}
-                  className="border-r border-border text-center"
-                >
-                  {formatted}
-                </TableCell>
-              );
-            })}
-          </TableRow>
-        ))}
+                      const slice = safeData.slice(startIndex, rowIndex + 1);
+
+                      const sum = (slice as (TData & RowWithTotal)[]).reduce(
+                        (acc, row) => acc + row.total,
+                        0
+                      );
+
+                      return formatMoneyPT(sum);
+                    })()}
+                  </TableCell>
+                </TableRow>
+              )}
+            </Fragment>
+          );
+        })}
       </TableBody>
 
       {/* 4️⃣ Footer: Totals row */}
-      <tfoot>
-        <TableRow className="bg-muted/30 font-semibold border-t border-border">
-          <TableCell colSpan={6} className="text-right">
+      <TableFooter>
+        <TableRow className="font-semibold border border-border h-2 ">
+          <TableCell
+            colSpan={6}
+            className="text-right px-2 py-0 border-r border-border"
+          >
             Total:
           </TableCell>
-          <TableCell colSpan={6} className="text-center">
+          <TableCell className="text-center p-0 ">
             {formatMoneyPT(totalSum)}
           </TableCell>
         </TableRow>
-      </tfoot>
+      </TableFooter>
     </Table>
   );
 };
