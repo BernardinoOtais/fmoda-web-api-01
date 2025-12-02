@@ -1,18 +1,18 @@
 //FaturacaoLinhaDto
 
-import { FaturacaoLinhaDto } from "@repo/tipos/joana/faturas";
+import { FaturacaoWebLinhaDto } from "@repo/tipos/joana/faturas";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 import { formatMoneyPT } from "@/lib/my-utils";
 
-const ColunasFaturacao = (): ColumnDef<FaturacaoLinhaDto>[] => [
+const ColunasFaturacao = (): ColumnDef<FaturacaoWebLinhaDto>[] => [
   {
     accessorKey: "obrano",
     header: "Op",
     cell: ({ row }) => {
       return (
-        <div className="flex flex-col items-center justify-center  rounded-md order-1">
+        <div className="flex flex-col items-center justify-center rounded-md ">
           <span>
             Op: <span className="font-bold">{row.original.obrano}</span>
           </span>

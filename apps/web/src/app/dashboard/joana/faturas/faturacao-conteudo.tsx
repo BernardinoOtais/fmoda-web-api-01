@@ -5,8 +5,8 @@ import { useSuspenseQuery } from "@repo/trpc";
 import { ChevronDownIcon } from "lucide-react";
 import React, { useState } from "react";
 
-import ColunasFaturacao from "./_tabela/colunas";
-import DataTable from "./_tabela/data-table";
+import FaturacaoMovel from "./faturacao-movel";
+import FaturacaoWeb from "./faturacao-web";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -57,9 +57,6 @@ const FaturacaoConteudo = ({ dataIni, dataFini }: FaturacaoConteudoProps) => {
     )
   );
 
-  const colunas = ColunasFaturacao;
-
-  const totalSum = data.reduce((sum, item) => sum + item.total, 0);
   return (
     <>
       <header>
@@ -137,15 +134,26 @@ const FaturacaoConteudo = ({ dataIni, dataFini }: FaturacaoConteudoProps) => {
 
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
-          <div className="flex w-full flex-col items-center  overflow-auto">
+          <div className="flex w-full flex-col items-center overflow-auto">
             {/* Show data only if valid */}
             {parsed.success ? (
-              <DataTable
-                columns={colunas()}
-                data={data}
-                groupedColumns={["obrano"]}
-                totalSum={totalSum}
-              />
+              <>
+                {/* MOBILE / TABLET version (< lg) */}
+                <div className="block lg:hidden w-full  flex-col">
+                  <FaturacaoMovel
+                    faturacaoMovel={data.faturacaoMobile}
+                    totalGeral={data.totalGeral}
+                  />
+                </div>
+
+                {/* DESKTOP version (>= lg) */}
+                <div className="hidden w-full lg:block">
+                  <FaturacaoWeb
+                    faturacaoWeb={data.faturacaoWeb}
+                    totalGeral={data.totalGeral}
+                  />
+                </div>
+              </>
             ) : (
               "Preencha corretamente"
             )}
@@ -157,3 +165,8 @@ const FaturacaoConteudo = ({ dataIni, dataFini }: FaturacaoConteudoProps) => {
 };
 
 export default FaturacaoConteudo;
+
+/*
+
+
+*/
