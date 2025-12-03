@@ -26,6 +26,7 @@
     "./joana/esteborda": "./dist/joana/est-e-borda/index.js",
     "./joana/corteporop": "./dist/joana/cortes-por-op/index.js",
     "./joana/faturas": "./dist/joana/faturas/index.js",
+    "./joana/faturasplan": "./dist/joana/faturas-planeadas/index.js",
     "./rfid": "./dist/rfid/index.js"
   },
   "scripts": {

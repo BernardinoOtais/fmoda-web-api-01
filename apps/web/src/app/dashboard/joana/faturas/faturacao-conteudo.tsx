@@ -121,7 +121,7 @@ const FaturacaoConteudo = ({ dataIni, dataFini }: FaturacaoConteudoProps) => {
 
           {/* OP */}
           <div className="flex flex-row gap-3 mx-auto items-center">
-            <span className="px-1">Op :</span>
+            <Label className="px-1">Op</Label>
             <Input
               placeholder="Pesquisar por op..."
               value={searchOp ?? ""}

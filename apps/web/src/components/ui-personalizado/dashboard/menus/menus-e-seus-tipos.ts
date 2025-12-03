@@ -177,6 +177,11 @@ export const MenusExistentes: MenusTodos = {
         path: "/dashboard/joana/faturas",
         subMenu: false,
       },
+      {
+        nome: "Faturação Planeada",
+        path: "/dashboard/joana/faturasPlan",
+        subMenu: false,
+      },
     ],
   },
 };

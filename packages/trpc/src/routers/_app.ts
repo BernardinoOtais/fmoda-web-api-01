@@ -8,6 +8,7 @@ import { joanaCortesPorOp } from "@/modules/server/joana/cortes-por-op";
 import { joanaEntradasMcMa } from "@/modules/server/joana/entradas-mc-ma";
 import { joanaEstampadosEBordados } from "@/modules/server/joana/est-e-borda";
 import { joanaFaturacao } from "@/modules/server/joana/faturacao";
+import { joanaFaturacaoPlaneada } from "@/modules/server/joana/faturas-planeadas";
 import { planeamento } from "@/modules/server/planeamento";
 import { qualidade_balancom_op_composicao } from "@/modules/server/qualidade/balanco-op-composicao";
 import { qualidade_balancom } from "@/modules/server/qualidade/balancom";
@@ -40,6 +41,8 @@ export const appRouter = createTRPCRouter({
   joanaCortesPorOp,
 
   joanaFaturacao,
+
+  joanaFaturacaoPlaneada,
 
   rfid,
 });

@@ -169,6 +169,7 @@ const DataTable = <TData, TValue>({
       {/* Body */}
       <TableBody>
         {table.getRowModel().rows.map((row, rowIndex) => {
+          console.log(row);
           return (
             <Fragment key={row.id}>
               <TableRow className="border border-border ">
