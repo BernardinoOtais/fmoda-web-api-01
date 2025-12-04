@@ -18,7 +18,8 @@ type FaturacaoPlaneadaWebProps = {
 const FaturacaoPlaneadaWeb = ({
   dadosPlaneados,
 }: FaturacaoPlaneadaWebProps) => {
-  const { dados } = dadosPlaneados;
+  const { dados, valorTotalAPagar, valorTotalAReceber, qttTotal } =
+    dadosPlaneados;
   return (
     <>
       <Table className="w-full border border-border rounded-md border-collapse ">
@@ -62,92 +63,154 @@ const FaturacaoPlaneadaWeb = ({
             </TableHead>
           </TableRow>
         </TableHeader>
-
         <TableBody>
           {dados.map((s, sIdx) => {
             let semanaRowAdded = false;
             const rows: React.JSX.Element[] = [];
             s.dataSemanda.map((d, dIdx) => {
               let dataRowAdded = false;
-
               d.detalhe.map((de, deIdx) => {
-                rows.push(
-                  <TableRow key={`${sIdx}-${dIdx}-${deIdx}-`}>
-                    {!semanaRowAdded && (
-                      <TableCell
-                        className="border border-border text-center  h-2 px-1 py-0"
-                        rowSpan={s.spanSemana}
-                      >
-                        {s.SemanaNumero}
-                      </TableCell>
-                    )}
+                let fornecedoresRowAdded = false;
+                const detalheSpan = de.fornecedores.length;
+                de.fornecedores.map((f, fIdx) => {
+                  rows.push(
+                    <TableRow key={`${sIdx}-${dIdx}-${deIdx}-${fIdx}`}>
+                      {!semanaRowAdded && (
+                        <TableCell
+                          className="border border-border text-center  h-2 px-1 py-0"
+                          rowSpan={
+                            s.spanSemana > 1 ? s.spanSemana + 1 : s.spanSemana
+                          }
+                        >
+                          {s.SemanaNumero}
+                        </TableCell>
+                      )}
 
-                    {!dataRowAdded && (
-                      <TableCell
-                        rowSpan={d.spanData}
-                        className="border border-border text-center  h-2 px-1 py-0"
-                      >
-                        {d.data.toLocaleDateString("pt-PT")}
-                      </TableCell>
-                    )}
+                      {!dataRowAdded && (
+                        <TableCell
+                          rowSpan={d.spanData}
+                          className="border border-border text-center  h-2 px-1 py-0"
+                        >
+                          {d.data.toLocaleDateString("pt-PT")}
+                        </TableCell>
+                      )}
 
-                    <>
+                      {!fornecedoresRowAdded && (
+                        <>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {de.pedido}
+                          </TableCell>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {de.obrano}
+                          </TableCell>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {de.cliente}
+                          </TableCell>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {de.design}
+                          </TableCell>
+                        </>
+                      )}
+
                       <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        {de.pedido}
+                        {f.nome}
                       </TableCell>
                       <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        {de.obrano}
+                        {formatMoneyPT(f.valorServico)}
                       </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        {de.cliente}
-                      </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        {de.design}
-                      </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        <div className="flex flex-col">
-                          {de.fornecedores.map((f) => (
-                            <span key={f.nome}>{f.nome}</span>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        <div className="flex flex-col">
-                          {de.fornecedores.map((f) => (
-                            <span key={f.nome}>
-                              {formatMoneyPT(f.valorServico)}
-                            </span>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        <div className="flex flex-col">
-                          {de.fornecedores.map((f) => (
-                            <span key={f.nome}>
-                              {formatMoneyPT(f.valorServico * de.qtt)}
-                            </span>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        {de.qtt}
-                      </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        {formatMoneyPT(de.u_total)}
-                      </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
-                        {formatMoneyPT(de.valorTotail)}
-                      </TableCell>
-                    </>
-                  </TableRow>
-                );
-                semanaRowAdded = true;
-                dataRowAdded = true;
+
+                      {!fornecedoresRowAdded && (
+                        <>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {formatMoneyPT(
+                              de.fornecedores.reduce(
+                                (acc, f) => acc + f.valorServico * de.qtt,
+                                0
+                              )
+                            )}
+                          </TableCell>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {de.qtt}
+                          </TableCell>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {formatMoneyPT(de.u_total)}
+                          </TableCell>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border text-center h-2 px-1 py-0"
+                          >
+                            {formatMoneyPT(de.u_total * de.qtt)}
+                          </TableCell>
+                        </>
+                      )}
+                    </TableRow>
+                  );
+
+                  fornecedoresRowAdded = true;
+                  semanaRowAdded = true;
+                  dataRowAdded = true;
+                });
               });
             });
 
+            // EXTRA ROW BELOW THE WEEK IF spanSemana > 1
+            if (s.spanSemana > 1) {
+              rows.push(
+                <TableRow key={`extra-row-${sIdx}`}>
+                  <TableCell colSpan={7} />
+                  <TableCell className="border border-border text-center h-2 px-1 py-0">
+                    {formatMoneyPT(s.valorServicoT)}
+                  </TableCell>
+                  <TableCell className="border border-border text-center h-2 px-1 py-0">
+                    {s.qtt}
+                  </TableCell>
+                  <TableCell />
+                  <TableCell className="border border-border text-center h-2 px-1 py-0">
+                    {formatMoneyPT(s.valorTotalFatura)}
+                  </TableCell>
+                </TableRow>
+              );
+            }
+
             return rows;
           })}
+          <TableRow className="border border-border text-center  h-2 px-1 py-0">
+            <TableCell colSpan={7} />
+            <TableCell className="border border-border text-center h-2 px-1 py-0">
+              Total
+            </TableCell>
+            <TableCell className="border border-border text-center h-2 px-1 py-0">
+              {formatMoneyPT(valorTotalAPagar)}
+            </TableCell>
+            <TableCell className="border border-border text-center h-2 px-1 py-0">
+              {qttTotal}
+            </TableCell>
+            <TableCell colSpan={1} />
+            <TableCell className="border border-border text-center h-2 px-1 py-0">
+              {formatMoneyPT(valorTotalAReceber)}
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </>
