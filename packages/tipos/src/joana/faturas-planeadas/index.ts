@@ -60,7 +60,7 @@ const DataSemandaSchema = z.object({
   spanData: z.coerce.number(),
   detalhe: z.array(DetalheSchema),
 });
-const SemanaLinhaMovelSchema = z.object({
+const SemanaLinhaSchema = z.object({
   SemanaNumero: z.coerce.number(),
   spanSemana: z.coerce.number(),
   valorServicoT: z.coerce.number(),
@@ -69,11 +69,10 @@ const SemanaLinhaMovelSchema = z.object({
   dataSemanda: z.array(DataSemandaSchema),
 });
 
-const SemanaMovelSchema = z.array(SemanaLinhaMovelSchema);
+const SemanaMovelSchema = z.array(SemanaLinhaSchema);
 
 export const FaturasPlaneadasSchema = z.object({
-  dadosMoveis: safeJsonArray(SemanaMovelSchema),
-
+  dados: safeJsonArray(SemanaMovelSchema),
   valorTotalAPagar: z.coerce.number(),
   qttTotal: z.coerce.number(),
   valorTotalAReceber: z.coerce.number(),
