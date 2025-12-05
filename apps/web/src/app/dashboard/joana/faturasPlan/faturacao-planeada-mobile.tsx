@@ -1,13 +1,7 @@
 import { FaturasPlaneadasDto } from "@repo/tipos/joana/faturasplan";
-import React from "react";
+import React, { useRef } from "react";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -27,7 +21,7 @@ const FaturacaoPlaneadaMobile = ({
 }: FaturacaoPlaneadaMobileProps) => {
   const { dados, valorTotalAPagar, valorTotalAReceber, qttTotal } =
     dadosPlaneados;
-
+  const semanaRefs = useRef<HTMLDivElement[]>([]);
   return (
     <>
       <div className="mx-auto space-x-1  font-semibold text-center">
@@ -35,11 +29,31 @@ const FaturacaoPlaneadaMobile = ({
         <span>{`Qtt: ${qttTotal}`}</span>
         <span>{`V.Rec: ${formatMoneyPT(valorTotalAReceber)}`}</span>
       </div>
-      {dados.map((s) => (
-        <Card key={s.SemanaNumero} className="m-1 py-1 gap-0 ">
+      {dados.map((s, sIdx) => (
+        <Card
+          key={s.SemanaNumero}
+          ref={(el) => {
+            semanaRefs.current[sIdx] = el!;
+          }}
+          className="m-1 py-1 gap-0 "
+        >
           <CardHeader className="gap-0.5 px-2">
             <CardTitle className="flex flex-row ">
-              <span>{`Semana: ${s.SemanaNumero}`}</span>
+              <span
+                className="cursor-pointer"
+                onClick={() => {
+                  const next =
+                    sIdx === dados.length - 1
+                      ? semanaRefs.current[0]
+                      : semanaRefs.current[sIdx + 1];
+                  if (next) {
+                    next.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }
+                }}
+              >{`Semana: ${s.SemanaNumero}`}</span>
 
               <div className="ml-auto space-x-1  text-xs font-semibold">
                 <span>{`V.Serv: ${formatMoneyPT(s.valorServicoT)}`}</span>
