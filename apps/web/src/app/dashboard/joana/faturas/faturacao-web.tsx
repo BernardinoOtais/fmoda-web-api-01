@@ -6,6 +6,7 @@ import DataTable from "./_tabela/data-table";
 
 type FaturacaoWebPros = { faturacaoWeb: FaturacaoWebDto; totalGeral: number };
 const FaturacaoWeb = ({ faturacaoWeb, totalGeral }: FaturacaoWebPros) => {
+  //console.log(JSON.stringify(faturacaoWeb, null, 2));
   const colunas = ColunasFaturacao;
   return (
     <DataTable

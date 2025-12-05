@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/popover";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
+import FaturacaoPlaneadaMobile from "./faturacao-planeada-mobile";
 
 type FaturacaoPlaneadaConteudoProps = {
   dataIni: Date;
@@ -145,7 +146,9 @@ const FaturacaoPlaneadaConteudo = ({
             {parsed.success ? (
               <>
                 {/* MOBILE / TABLET version (< lg) */}
-                <div className="block lg:hidden w-full  flex-col">Móvel</div>
+                <div className="block lg:hidden w-full  flex-col">
+                  <FaturacaoPlaneadaMobile dadosPlaneados={data} />
+                </div>
 
                 {/* DESKTOP version (>= lg) */}
                 <div className="hidden w-full lg:block">

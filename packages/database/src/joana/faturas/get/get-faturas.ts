@@ -12,5 +12,7 @@ export const getFaturasDb = async (
   `;
 
   const dadosFinais = FaturacaoSchema.parse(dados[0]);
+  //console.log("datas : ", dataIni, dataFini);
+  //console.log("dados: ", JSON.stringify(dadosFinais, null, 2));
   return dadosFinais;
 };
