@@ -9,12 +9,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 import { formatMoneyPT } from "@/lib/my-utils";
 
 type FaturacaoPlaneadaWebProps = {
   dadosPlaneados: FaturasPlaneadasDto;
 };
-
+//hidden xl:block
 const FaturacaoPlaneadaWeb = ({
   dadosPlaneados,
 }: FaturacaoPlaneadaWebProps) => {
@@ -22,8 +28,8 @@ const FaturacaoPlaneadaWeb = ({
     dadosPlaneados;
   return (
     <>
-      <Table className="w-full border border-border rounded-md border-collapse ">
-        <TableHeader className="bg-muted">
+      <Table className=" border border-border rounded-md border-collapse">
+        <TableHeader className="bg-muted ">
           <TableRow>
             <TableHead className="text-center font-semibold border border-border h-7">
               Semana
@@ -32,15 +38,15 @@ const FaturacaoPlaneadaWeb = ({
               Data
             </TableHead>
             <TableHead className="text-center font-semibold border border-border h-7">
-              Pedido
+              Op
             </TableHead>
             <TableHead className="text-center font-semibold border border-border h-7">
-              Op
+              Pedido
             </TableHead>
             <TableHead className="text-center font-semibold border border-border h-7">
               Cliente
             </TableHead>
-            <TableHead className="text-center font-semibold border border-border h-7">
+            <TableHead className="text-center font-semibold border border-border h-7 ">
               Modelo
             </TableHead>
             <TableHead className="text-center font-semibold border border-border h-7">
@@ -77,7 +83,7 @@ const FaturacaoPlaneadaWeb = ({
                     <TableRow key={`${sIdx}-${dIdx}-${deIdx}-${fIdx}`}>
                       {!semanaRowAdded && (
                         <TableCell
-                          className="border border-border text-center  h-2 px-1 py-0"
+                          className="border border-border text-center  h-2 px-1 py-0 w-0"
                           rowSpan={
                             s.spanSemana > 1 ? s.spanSemana + 1 : s.spanSemana
                           }
@@ -89,7 +95,7 @@ const FaturacaoPlaneadaWeb = ({
                       {!dataRowAdded && (
                         <TableCell
                           rowSpan={d.spanData}
-                          className="border border-border text-center  h-2 px-1 py-0"
+                          className="border border-border  h-2 px-1 py-0 text-center w-0"
                         >
                           {d.data.toLocaleDateString("pt-PT")}
                         </TableCell>
@@ -99,35 +105,52 @@ const FaturacaoPlaneadaWeb = ({
                         <>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
+                            className="border border-border text-center h-2 px-1 py-0 w-24"
+                          >
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className=" cursor-pointer">
+                                  <span className="font-bold">{de.obrano}</span>
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                {process.env.NODE_ENV === "production" ? (
+                                  <LazyFotoClient
+                                    src={de.foto || ""}
+                                    alt="Foto Modelo"
+                                    cssImage="w-40 h-40 object-contain rounded-md border border-border"
+                                  />
+                                ) : (
+                                  <span className="font-bold">Mostra foto</span>
+                                )}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell
+                            rowSpan={detalheSpan}
+                            className="border border-border  h-2 px-1 py-0"
                           >
                             {de.pedido}
                           </TableCell>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
-                          >
-                            {de.obrano}
-                          </TableCell>
-                          <TableCell
-                            rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
+                            className="border border-border  h-2 px-1 py-0"
                           >
                             {de.cliente}
                           </TableCell>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
+                            className="border border-border  h-2 px-1 py-0 "
                           >
                             {de.design}
                           </TableCell>
                         </>
                       )}
 
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
+                      <TableCell className="border border-border  h-2 px-1 py-0">
                         {f.nome}
                       </TableCell>
-                      <TableCell className="border border-border text-center h-2 px-1 py-0">
+                      <TableCell className="border border-border text-center h-2 px-1 py-0 w-0">
                         {formatMoneyPT(f.valorServico)}
                       </TableCell>
 
@@ -135,7 +158,7 @@ const FaturacaoPlaneadaWeb = ({
                         <>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
+                            className="border border-border text-right h-2 px-1 py-0 w-0"
                           >
                             {formatMoneyPT(
                               de.fornecedores.reduce(
@@ -146,19 +169,19 @@ const FaturacaoPlaneadaWeb = ({
                           </TableCell>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
+                            className="border border-border text-center h-2 px-1 py-0 w-0"
                           >
                             {de.qtt}
                           </TableCell>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
+                            className="border border-border text-center h-2 px-1 py-0 w-0"
                           >
                             {formatMoneyPT(de.u_total)}
                           </TableCell>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0"
+                            className="border border-border text-right h-2 px-1 py-0 w-0"
                           >
                             {formatMoneyPT(de.u_total * de.qtt)}
                           </TableCell>
@@ -179,14 +202,14 @@ const FaturacaoPlaneadaWeb = ({
               rows.push(
                 <TableRow key={`extra-row-${sIdx}`}>
                   <TableCell colSpan={7} />
-                  <TableCell className="border border-border text-center h-2 px-1 py-0">
+                  <TableCell className="border border-border text-right h-2 px-1 py-0 bg-muted font-semibold">
                     {formatMoneyPT(s.valorServicoT)}
                   </TableCell>
-                  <TableCell className="border border-border text-center h-2 px-1 py-0">
+                  <TableCell className="border border-border text-center h-2 px-1 py-0 bg-muted font-semibold">
                     {s.qtt}
                   </TableCell>
                   <TableCell />
-                  <TableCell className="border border-border text-center h-2 px-1 py-0">
+                  <TableCell className="border border-border text-right h-2 px-1 py-0 bg-muted font-semibold">
                     {formatMoneyPT(s.valorTotalFatura)}
                   </TableCell>
                 </TableRow>
@@ -197,17 +220,17 @@ const FaturacaoPlaneadaWeb = ({
           })}
           <TableRow className="border border-border text-center  h-2 px-1 py-0">
             <TableCell colSpan={7} />
-            <TableCell className="border border-border text-center h-2 px-1 py-0">
+            <TableCell className="border border-border text-center h-2 px-1 py-0 bg-muted font-semibold">
               Total
             </TableCell>
-            <TableCell className="border border-border text-center h-2 px-1 py-0">
+            <TableCell className="border border-border text-right h-2 px-1 py-0 bg-muted font-semibold">
               {formatMoneyPT(valorTotalAPagar)}
             </TableCell>
-            <TableCell className="border border-border text-center h-2 px-1 py-0">
+            <TableCell className="border border-border text-center h-2 px-1 py-0 bg-muted font-semibold">
               {qttTotal}
             </TableCell>
             <TableCell colSpan={1} />
-            <TableCell className="border border-border text-center h-2 px-1 py-0">
+            <TableCell className="border border-border text-right h-2 px-1 py-0 bg-muted font-semibold">
               {formatMoneyPT(valorTotalAReceber)}
             </TableCell>
           </TableRow>

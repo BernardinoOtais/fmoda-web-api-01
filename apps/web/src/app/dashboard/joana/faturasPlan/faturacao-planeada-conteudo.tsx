@@ -1,6 +1,7 @@
 "use client";
 import { PesquisaFaturasPlaneadasSchema } from "@repo/tipos/joana/faturasplan";
 import { useSuspenseQuery } from "@repo/trpc";
+import { pt } from "date-fns/locale";
 import { ChevronDownIcon } from "lucide-react";
 import React, { useState } from "react";
 
@@ -80,6 +81,9 @@ const FaturacaoPlaneadaConteudo = ({
               <PopoverContent className="w-auto overflow-hidden p-0">
                 <Calendar
                   mode="single"
+                  locale={pt}
+                  startMonth={new Date(2020, 1)}
+                  endMonth={new Date(2035, 12)}
                   selected={dateIni ?? undefined}
                   captionLayout="dropdown"
                   onSelect={(date) => {
@@ -109,6 +113,9 @@ const FaturacaoPlaneadaConteudo = ({
               <PopoverContent className="w-auto overflow-hidden p-0">
                 <Calendar
                   mode="single"
+                  locale={pt}
+                  startMonth={new Date(2020, 1)}
+                  endMonth={new Date(2035, 12)}
                   selected={dateFini ?? undefined}
                   captionLayout="dropdown"
                   onSelect={(date) => {
