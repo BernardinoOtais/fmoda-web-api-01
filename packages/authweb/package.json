@@ -14,14 +14,14 @@
     "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
     "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
     "concurrently": "^9.2.0",
     "tsc-alias": "^1.8.16"
   },
   "dependencies": {
     "@repo/db": "*",
     "@repo/encryption": "*",
-    "better-auth": "^1.2.10"
+    "better-auth": "^1.4.6"
   }
 }

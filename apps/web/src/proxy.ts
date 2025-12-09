@@ -1,4 +1,4 @@
-import { getSessionCookie } from "better-auth/cookies";
+import { getSessionCookie } from "@repo/authweb/session";
 import { NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(

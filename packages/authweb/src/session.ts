@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { getSessionCookie } from "better-auth/cookies";
 
 import { auth } from "./auth";
 
@@ -53,3 +54,5 @@ export const getSessionFromRequestValidaPapeis = async (
 
   return session;
 };
+
+export { getSessionCookie };
