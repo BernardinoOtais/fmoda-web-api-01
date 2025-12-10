@@ -11,7 +11,7 @@ import { getQueryClient, trpc } from "@/trpc/server";
 const EntradasMCMA = () => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(
-    trpc.joanaEntradasMcMa.getEntradasMcMa.queryOptions()
+    trpc.joanaEntradasMcMa.getEntradasMcMa.queryOptions({ op: null })
   );
 
   return (

@@ -1,42 +1,37 @@
 "use client";
 import { useSuspenseQuery } from "@repo/trpc";
-import React, { useMemo, useState } from "react";
-
-import ColunasMalhaMaMc from "./_tabela/colunas";
-import DataTable from "./_tabela/data-table";
+import React, { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
 
 const EntradasMCMAConteudo = () => {
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 300);
-
   const trpc = useTRPC();
 
+  const [searchOp, setSearchOp] = useState<string>("");
+  const debouncedOp = useDebounce(searchOp, 1500);
+  const opValue = debouncedOp.trim() === "" ? null : Number(debouncedOp);
+
   const { data } = useSuspenseQuery(
-    trpc.joanaEntradasMcMa.getEntradasMcMa.queryOptions()
+    trpc.joanaEntradasMcMa.getEntradasMcMa.queryOptions({ op: opValue })
   );
 
-  // 👇 use the debounced value here
-  const filteredData = useMemo(() => {
-    if (!debouncedSearch.trim()) return data;
-    const term = debouncedSearch.toLowerCase();
-    return data.filter((item) => String(item.op).toLowerCase().includes(term));
-  }, [data, debouncedSearch]);
+  const [filtered, setFiltered] = useState(data);
 
-  const colunas = ColunasMalhaMaMc;
+  useEffect(() => {
+    setFiltered(data);
+  }, [data]);
 
   return (
     <>
       <header>
-        <div className="flex flex-row ml-auto  items-center pb-1">
+        <div className="flex flex-row ml-auto items-center pb-1">
           <span className="ml-auto px-1">Op :</span>
           <Input
             placeholder="Pesquisar por op..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchOp}
+            onChange={(e) => setSearchOp(e.target.value)}
             className="w-44"
           />
         </div>
@@ -44,13 +39,7 @@ const EntradasMCMAConteudo = () => {
 
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
-          <div className="flex w-full flex-col items-center gap-1 overflow-auto">
-            <DataTable
-              columns={colunas()}
-              data={filteredData}
-              groupedColumns={["op", "ref"]}
-            />
-          </div>
+          <div className="flex w-full flex-col items-center gap-1 overflow-auto"></div>
         </div>
       </main>
     </>

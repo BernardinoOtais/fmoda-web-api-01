@@ -1,17 +1,28 @@
 import z from "zod";
 
 import { StringComTamanhoSchema } from "@/comuns";
+import { safeJsonArray } from "@/index";
+
+const DetalheMalhaSchema = z.object({
+  perfix: StringComTamanhoSchema(2, 1),
+  detalheMalhaSpan: z.coerce.number(),
+});
+
+const DetalhesMalhaSchema = z.array(DetalheMalhaSchema);
 
 export const MalhasEntradasMcMaSchema = z.object({
-  op: z.coerce.number(),
-  foto: StringComTamanhoSchema(500, 3),
-  ref: StringComTamanhoSchema(18, 1),
+  obrano: z.coerce.number(),
+  cliente: StringComTamanhoSchema(25, 1),
   design: StringComTamanhoSchema(60, 1),
-  pedido: z.coerce.number(),
-  enviado: z.coerce.number(),
-  recebido: z.coerce.number(),
-  unidade: StringComTamanhoSchema(4, 1),
+  cor: StringComTamanhoSchema(25, 1),
+  foto: StringComTamanhoSchema(500, 3),
+  spanOp: z.coerce.number(),
+  detalheMalha: safeJsonArray(DetalhesMalhaSchema),
 });
 
 export const MalhasEntradasMcMaListaSchema = z.array(MalhasEntradasMcMaSchema);
 export type MalhasEntradasMcMaDto = z.infer<typeof MalhasEntradasMcMaSchema>;
+
+export const OpSchema = z.object({
+  op: z.number().nullable(),
+});

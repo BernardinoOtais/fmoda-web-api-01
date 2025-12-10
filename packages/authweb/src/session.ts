@@ -1,5 +1,5 @@
-import { headers } from "next/headers";
 import { getSessionCookie } from "better-auth/cookies";
+import { headers } from "next/headers";
 
 import { auth } from "./auth";
 
