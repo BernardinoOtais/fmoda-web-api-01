@@ -16,6 +16,7 @@ type MalhaMobileProps = {
   dados: MalhasEntradasMcMaDto[];
 };
 const MalhaMobile = ({ dados }: MalhaMobileProps) => {
+  console.log("cernas e coisas");
   return (
     <>
       {dados.map((op) => (

@@ -11,7 +11,7 @@ import { useTRPC } from "@/trpc/client";
 
 const EntradasMCMAConteudo = () => {
   const trpc = useTRPC();
-
+  console.log("cernas e coisas");
   const [searchOp, setSearchOp] = useState<string>("");
   const debouncedOp = useDebounce(searchOp, 1500);
   const opValue = debouncedOp.trim() === "" ? null : Number(debouncedOp);

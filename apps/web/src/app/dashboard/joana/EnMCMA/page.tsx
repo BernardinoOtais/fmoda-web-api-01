@@ -14,6 +14,8 @@ const EntradasMCMA = () => {
     trpc.joanaEntradasMcMa.getEntradasMcMa.queryOptions({ op: null })
   );
 
+  console.log("cernas e coisas");
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense

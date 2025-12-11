@@ -16,6 +16,7 @@ type MalhaWebProps = {
 };
 
 const MalhaWeb = ({ dados }: MalhaWebProps) => {
+  console.log("cernas e coisas");
   return (
     <>
       <Table className=" border border-border rounded-md border-collapse">
