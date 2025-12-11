@@ -4,6 +4,7 @@ import { PAPEL_ROTA_ADMINISTRADOR } from "@repo/tipos/consts";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  let buffer: Buffer<ArrayBuffer> | null = null;
   try {
     const papeis = [PAPEL_ROTA_ADMINISTRADOR];
     await getSessionFromRequestValidaPapeis(request, papeis);
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    buffer = Buffer.from(await file.arrayBuffer());
 
     const transformaPedidoEmJsonRecebido = await transformaPedidoEmJson(buffer);
 
@@ -33,5 +34,13 @@ export async function POST(request: Request) {
         ? error.message
         : "Failed to parse PDF (unknown error)";
     return NextResponse.json({ error: message }, { status: 500 });
+  } finally {
+    // Explicit cleanup
+    if (buffer) {
+      buffer = null;
+    }
+    if (global.gc) {
+      global.gc();
+    }
   }
 }
