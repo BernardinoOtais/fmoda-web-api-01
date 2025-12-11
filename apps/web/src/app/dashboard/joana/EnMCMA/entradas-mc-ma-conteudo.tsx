@@ -2,6 +2,9 @@
 import { useSuspenseQuery } from "@repo/trpc";
 import React, { useEffect, useState } from "react";
 
+import MalhaMobile from "./malha-mobile";
+import MalhaWeb from "./malha-web";
+
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
@@ -39,7 +42,19 @@ const EntradasMCMAConteudo = () => {
 
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
-          <div className="flex w-full flex-col items-center gap-1 overflow-auto"></div>
+          <div className="flex w-full flex-col items-center gap-1 overflow-auto">
+            <>
+              {/* MOBILE / TABLET version (< lg) */}
+              <div className="block lg:hidden w-full  flex-col">
+                <MalhaMobile dados={filtered} />
+              </div>
+
+              {/* DESKTOP version (>= lg) */}
+              <div className="hidden w-full lg:block">
+                <MalhaWeb dados={filtered} />
+              </div>
+            </>
+          </div>
         </div>
       </main>
     </>

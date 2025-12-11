@@ -189,7 +189,6 @@ const FaturacaoPlaneadaWeb = ({
                       )}
                     </TableRow>
                   );
-
                   fornecedoresRowAdded = true;
                   semanaRowAdded = true;
                   dataRowAdded = true;

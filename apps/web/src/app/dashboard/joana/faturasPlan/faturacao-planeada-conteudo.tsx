@@ -5,6 +5,7 @@ import { pt } from "date-fns/locale";
 import { ChevronDownIcon } from "lucide-react";
 import React, { useState } from "react";
 
+import FaturacaoPlaneadaMobile from "./faturacao-planeada-mobile";
 import FaturacaoPlaneadaWeb from "./faturacao-planeada-web";
 
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,6 @@ import {
 } from "@/components/ui/popover";
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
-import FaturacaoPlaneadaMobile from "./faturacao-planeada-mobile";
 
 type FaturacaoPlaneadaConteudoProps = {
   dataIni: Date;

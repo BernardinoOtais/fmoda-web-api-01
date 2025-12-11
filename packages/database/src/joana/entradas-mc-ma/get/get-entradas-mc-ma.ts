@@ -5,9 +5,11 @@ import {
 
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
-export const getEntradasMcMaDb = async (): Promise<MalhasEntradasMcMaDto[]> => {
+export const getEntradasMcMaDb = async (
+  op: number | null
+): Promise<MalhasEntradasMcMaDto[]> => {
   const dados = await prismaQualidade.$queryRaw<MalhasEntradasMcMaDto[]>`
-    exec FMO_PHC..fm_web_joana_get_EntradasMcMa
+    exec FMO_PHC..fm_web_joana_get_EntradasMcMa ${op}
   `;
   /* const normalizados = dados.map((row) => ({
     ...row,

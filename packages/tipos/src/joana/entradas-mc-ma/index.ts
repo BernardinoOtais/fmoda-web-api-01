@@ -3,9 +3,18 @@ import z from "zod";
 import { StringComTamanhoSchema } from "@/comuns";
 import { safeJsonArray } from "@/index";
 
+const MalhaSchema = z.object({
+  design: StringComTamanhoSchema(60, 1),
+  qtt: z.coerce.number(),
+  recebido: z.coerce.number(),
+  enviado: z.coerce.number(),
+  unidade: z.string(),
+});
+
 const DetalheMalhaSchema = z.object({
   perfix: StringComTamanhoSchema(2, 1),
   detalheMalhaSpan: z.coerce.number(),
+  malhas: z.array(MalhaSchema),
 });
 
 const DetalhesMalhaSchema = z.array(DetalheMalhaSchema);
