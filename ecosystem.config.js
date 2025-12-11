@@ -3,8 +3,16 @@ module.exports = {
     {
       namespace: "next-express",
       name: "web",
-      script: "npm run start ",
+      script: "./node_modules/.bin/next",
+      args: "start -p 3000",
       cwd: "./apps/web",
+      max_memory_restart: "500M",
+      node_args: "--expose-gc",
+      instances: 1,
+      exec_mode: "fork",
+      env: {
+        NODE_ENV: "production",
+      },
     },
     {
       namespace: "next-express",
@@ -12,6 +20,8 @@ module.exports = {
       script: "dist/server.js",
       cwd: "./apps/api",
       exec_mode: "fork",
+      max_memory_restart: "300M",
+      instances: 1,
       env: {
         NODE_ENV: "production",
         PORT: 8000,
@@ -23,6 +33,8 @@ module.exports = {
       script: "dist/server.js",
       cwd: "./apps/api",
       exec_mode: "fork",
+      max_memory_restart: "300M",
+      instances: 1,
       env: {
         NODE_ENV: "production",
         PORT: 8001,
@@ -34,6 +46,8 @@ module.exports = {
       script: "dist/server.js",
       cwd: "./apps/api",
       exec_mode: "fork",
+      max_memory_restart: "300M",
+      instances: 1,
       env: {
         NODE_ENV: "production",
         PORT: 8002,
