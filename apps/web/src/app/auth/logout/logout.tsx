@@ -13,6 +13,7 @@ const Logout = () => {
         await authClient.signOut(); // ✔ this is enough
         router.replace("/auth/login"); // ✔ redirect manually
       } catch (error) {
+        router.replace("/");
         console.error("Logout failed:", error);
       }
     };
