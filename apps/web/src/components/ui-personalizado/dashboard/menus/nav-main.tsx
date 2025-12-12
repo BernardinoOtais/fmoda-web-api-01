@@ -25,7 +25,7 @@ import {
 export async function NavMain() {
   const utilizadorActual = await getSession();
 
-  if (!utilizadorActual) return redirect("/");
+  if (!utilizadorActual) return redirect("/auth/logout");
 
   const menusMapeados = utilizadorActual.papeis
     .map((papel) => MenusExistentes[papel as keyof MenusTodos])

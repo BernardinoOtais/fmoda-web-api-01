@@ -8,6 +8,7 @@ import {
   GitPullRequestCreate,
   Cog,
   Bug,
+  ChessQueen,
 } from "lucide-react";
 
 type IconType = React.FC<React.SVGProps<SVGSVGElement>>;
@@ -37,6 +38,7 @@ export type MenusTodos = {
   Rfid: Menu;
   Cp: Menu;
   Joana: Menu;
+  Fernanda: Menu;
 };
 
 export const IconsMenus = {
@@ -48,6 +50,7 @@ export const IconsMenus = {
   Rfid: OctagonX,
   Cp: Cog,
   joana: Bug,
+  fernanda: ChessQueen,
 };
 
 export const MenusExistentes: MenusTodos = {
@@ -183,5 +186,11 @@ export const MenusExistentes: MenusTodos = {
         subMenu: false,
       },
     ],
+  },
+  Fernanda: {
+    nome: "Fernanda",
+    path: "/dashboard/fernanda",
+    icon: IconsMenus.fernanda,
+    subMenu: false,
   },
 };
