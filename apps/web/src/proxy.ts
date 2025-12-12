@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 export default async function middleware(
   req: NextRequest
 ): Promise<NextResponse> {
-  /*
   const { pathname } = req.nextUrl;
 
   //console.log("Tais middleware pathname: ", pathname);
@@ -29,7 +28,7 @@ export default async function middleware(
   }
 
   console.log("proxy 04");
-  */
+
   return NextResponse.next();
 }
 
