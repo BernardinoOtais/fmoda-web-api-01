@@ -27,6 +27,7 @@
     "./joana/corteporop": "./dist/joana/cortes-por-op/index.js",
     "./joana/faturas": "./dist/joana/faturas/index.js",
     "./joana/faturasplan": "./dist/joana/faturas-planeadas/index.js",
+    "./joana/enviosmarrocos": "./dist/joana/envios-marrocos/index.js",
     "./rfid": "./dist/rfid/index.js"
   },
   "scripts": {
