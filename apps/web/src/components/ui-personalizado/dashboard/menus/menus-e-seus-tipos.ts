@@ -191,6 +191,18 @@ export const MenusExistentes: MenusTodos = {
     nome: "Fernanda",
     path: "/dashboard/fernanda",
     icon: IconsMenus.fernanda,
-    subMenu: false,
+    subMenu: true,
+    subMenuItems: [
+      {
+        nome: "Faturação",
+        path: "/dashboard/fernanda/faturas",
+        subMenu: false,
+      },
+      {
+        nome: "Faturação Planeada",
+        path: "/dashboard/fernanda/faturasPlan",
+        subMenu: false,
+      },
+    ],
   },
 };

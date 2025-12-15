@@ -1,3 +1,5 @@
+import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
+import { PAPEL_JOANA } from "@repo/tipos/consts";
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
@@ -30,6 +32,7 @@ export default EstampariaEBordados;
 const EstampariaEBordadosWrapper = async ({
   searchParams,
 }: EstampariaEBordadosProps) => {
+  await authorizePapelOrRedirect(PAPEL_JOANA);
   const queryClient = getQueryClient();
   const { esc } = await searchParams;
   const veEscondidas = esc === "true";

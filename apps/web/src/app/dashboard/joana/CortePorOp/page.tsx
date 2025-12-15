@@ -1,3 +1,5 @@
+import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
+import { PAPEL_JOANA } from "@repo/tipos/consts";
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -8,7 +10,8 @@ import ErrorState from "@/components/ui-personalizado/states/error-state";
 import LoadingState from "@/components/ui-personalizado/states/loading-state";
 import { getQueryClient, trpc } from "@/trpc/server";
 
-const CortePorOp = () => {
+const CortePorOp = async () => {
+  await authorizePapelOrRedirect(PAPEL_JOANA);
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(
     trpc.joanaCortesPorOp.getCortesPorOp.queryOptions({ op: null })
