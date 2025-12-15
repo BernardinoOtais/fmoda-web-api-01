@@ -12,7 +12,7 @@ export default async function Home() {
             <div className="bg-image h-[130px] w-full bg-contain bg-center bg-no-repeat " />
           </Link>
         </Button>
-        <div className="relative w-full max-w-[1920px] aspect-[70/45] mx-auto ">
+        <div className="relative w-full max-w-[1920px] aspect-70/45 mx-auto ">
           <Image
             src={"/assets/fmoda.jpg"}
             alt="Fashion"

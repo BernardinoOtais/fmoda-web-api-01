@@ -10,7 +10,7 @@ export default async function middleware(
   // Public route
   const isPublicRoute = pathname === "/";
   if (isPublicRoute) {
-    console.log("proxy 01");
+    //console.log("proxy 01");
     return NextResponse.next();
   }
 
@@ -18,16 +18,16 @@ export default async function middleware(
   const isLoginPath = pathname.startsWith("/auth/login");
 
   if (sessionCookie && isLoginPath) {
-    console.log("proxy 02");
+    //console.log("proxy 02");
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   if (!sessionCookie && !isLoginPath) {
-    console.log("proxy 03");
+    //console.log("proxy 03");
     return redirectToLoginWithCallback(req);
   }
 
-  console.log("proxy 04");
+  //console.log("proxy 04");
 
   return NextResponse.next();
 }

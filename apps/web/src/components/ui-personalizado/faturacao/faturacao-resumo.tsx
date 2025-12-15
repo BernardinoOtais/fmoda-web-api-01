@@ -22,7 +22,7 @@ const FaturacaoResumo = ({ dataIni, dataFini }: FaturacaoResumoProps) => {
   return (
     <>
       <span className="text-center">
-        {`Valor faturado de ${dataIni.toLocaleDateString("pt-PT")} a ${dataFini.toLocaleDateString("pt-PT")} = `}
+        {`Faturação de ${dataIni.toLocaleDateString("pt-PT")} a ${dataFini.toLocaleDateString("pt-PT")} = `}
         <span className="text-center font-semibold">
           {formatMoneyPT(data.totalGeral)}
         </span>
