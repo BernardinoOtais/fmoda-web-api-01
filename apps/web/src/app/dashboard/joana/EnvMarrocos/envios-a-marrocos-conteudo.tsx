@@ -2,13 +2,18 @@
 import { PesquisaEnviosMarrocosSchema } from "@repo/tipos/joana/enviosmarrocos";
 import { useSuspenseQuery } from "@repo/trpc";
 import { ChevronDownIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 
 import TabelaTamanhosQtt from "../_joana-aux/componentes/tabela-tamanhos-qtt";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,8 +21,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 import useDebounce from "@/hooks/use-debounce";
+import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 
 type EnviosAMarrocosConteudoProps = {
@@ -167,12 +178,106 @@ const EnviosAMarrocosConteudo = ({
                         )}
                       </div>
 
-                      <div className="flex items-center justify-center border border-border flex-col rounded-md p-1 order-2">
+                      <div className="flex items-center justify-center border border-border flex-col rounded-md p-1 order-2 gap-1">
+                        {/* Pedido */}
                         <span className="font-bold">Pedido</span>
-
                         <TabelaTamanhosQtt dados={op.pedido} />
+                        {/* Pedido */}
 
-                        <span className="font-bold">Cortado</span>
+                        {op.enviadoFornecedorData.map((env) => (
+                          <Fragment key={env.destino}>
+                            <span className="font-bold text-center text-xs flex flex-col">
+                              {env.destino}
+                            </span>
+
+                            {(env.datasEnvio.length > 1 ||
+                              JSON.stringify(env.totalDestinoT) ===
+                                JSON.stringify(env.totalDestinoD)) && (
+                              <>
+                                <span className="font-bold text-center text-xs flex flex-col">
+                                  Total Enviado
+                                </span>
+                                {env.totalDestinoT.map((envT) => (
+                                  <Fragment key={envT.descricaoParte}>
+                                    <span className="font-bold text-center text-xs flex flex-col">
+                                      {envT.descricaoParte}
+                                    </span>
+                                    <TabelaTamanhosQtt
+                                      dados={envT.quantidades}
+                                    />
+                                  </Fragment>
+                                ))}
+                              </>
+                            )}
+
+                            {JSON.stringify(env.totalDestinoT) !==
+                              JSON.stringify(env.totalDestinoD) && (
+                              <>
+                                <span
+                                  className={cn(
+                                    "font-bold text-center text-xs flex flex-col"
+                                  )}
+                                >
+                                  {`Total enviado entre ${dataIni.toLocaleDateString("pt-PT")} e ${dataFini.toLocaleDateString("pt-PT")}`}
+                                </span>
+                                {env.totalDestinoD.map((envD) => (
+                                  <Fragment key={envD.descricaoParte}>
+                                    <span className="font-bold text-center text-xs flex flex-col">
+                                      {envD.descricaoParte}
+                                    </span>
+                                    <TabelaTamanhosQtt
+                                      dados={envD.quantidades}
+                                    />
+                                  </Fragment>
+                                ))}
+                              </>
+                            )}
+                            <Collapsible className="w-full text-center">
+                              <CollapsibleTrigger>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <span className="font-bold text-center text-xs flex flex-col cursor-pointer">
+                                      Envios por Datas
+                                    </span>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Mostra envios...</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent
+                                className={cn(
+                                  "w-full overflow-hidden transition-all duration-300 ease-in-out",
+                                  "data-[state=open]:animate-collapsible-down",
+                                  "data-[state=closed]:animate-collapsible-up"
+                                )}
+                              >
+                                {env.datasEnvio.map((envD, envDIdx) => (
+                                  <Fragment
+                                    key={`${envD.dataFim}-${envD.flag}-${envDIdx}`}
+                                  >
+                                    {envD.pater.map((p) => (
+                                      <Fragment key={p.descricaoParte}>
+                                        <span
+                                          className={cn(
+                                            "font-bold text-xs text-center",
+                                            envD.flag === false &&
+                                              "bg-accent/90 text-accent-foreground ring px-2"
+                                          )}
+                                        >
+                                          {`${envD.dataFim.toLocaleDateString("pt-PT")} - ${p.descricaoParte}`}
+                                        </span>
+                                        <TabelaTamanhosQtt
+                                          dados={p.quantidades}
+                                        />
+                                      </Fragment>
+                                    ))}
+                                  </Fragment>
+                                ))}
+                              </CollapsibleContent>
+                            </Collapsible>
+                          </Fragment>
+                        ))}
                       </div>
                     </CardContent>
                   </Card>

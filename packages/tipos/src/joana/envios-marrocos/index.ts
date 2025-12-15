@@ -57,6 +57,7 @@ const TotalDestinoSchema = z.array(ParteQuantidadeSchema);
 
 const DataEnvioSchema = z.object({
   dataFim: z.coerce.date(),
+  flag: z.coerce.boolean(),
   pater: z.array(ParteQuantidadeSchema),
 });
 
@@ -64,18 +65,12 @@ const DatasEnvioSchema = z.array(DataEnvioSchema);
 
 const EnviadoFornecedorDataLinhaSchema = z.object({
   destino: z.string(),
-  totalDestino: TotalDestinoSchema,
+  totalDestinoT: TotalDestinoSchema,
+  totalDestinoD: TotalDestinoSchema,
   datasEnvio: DatasEnvioSchema,
 });
 
 const EnviadoFornecedorDataSchema = z.array(EnviadoFornecedorDataLinhaSchema);
-
-const EnviadoFornecedorLinhaSchema = z.object({
-  destino: z.string(),
-  totalDestino: z.array(ParteQuantidadeSchema),
-});
-
-const EnviadoFornecedorSchema = z.array(EnviadoFornecedorLinhaSchema);
 
 const EnvioMarrocoschema = z.object({
   obrano: z.coerce.number(),
@@ -85,7 +80,6 @@ const EnvioMarrocoschema = z.object({
   foto: StringComTamanhoSchema(500, 3),
   pedido: safeJsonArray(QuanridadesSchema),
   enviadoFornecedorData: safeJsonArray(EnviadoFornecedorDataSchema),
-  enviadoFornecedor: safeJsonArray(EnviadoFornecedorSchema),
   totais: safeJsonArray(TotalDestinoSchema),
 });
 
