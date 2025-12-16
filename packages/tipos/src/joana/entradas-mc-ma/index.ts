@@ -5,6 +5,7 @@ import { safeJsonArray } from "@/index";
 
 const MalhaSchema = z.object({
   design: StringComTamanhoSchema(60, 1),
+  nome: z.string(),
   qtt: z.coerce.number(),
   recebido: z.coerce.number(),
   enviado: z.coerce.number(),

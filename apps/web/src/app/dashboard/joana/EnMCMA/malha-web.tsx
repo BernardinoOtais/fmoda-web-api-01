@@ -91,7 +91,10 @@ const MalhaWeb = ({ dados }: MalhaWebProps) => {
                     )}
 
                     <TableCell className="border border-border  h-2 px-1 py-0">
-                      {m.design}
+                      <div className="flex flex-col items-start">
+                        <span className="font-bold mx-auto"> {m.nome}</span>
+                        <span className="mx-auto"> {m.design}</span>
+                      </div>
                     </TableCell>
                     <TableCell className="border border-border  h-2 px-1 py-0 text-center">
                       {m.qtt}
