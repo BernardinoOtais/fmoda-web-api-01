@@ -24,7 +24,7 @@ const EnvioMarrocosFimResumoSchema = z.object({
   nomeEnvio: z.string(),
   clifor: z.string(),
   nomeClifor: z.string(),
-  nPaletes: z.string(),
+  nPaletes: InteiroNaoNegativoSchema,
   opPedidosCorParteQtde: z.string(),
 });
 
