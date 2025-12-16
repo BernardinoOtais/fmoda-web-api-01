@@ -9,11 +9,8 @@
   "version": 1,
   "framework": "react-cra",
   "chosenAddOns": [
-    "eslint",
     "nitro",
     "start",
-    "shadcn",
-    "tRPC",
-    "tanstack-query"
+    "shadcn"
   ]
 }
