@@ -19,16 +19,6 @@ import type { Response, Request } from "express";
 
 const authRoutes = Router();
 
-authRoutes.get("/", (req: Request, res: Response) => {
-  res.status(HttpStatusCode.OK).json({
-    tipo: server.NODE_ENV,
-    dateTime: new Date().toISOString(),
-    status: "RUNNING",
-    protected: false,
-    hello: "auth",
-  });
-});
-
 authRoutes.post(
   "/login",
   validaSchema(LoginAndroidSchema),
@@ -45,7 +35,9 @@ authRoutes.post(
 
       const { nomeUser, pass } = parsed.data;
 
-      const user = await getUserDb(nomeUser);
+      const userRecebido = nomeUser.trim();
+
+      const user = await getUserDb(userRecebido);
       const hashedPassword = user?.account?.[0]?.password;
 
       if (!user || !hashedPassword) {
@@ -65,13 +57,13 @@ authRoutes.post(
         });
       }
 
-      const token = generateAccessToken({ nomeUser });
-      const refreshToken = generateRefreshToken({ nomeUser });
+      const token = generateAccessToken({ nomeUser: userRecebido });
+      const refreshToken = generateRefreshToken({ nomeUser: userRecebido });
 
       // optionally save refresh token in DB
 
       return res.status(HttpStatusCode.OK).json({
-        nomeUser,
+        nomeUser: userRecebido,
         nome: user.name,
         apelido: user.apelido,
         token,
@@ -97,21 +89,23 @@ authRoutes.post(
       }
       const { nomeUser, refreshToken: refreshTokenRecebido } = parsed.data;
 
+      const userRecebido = nomeUser.trim();
+
       const decodeRefreshToken = verifyRefreshToken(refreshTokenRecebido);
       if (!decodeRefreshToken)
         return res.status(HttpStatusCode.FORBIDDEN).json({
           message: "Dados inválidos",
         });
-      if (decodeRefreshToken.nomeUser !== nomeUser)
+      if (decodeRefreshToken.nomeUser !== userRecebido)
         return res.status(HttpStatusCode.FORBIDDEN).json({
           message: "Dados inválidos",
         });
 
-      const token = generateAccessToken({ nomeUser });
-      const refreshToken = generateRefreshToken({ nomeUser });
+      const token = generateAccessToken({ nomeUser: userRecebido });
+      const refreshToken = generateRefreshToken({ nomeUser: userRecebido });
 
       return res.status(HttpStatusCode.OK).json({
-        nomeUser,
+        nomeUser: userRecebido,
         token,
         refreshToken,
       });
