@@ -1,3 +1,4 @@
+import { checkIp } from "@middlewares/check-ip";
 import { validaSchema } from "@middlewares/valida-schema";
 import { GetTraducaoSchema } from "@repo/tipos/tradutor";
 import { tradutor } from "@repo/tradutor";
@@ -5,6 +6,11 @@ import { sendInternalError } from "@utils/utils";
 import express, { Request, Response } from "express";
 
 const routeTradutor = express.Router();
+
+/**
+ * Auth verification
+ */
+routeTradutor.use(checkIp());
 
 routeTradutor.get(
   "/",

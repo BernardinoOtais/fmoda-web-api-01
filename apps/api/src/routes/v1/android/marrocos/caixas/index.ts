@@ -80,8 +80,8 @@ routesMarrocosCaixas.delete(
 
   async (req: Request, res: Response) => {
     try {
-      console.log("O tais body", req.body);
-      console.log("O tais query", req.query);
+      //console.log("O tais body", req.body);
+      //console.log("O tais query", req.query);
       const { idEnvioMarrocosCaixas } = DeleteListaCaixasBodySchema.parse(
         req.body
       );
@@ -157,7 +157,7 @@ routesMarrocosCaixas.post(
   validaSchema(PostNovaCaixaSchema),
   async (req: Request, res: Response) => {
     try {
-      console.log("Post nova Caixa");
+      //console.log("Post nova Caixa");
       const { idEnvioMarrocosPalete, nomeUser, codIcf } =
         PostNovaCaixaSchema.parse(req.body);
       const dados = await postNovaCaixa(

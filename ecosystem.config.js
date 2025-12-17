@@ -3,15 +3,18 @@ module.exports = {
     {
       namespace: "next-express",
       name: "web",
-      script: "./node_modules/.bin/next",
-      args: "start -p 3000",
+      // Change 1: Use npm start to ensure all hooks/path resolutions run correctly
+      script: "npm",
+      args: "run start",
       cwd: "./apps/web",
-      max_memory_restart: "500M",
-      node_args: "--expose-gc",
+      // Change 2: Increase memory. Next.js builds/actions can spike > 500MB
+      max_memory_restart: "1G",
       instances: 1,
       exec_mode: "fork",
+      // Change 3: Add explicit PATH and Build ID stability environment variables
       env: {
         NODE_ENV: "production",
+        PORT: 3000,
       },
     },
     {

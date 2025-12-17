@@ -4,6 +4,7 @@ import { corsHandler } from "@middlewares/cors-handler";
 import { requestLogger } from "@middlewares/logger";
 import { rateLimiter } from "@middlewares/rate-limiter";
 import { securityMiddleware } from "@middlewares/security";
+import raiz from "@routes/raiz";
 import v1Routes from "@routes/v1";
 import { parseAPIVersion } from "@utils/utils";
 import bodyParser from "body-parser";
@@ -42,6 +43,11 @@ app.use(corsHandler(server.ALLOWED_ORIGINS));
  * Registar pedidos recebidos.
  */
 app.use(requestLogger());
+
+/**
+ * Route Raiz
+ */
+app.use("/", raiz);
 
 /**
  * Route handling.
