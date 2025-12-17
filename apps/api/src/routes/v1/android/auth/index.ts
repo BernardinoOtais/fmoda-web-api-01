@@ -34,6 +34,7 @@ authRoutes.post(
       }
 
       const { nomeUser, pass } = parsed.data;
+      console.log("nomeUser", nomeUser);
 
       const userRecebido = nomeUser.trim();
 
