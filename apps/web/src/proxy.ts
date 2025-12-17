@@ -19,7 +19,7 @@ export default async function middleware(
 
   if (sessionCookie && isLoginPath) {
     //console.log("proxy 02");
-    console.log("proxy 02");
+    //console.log("proxy 02");
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
