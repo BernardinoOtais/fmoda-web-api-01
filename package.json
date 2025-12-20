@@ -23,7 +23,6 @@
     "packages/*"
   ],
   "dependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.54.0",
     "zod": "^4.0.5"
   }
 }
