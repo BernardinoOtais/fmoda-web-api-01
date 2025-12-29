@@ -1,41 +1,134 @@
 {
   "name": "@repo/tipos",
   "exports": {
-    "./user": "./dist/user/user.schemas.js",
-    "./embarques": "./dist/embarques/raiz/index.js",
-    "./embarques_idenvio": "./dist/embarques/id-envio/index.js",
-    "./embarques_configurar": "./dist/embarques/configurar/index.js",
-    "./qualidade_balancom": "./dist/qualidade/balancom/index.js",
-    "./qualidade_balancom_composicao": "./dist/qualidade/balancom/composicao/index.js",
-    "./consts": "./dist/consts/index.js",
-    "./comuns": "./dist/index.js",
-    "./foto": "./dist/foto/index.js",
-    "./android_auth": "./dist/api/android/auth/index.js",
-    "./android/marrocos/envios": "./dist/api/android/marrocos/envios/index.js",
-    "./android/marrocos/envios/fim": "./dist/api/android/marrocos/envios/fim/index.js",
-    "./android/marrocos/paletes": "./dist/api/android/marrocos/paletes/index.js",
-    "./android/marrocos/caixas": "./dist/api/android/marrocos/caixas/index.js",
-    "./android/especial": "./dist/api/android/especial/index.js",
-    "./android/resumo": "./dist/api/android/resumo/index.js",
-    "./android/imagem": "./dist/api/android/imagem/index.js",
-    "./android/cortes/envios": "./dist/api/android/cortes/envios/index.js",
-    "./android/cortes/envios/lotes": "./dist/api/android/cortes/envios/lotes/index.js",
-    "./android/cortes/fim": "./dist/api/android/cortes/fim/index.js",
-    "./qrcode": "./dist/api/qrcode/index.js",
-    "./tradutor": "./dist/api/tradutor/index.js",
-    "./planeamento": "./dist/planeamento/index.js",
-    "./pdf": "./dist/pdf/index.js",
-    "./joana/emmcma": "./dist/joana/entradas-mc-ma/index.js",
-    "./joana/esteborda": "./dist/joana/est-e-borda/index.js",
-    "./joana/corteporop": "./dist/joana/cortes-por-op/index.js",
-    "./joana/faturas": "./dist/joana/faturas/index.js",
-    "./joana/faturasplan": "./dist/joana/faturas-planeadas/index.js",
-    "./joana/enviosmarrocos": "./dist/joana/envios-marrocos/index.js",
-    "./rfid": "./dist/rfid/index.js"
+    "./comuns": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./android_auth": {
+      "types": "./dist/api/android/auth/index.d.ts",
+      "default": "./dist/api/android/auth/index.js"
+    },
+    "./android/marrocos/envios": {
+      "types": "./dist/api/android/marrocos/envios/index.d.ts",
+      "default": "./dist/api/android/marrocos/envios/index.js"
+    },
+    "./android/marrocos/envios/fim": {
+      "types": "./dist/api/android/marrocos/envios/fim/index.d.ts",
+      "default": "./dist/api/android/marrocos/envios/fim/index.js"
+    },
+    "./android/marrocos/paletes": {
+      "types": "./dist/api/android/marrocos/paletes/index.d.ts",
+      "default": "./dist/api/android/marrocos/paletes/index.js"
+    },
+    "./android/marrocos/caixas": {
+      "types": "./dist/api/android/marrocos/caixas/index.d.ts",
+      "default": "./dist/api/android/marrocos/caixas/index.js"
+    },
+    "./android/especial": {
+      "types": "./dist/api/android/especial/index.d.ts",
+      "default": "./dist/api/android/especial/index.js"
+    },
+    "./android/resumo": {
+      "types": "./dist/api/android/resumo/index.d.ts",
+      "default": "./dist/api/android/resumo/index.js"
+    },
+    "./android/imagem": {
+      "types": "./dist/api/android/imagem/index.d.ts",
+      "default": "./dist/api/android/imagem/index.js"
+    },
+    "./android/cortes/envios": {
+      "types": "./dist/api/android/cortes/envios/index.d.ts",
+      "default": "./dist/api/android/cortes/envios/index.js"
+    },
+    "./android/cortes/envios/lotes": {
+      "types": "./dist/api/android/cortes/envios/lotes/index.d.ts",
+      "default": "./dist/api/android/cortes/envios/lotes/index.js"
+    },
+    "./android/cortes/fim": {
+      "types": "./dist/api/android/cortes/fim/index.d.ts",
+      "default": "./dist/api/android/cortes/fim/index.js"
+    },
+    "./qrcode": {
+      "types": "./dist/api/qrcode/index.d.ts",
+      "default": "./dist/api/qrcode/index.js"
+    },
+    "./tradutor": {
+      "types": "./dist/api/tradutor/index.d.ts",
+      "default": "./dist/api/tradutor/index.js"
+    },
+    "./user": {
+      "types": "./dist/user/user.schemas.d.ts",
+      "default": "./dist/user/user.schemas.js"
+    },
+    "./embarques": {
+      "types": "./dist/embarques/raiz/index.d.ts",
+      "default": "./dist/embarques/raiz/index.js"
+    },
+    "./embarques_idenvio": {
+      "types": "./dist/embarques/id-envio/index.d.ts",
+      "default": "./dist/embarques/id-envio/index.js"
+    },
+    "./embarques_configurar": {
+      "types": "./dist/embarques/configurar/index.d.ts",
+      "default": "./dist/embarques/configurar/index.js"
+    },
+    "./qualidade_balancom": {
+      "types": "./dist/qualidade/balancom/index.d.ts",
+      "default": "./dist/qualidade/balancom/index.js"
+    },
+    "./qualidade_balancom_composicao": {
+      "types": "./dist/qualidade/balancom/composicao/index.d.ts",
+      "default": "./dist/qualidade/balancom/composicao/index.js"
+    },
+    "./consts": {
+      "types": "./dist/consts/index.d.ts",
+      "default": "./dist/consts/index.js"
+    },
+    "./foto": {
+      "types": "./dist/foto/index.d.ts",
+      "default": "./dist/foto/index.js"
+    },
+    "./pdf": {
+      "types": "./dist/pdf/index.d.ts",
+      "default": "./dist/pdf/index.js"
+    },
+    "./joana/emmcma": {
+      "types": "./dist/joana/entradas-mc-ma/index.d.ts",
+      "default": "./dist/joana/entradas-mc-ma/index.js"
+    },
+    "./joana/esteborda": {
+      "types": "./dist/joana/est-e-borda/index.d.ts",
+      "default": "./dist/joana/est-e-borda/index.js"
+    },
+    "./joana/corteporop": {
+      "types": "./dist/joana/cortes-por-op/index.d.ts",
+      "default": "./dist/joana/cortes-por-op/index.js"
+    },
+    "./joana/faturas": {
+      "types": "./dist/joana/faturas/index.d.ts",
+      "default": "./dist/joana/faturas/index.js"
+    },
+    "./joana/faturasplan": {
+      "types": "./dist/joana/faturas-planeadas/index.d.ts",
+      "default": "./dist/joana/faturas-planeadas/index.js"
+    },
+    "./joana/enviosmarrocos": {
+      "types": "./dist/joana/envios-marrocos/index.d.ts",
+      "default": "./dist/joana/envios-marrocos/index.js"
+    },
+    "./rfid": {
+      "types": "./dist/rfid/index.d.ts",
+      "default": "./dist/rfid/index.js"
+    },
+    "./planeamento": {
+      "types": "./dist/planeamento/index.d.ts",
+      "default": "./dist/planeamento/index.js"
+    }
   },
   "scripts": {
-    "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "dev": "NODE_OPTIONS=--max-old-space-size=7000 tsup --watch",
+    "build": "NODE_OPTIONS=--max-old-space-size=7000 tsup",
     "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {

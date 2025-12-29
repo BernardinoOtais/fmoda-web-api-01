@@ -2,7 +2,9 @@
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "target": "es2024",
-    "module": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./",

@@ -1,7 +1,7 @@
 import z from "zod";
 
 import {
-  DataQttSchema,
+  DataQttSchema as DataQttSchemaDef,
   FornecedorSchema,
   FornecedorValorSchema,
   OpCamioesEnviosSchema,
@@ -89,7 +89,9 @@ export const OpCamioesEnviosArraySchema = z.array(OpCamioesEnviosSchema);
 //Fornecedor Preco
 export type FornecedorValorDto = z.infer<typeof FornecedorValorSchema>;
 
-export type DataQttSchema = z.infer<typeof DataQttSchema>;
+/* para passar no tsup */
+export type DataQttSchema = z.infer<typeof DataQttSchemaDef>;
+/* para passar no tsup */
 
 // TypeScript type
 export type OpCamioesEnvios = z.infer<typeof OpCamioesEnviosSchema>;
