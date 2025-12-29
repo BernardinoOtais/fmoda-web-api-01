@@ -212,6 +212,37 @@ model TipoContainer {
   Item                Item        @relation(fields: [idItem], references: [idItem], onUpdate: NoAction, map: "FK_TipoContainer_Item")
 }
 
+model Trace {
+  RowNumber       Int       @id(map: "PK__Trace__AAAC09D8B908E0FF") @default(autoincrement())
+  EventClass      Int?
+  TextData        String?   @enviosDb.NText
+  ApplicationName String?   @enviosDb.NVarChar(128)
+  NTUserName      String?   @enviosDb.NVarChar(128)
+  LoginName       String?   @enviosDb.NVarChar(128)
+  CPU             Int?
+  Reads           BigInt?
+  Writes          BigInt?
+  Duration        BigInt?
+  ClientProcessID Int?
+  SPID            Int?
+  StartTime       DateTime? @enviosDb.DateTime
+  EndTime         DateTime? @enviosDb.DateTime
+  BinaryData      Bytes?    @enviosDb.Image
+}
+
+model traceCorrec {
+  RowNumber       Int       @id(map: "PK__traceCor__AAAC09D8FA285FDA") @default(autoincrement())
+  EventClass      Int?
+  ApplicationName String?   @enviosDb.NVarChar(128)
+  NTUserName      String?   @enviosDb.NVarChar(128)
+  LoginName       String?   @enviosDb.NVarChar(128)
+  ClientProcessID Int?
+  TextData        String?   @enviosDb.NText
+  SPID            Int?
+  StartTime       DateTime? @enviosDb.DateTime
+  BinaryData      Bytes?    @enviosDb.Image
+}
+
 model Unidades {
   idUnidades       Int        @id(map: "PK_Unidades") @default(autoincrement())
   idItem           Int        @unique(map: "UQ_Unidades_Iditem")
