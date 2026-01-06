@@ -1,4 +1,5 @@
-import { prismaAuth, prisma } from "@repo/db/auth";
+import { prisma } from "@repo/db/auth";
+import { getUserDb } from "@repo/db/userweb";
 import { hashPassword, verifyPassword } from "@repo/encryption/argon2";
 import { type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -36,20 +37,7 @@ export const options = {
     username(),
     customSession(async ({ user, session }) => {
       //falta o apelido
-      const dadosUser = await prismaAuth.user.findUnique({
-        where: { id: user.id },
-        select: {
-          apelido: true,
-          userPapeis: {
-            select: { Papeis: { select: { descPapel: true } } },
-            orderBy: {
-              Papeis: {
-                descPapel: "asc",
-              },
-            },
-          },
-        },
-      });
+      const dadosUser = await getUserDb(user.id);
 
       const apelido = dadosUser?.apelido ?? "";
       const papeis = dadosUser?.userPapeis.map((p) => p.Papeis.descPapel) ?? [];

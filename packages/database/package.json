@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "exports": {
     "./auth": "./dist/prisma-servicos/auth/auth.js",
+    "./userweb": "./dist/auth-web/index.js",
     "./user": "./dist/user/user.js",
     "./administrador_user": "./dist/administrador/user/index.js",
     "./embarques": "./dist/embarques/raiz/index.js",

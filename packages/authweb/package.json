@@ -22,6 +22,6 @@
   "dependencies": {
     "@repo/db": "*",
     "@repo/encryption": "*",
-    "better-auth": "^1.4.9"
+    "better-auth": "^1.4.10"
   }
 }
