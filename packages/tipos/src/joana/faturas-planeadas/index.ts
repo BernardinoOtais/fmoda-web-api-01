@@ -51,6 +51,7 @@ const DetalheSchema = z.object({
   cliente: StringComTamanhoSchema(25, 1),
   tipo: z.string(),
   qtt: z.coerce.number(),
+  nPrecosDif: z.coerce.number(),
   u_total: z.coerce.number(),
   valorTotail: z.coerce.number(),
   fornecedores: z.array(FornecedoresSchema),

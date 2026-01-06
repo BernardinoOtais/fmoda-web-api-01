@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/tooltip";
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 import { formatMoneyPT } from "@/lib/my-utils";
+import { cn } from "@/lib/utils";
 
 type FaturacaoPlaneadaWebProps = {
   dadosPlaneados: FaturasPlaneadasDto;
@@ -175,7 +176,12 @@ const FaturacaoPlaneadaWeb = ({
                           </TableCell>
                           <TableCell
                             rowSpan={detalheSpan}
-                            className="border border-border text-center h-2 px-1 py-0 w-0"
+                            className={cn(
+                              "border text-center h-2 px-1 py-0 w-0",
+                              de.nPrecosDif !== 1
+                                ? "border-red-500 bg-red-500 text-white"
+                                : "border-gray-300 dark:border-gray-700"
+                            )}
                           >
                             {formatMoneyPT(de.u_total)}
                           </TableCell>
