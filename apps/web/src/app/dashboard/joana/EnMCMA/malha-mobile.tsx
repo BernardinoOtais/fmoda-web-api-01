@@ -10,22 +10,43 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 
 type MalhaMobileProps = {
   dados: MalhasEntradasMcMaDto[];
+  escondeOuMostra: (variables: { bostamp: string }) => void;
+  veEscondidas: boolean;
 };
-const MalhaMobile = ({ dados }: MalhaMobileProps) => {
-  console.log("cernas e coisas");
+const MalhaMobile = ({
+  dados,
+  escondeOuMostra,
+  veEscondidas,
+}: MalhaMobileProps) => {
   return (
     <>
       {dados.map((op) => (
         <Card key={op.obrano} className="m-1 py-1 gap-0 ">
           <CardContent>
             <div className="flex flex-col items-center justify-center  p-1 order-1">
-              <span>
-                Op: <span className="font-bold">{op.obrano}</span>
-              </span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span
+                    role="button"
+                    className=" cursor-pointer"
+                    onClick={() => escondeOuMostra({ bostamp: op.bostamp })}
+                  >
+                    Op: <span className="font-bold">{op.obrano}</span>
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{veEscondidas ? "_Mostra op_" : "_Esconde Op_"}</p>
+                </TooltipContent>
+              </Tooltip>
               <span>
                 Cliente: <span className="font-bold">{op.cliente}</span>
               </span>

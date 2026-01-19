@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { StringComTamanhoSchema } from "@/comuns";
+import { ChavePhcSchema, StringComTamanhoSchema } from "@/comuns";
 import { safeJsonArray } from "@/index";
 
 const MalhaSchema = z.object({
@@ -21,6 +21,7 @@ const DetalheMalhaSchema = z.object({
 const DetalhesMalhaSchema = z.array(DetalheMalhaSchema);
 
 export const MalhasEntradasMcMaSchema = z.object({
+  bostamp: ChavePhcSchema,
   obrano: z.coerce.number(),
   cliente: StringComTamanhoSchema(25, 1),
   design: StringComTamanhoSchema(60, 1),
@@ -35,4 +36,9 @@ export type MalhasEntradasMcMaDto = z.infer<typeof MalhasEntradasMcMaSchema>;
 
 export const OpSchema = z.object({
   op: z.number().nullable(),
+  veEscondidas: z.boolean().nullable(),
+});
+
+export const EscondeMostraSchema = z.object({
+  bostamp: ChavePhcSchema,
 });

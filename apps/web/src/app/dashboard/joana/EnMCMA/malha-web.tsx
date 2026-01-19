@@ -9,14 +9,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-client";
 
 type MalhaWebProps = {
   dados: MalhasEntradasMcMaDto[];
+  escondeOuMostra: (variables: { bostamp: string }) => void;
+  veEscondidas: boolean;
 };
 
-const MalhaWeb = ({ dados }: MalhaWebProps) => {
-  console.log("cernas e coisas");
+const MalhaWeb = ({ dados, escondeOuMostra, veEscondidas }: MalhaWebProps) => {
   return (
     <>
       <Table className=" border border-border rounded-md border-collapse">
@@ -60,9 +66,26 @@ const MalhaWeb = ({ dados }: MalhaWebProps) => {
                         rowSpan={op.spanOp}
                       >
                         <div className="flex flex-col items-center justify-center">
-                          <span>
-                            Op: <span className="font-bold">{op.obrano}</span>
-                          </span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span
+                                role="button"
+                                className=" cursor-pointer"
+                                onClick={() =>
+                                  escondeOuMostra({ bostamp: op.bostamp })
+                                }
+                              >
+                                Op:
+                                <span className="font-bold">{op.obrano}</span>
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>
+                                {veEscondidas ? "_Mostra op_" : "_Esconde Op_"}
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+
                           <span>
                             Cliente:
                             <span className="font-bold">{op.cliente}</span>
@@ -108,7 +131,7 @@ const MalhaWeb = ({ dados }: MalhaWebProps) => {
                     <TableCell className="border border-border  h-2 px-1 py-0 text-center">
                       {m.unidade}
                     </TableCell>
-                  </TableRow>
+                  </TableRow>,
                 );
                 opRowAdded = true;
                 deRowAdded = true;
