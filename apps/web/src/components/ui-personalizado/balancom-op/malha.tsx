@@ -25,7 +25,7 @@ type MalhaProps = { idBm: string; op: number };
 const Malha = ({ idBm, op }: MalhaProps) => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
-    trpc.qualidade_balancom_op.getBmDataViaId.queryOptions(idBm)
+    trpc.qualidade_balancom_op.getBmDataViaId.queryOptions(idBm),
   );
 
   const malhas = data?.BmMalhas;
@@ -87,7 +87,7 @@ const Malha = ({ idBm, op }: MalhaProps) => {
                     tipo: lote.tipo,
                     qtt: lote.qtt,
                     lote: lote.lote,
-                  }))
+                  })),
                 ) || [];
 
               const qtdeTotalLinha =
