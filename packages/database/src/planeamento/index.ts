@@ -4,12 +4,15 @@ import { getClientesBd } from "./get/get-clientes";
 import { getFornecedoresBd } from "./get/get-fornecedores";
 import { getOpAbertasDb } from "./get/get-op-abertas";
 import { getOpCamioesEnviosDb } from "./get/get-op-camioes-envios";
+import { getOpLotesDb } from "./get/get-op-lotes";
+import { getOpLotesDistDb } from "./get/get-op-lotes-dist";
 import { getPlaneamentoViaOrcamentoDb } from "./get/get-planeamento-via-orc";
 import { getPlaneamentosDb } from "./get/get-planeamentos";
 import { postDePlaneamentosDB } from "./post/post-de-palneamentos";
 import { postObsDb } from "./post/post-obs";
 import { upsertDataEValorDb } from "./upsert/upsert-data-e-qtt";
 import { upsertDescValorDb } from "./upsert/upsert-desc-valor";
+import { upsertOpLotesDb } from "./upsert/upsert-op-lotes";
 
 export {
   getOpAbertasDb,
@@ -24,4 +27,7 @@ export {
   upsertDescValorDb,
   upsertDataEValorDb,
   deleteDataEQttBd,
+  getOpLotesDb,
+  upsertOpLotesDb,
+  getOpLotesDistDb,
 };

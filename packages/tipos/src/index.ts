@@ -62,7 +62,7 @@ export const NumeroOuZero = z.preprocess(
           ? "Tem que inserrir números..."
           : "Formato errado...",
     })
-    .min(0, { message: "Qtde positiva..." })
+    .min(0, { message: "Qtde positiva..." }),
 );
 
 export {
@@ -103,8 +103,8 @@ export const DateSchema = z.coerce.date().pipe(
     {
       message:
         "Date must be between 1753-01-01 and 9999-12-31 (MSSQL datetime range)",
-    }
-  )
+    },
+  ),
 );
 
 export const safeJsonArray = <T extends z.ZodTypeAny>(schema: T) =>

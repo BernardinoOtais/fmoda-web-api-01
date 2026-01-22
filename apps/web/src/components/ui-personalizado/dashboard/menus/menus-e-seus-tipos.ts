@@ -9,7 +9,9 @@ import {
   Cog,
   Bug,
   ChessQueen,
+  Boxes,
 } from "lucide-react";
+import { boolean } from "zod";
 
 type IconType = React.FC<React.SVGProps<SVGSVGElement>>;
 
@@ -51,6 +53,7 @@ export const IconsMenus = {
   Cp: Cog,
   joana: Bug,
   fernanda: ChessQueen,
+  hm: Boxes,
 };
 
 export const MenusExistentes: MenusTodos = {
@@ -79,21 +82,15 @@ export const MenusExistentes: MenusTodos = {
     subMenu: true,
     subMenuItems: [
       {
-        nome: "N. Planeamento",
-        path: "/dashboard/planeamento?novo=true",
-        icon: PlaneIcon,
-        subMenu: false,
-      },
-      {
-        nome: "Fornecedores",
-        path: "/dashboard/planeamento/fornecedores",
-        icon: PlaneIcon,
-        subMenu: false,
-      },
-      {
         nome: "Op's Datas",
         path: "/dashboard/planeamento/opdatas",
         icon: PlaneIcon,
+        subMenu: false,
+      },
+      {
+        nome: "Op's Lotes",
+        path: "/dashboard/planeamento/op-lotes",
+        icon: IconsMenus.hm,
         subMenu: false,
       },
       {
@@ -206,3 +203,20 @@ export const MenusExistentes: MenusTodos = {
     ],
   },
 };
+
+/*
+
+      {
+        nome: "N. Planeamento",
+        path: "/dashboard/planeamento?novo=true",
+        icon: PlaneIcon,
+        subMenu: false,
+      },
+      {
+        nome: "Fornecedores",
+        path: "/dashboard/planeamento/fornecedores",
+        icon: PlaneIcon,
+        subMenu: false,
+      },
+      
+*/

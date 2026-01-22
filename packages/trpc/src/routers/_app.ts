@@ -11,6 +11,7 @@ import { joanaEstampadosEBordados } from "@/modules/server/joana/est-e-borda";
 import { joanaFaturacao } from "@/modules/server/joana/faturacao";
 import { joanaFaturacaoPlaneada } from "@/modules/server/joana/faturas-planeadas";
 import { planeamento } from "@/modules/server/planeamento";
+import { planeamentoLotes } from "@/modules/server/planeamento/lotes";
 import { qualidade_balancom_op_composicao } from "@/modules/server/qualidade/balanco-op-composicao";
 import { qualidade_balancom } from "@/modules/server/qualidade/balancom";
 import { qualidade_balancom_op } from "@/modules/server/qualidade/balancom-op";
@@ -32,6 +33,8 @@ export const appRouter = createTRPCRouter({
   qualidade_balancom_op_composicao,
 
   planeamento,
+
+  planeamentoLotes,
 
   fotosGeraisFmoda,
 

@@ -9,6 +9,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import { skipToken } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { TRPCError } from "@trpc/server";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
@@ -34,4 +35,5 @@ export {
   useQueryClient,
   superjson,
   TRPCError,
+  skipToken,
 };

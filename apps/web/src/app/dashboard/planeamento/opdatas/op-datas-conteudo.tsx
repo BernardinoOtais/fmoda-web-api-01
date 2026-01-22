@@ -124,7 +124,7 @@ const OpDatasConteudo = () => {
                           <TableCell className="border text-center w-16 font-semibold">
                             {d.quantidades.reduce(
                               (sum, item) => sum + item.qtt,
-                              0
+                              0,
                             )}
                           </TableCell>
                         </TableRow>
