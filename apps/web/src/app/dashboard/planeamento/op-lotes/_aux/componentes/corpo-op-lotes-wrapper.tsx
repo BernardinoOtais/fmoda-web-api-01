@@ -45,6 +45,7 @@ const CorpoOpLotesWrapper = ({
         op={op}
         numeroPecaCaixa={numeroPecaCaixa}
         qttTamanhosAJuntar={qttTamanhosAJuntar}
+        bostamp={bostamp}
       />
     </>
   );

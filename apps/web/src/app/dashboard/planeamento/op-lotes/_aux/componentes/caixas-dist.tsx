@@ -1,7 +1,8 @@
 import { skipToken, useQuery } from "@repo/trpc";
-import React, { Fragment } from "react";
 
-import { Button } from "@/components/ui/button";
+import NovoPack from "./novo-pack";
+import Packs from "./packs";
+
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -12,22 +13,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTRPC } from "@/trpc/client";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 type CaixasDistProps = {
   op: number;
   numeroPecaCaixa: number | "";
   qttTamanhosAJuntar: number | "";
+  bostamp: string;
 };
 const CaixasDist = ({
   op,
   numeroPecaCaixa,
   qttTamanhosAJuntar,
+  bostamp,
 }: CaixasDistProps) => {
   const trpc = useTRPC();
 
@@ -55,23 +52,36 @@ const CaixasDist = ({
           <Card key={p.ref} className="mx-auto">
             <CardContent>
               <CardTitle className="">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="w-full text-center px-4 py-2 hover:bg-muted/70 cursor-pointer"
-                      >
-                        {p.Pais}
-                      </Button>
-                    </TooltipTrigger>
-
-                    <TooltipContent>
-                      <span>Editar Packs</span>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                {numeroPecaCaixa !== "" && qttTamanhosAJuntar !== "" && (
+                  <NovoPack
+                    textoBotao={p.Pais}
+                    total={p.totalSingle}
+                    ref={p.ref}
+                    bostamp={bostamp}
+                    op={op}
+                    numeroPecaCaixa={numeroPecaCaixa}
+                    qttTamanhosAJuntar={qttTamanhosAJuntar}
+                  />
+                )}
               </CardTitle>
+
+              {p.packs.length !== 0 &&
+                numeroPecaCaixa !== "" &&
+                qttTamanhosAJuntar !== "" && (
+                  <Packs
+                    packs={p.packs}
+                    bostamp={bostamp}
+                    ref={p.ref}
+                    op={op}
+                    numeroPecaCaixa={numeroPecaCaixa}
+                    qttTamanhosAJuntar={qttTamanhosAJuntar}
+                  />
+                )}
+
+              <div className="w-full text-center">
+                <span className="font-semibold  ">Singles</span>
+              </div>
+
               <Table className="border border-border rounded-md border-collapse  mx-auto ">
                 <TableHeader className="bg-muted">
                   <TableRow>

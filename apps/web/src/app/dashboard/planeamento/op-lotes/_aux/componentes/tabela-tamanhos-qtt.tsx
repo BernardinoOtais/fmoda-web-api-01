@@ -17,7 +17,7 @@ type TabelaTamanhosQttProps = {
 const TabelaTamanhosQtt = ({ dados, dados2 }: TabelaTamanhosQttProps) => {
   if (dados2 && dados.length !== dados2.length) return <span>Erro...</span>;
   return (
-    <Table className="border border-border rounded-md border-collapse max-w-[500px] mx-auto ">
+    <Table className="border border-border rounded-md border-collapse max-w-125 mx-auto ">
       <TableHeader className="bg-muted">
         <TableRow>
           {dados2 && (
@@ -30,7 +30,7 @@ const TabelaTamanhosQtt = ({ dados, dados2 }: TabelaTamanhosQttProps) => {
               key={p.tam}
               className="border border-border text-center min-w-12 max-w-25 h-7 "
             >
-              {p.tam}
+              {p.tam.split(" - ")[0]}
             </TableHead>
           ))}
           <TableHead className="border border-border text-center font-semibold min-w-12 max-w-25 h-7 ">
@@ -50,7 +50,7 @@ const TabelaTamanhosQtt = ({ dados, dados2 }: TabelaTamanhosQttProps) => {
               key={p.tam}
               className="border border-border text-center min-w-12 max-w-25 h-2 p-0"
             >
-              {p.qtt}
+              {p.qtt !== 0 && p.qtt}
             </TableCell>
           ))}
 
@@ -68,7 +68,7 @@ const TabelaTamanhosQtt = ({ dados, dados2 }: TabelaTamanhosQttProps) => {
                 key={p.tam}
                 className="border border-border text-center min-w-12 max-w-25 h-2 p-0"
               >
-                {p.qtt}
+                {p.qtt !== 0 && p.qtt}
               </TableCell>
             ))}
 

@@ -5,7 +5,7 @@ import {
   NumeroInteiroMaiorQueZero,
   StringComTamanhoSchema,
 } from "@/comuns";
-import { safeJsonArray } from "@/index";
+import { NumeroOuZero, safeJsonArray } from "@/index";
 
 const QuantidadeSchema = z.object({
   tam: StringComTamanhoSchema(50, 1),
@@ -13,6 +13,8 @@ const QuantidadeSchema = z.object({
   qtt: z.coerce.number(),
 });
 const QuantidadesSchema = z.array(QuantidadeSchema);
+
+export type QuantidadesDto = z.infer<typeof QuantidadesSchema>;
 
 const DistPorCaixaSchema = z
   .object({
@@ -40,8 +42,8 @@ export const OPschema = z.object({
 
 export const PostdistPorCaixaSchema = z.object({
   bostamp: ChavePhcSchema,
-  numeroPecaCaixa: z.coerce.number(),
-  qttTamanhosAJuntar: z.coerce.number(),
+  numeroPecaCaixa: z.coerce.number().positive(),
+  qttTamanhosAJuntar: z.coerce.number().positive(),
 });
 
 export type DistPorCaixaDto = z.infer<typeof DistPorCaixaSchema>;
@@ -53,6 +55,16 @@ const CaixaSchema = z.object({
 
 const CaixasSchema = z.array(CaixaSchema);
 
+const PackSchema = z.object({
+  idLote: z.coerce.number(),
+  nLotesCaixa: z.coerce.number(),
+  nLotesTotal: z.coerce.number(),
+  quantidades: QuantidadesSchema,
+});
+
+const PacksSchema = z.array(PackSchema);
+export type PacksDto = z.infer<typeof PacksSchema>;
+
 const DistPorCaixaDistSchema = z.object({
   ref: StringComTamanhoSchema(19, 1),
   Pais: StringComTamanhoSchema(500, 3),
@@ -62,6 +74,7 @@ const DistPorCaixaDistSchema = z.object({
       ordem: z.coerce.number(),
     }),
   ),
+  packs: PacksSchema,
   singles: CaixasSchema,
   totalSingle: QuantidadesSchema,
 });
@@ -83,3 +96,34 @@ export const GetOpLotesDistSchema = z.object({
   CaseCapacity: NumeroInteiroMaiorQueZero,
   MaxSizesPerCase: NumeroInteiroMaiorQueZero,
 });
+
+export const QuantidadeParaPostSchema = z.array(
+  z.object({
+    tam: z.string(),
+    ordem: z.number().int(),
+    qtt: z.number().int().nonnegative(),
+  }),
+);
+
+export const PostLoteSchema = z.object({
+  bostamp: ChavePhcSchema,
+  ref: StringComTamanhoSchema(19, 1),
+  nLotesCaixa: z.number().int().nonnegative(),
+  nLotesTotal: z.number().int().positive(),
+  lotes: QuantidadeParaPostSchema,
+});
+
+export type PostLoteDto = z.infer<typeof PostLoteSchema>;
+
+export const DeleteLotesSchema = z.object({
+  idLote: NumeroInteiroMaiorQueZero,
+  bostamp: ChavePhcSchema,
+  ref: StringComTamanhoSchema(19, 1),
+});
+
+/*
+		@idLote int,
+		@bostamp char(25),
+		@ref char(18),
+		@userName NVARCHAR(50) = NULL 
+*/
