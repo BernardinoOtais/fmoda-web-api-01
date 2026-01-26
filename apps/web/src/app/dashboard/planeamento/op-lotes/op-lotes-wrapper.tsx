@@ -13,7 +13,10 @@ import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-cl
 import useDebounce from "@/hooks/use-debounce";
 import { useTRPC } from "@/trpc/client";
 
-const OpLotesWrapper = () => {
+type OpLotesWrapperProps = {
+  user: string | undefined;
+};
+const OpLotesWrapper = ({ user }: OpLotesWrapperProps) => {
   const trpc = useTRPC();
 
   const [opI, setOp] = useState("");
@@ -86,6 +89,7 @@ const OpLotesWrapper = () => {
                     bostamp={data.bostamp}
                     distPorCaixa={data.distPorCaixa}
                     op={parseInt(debouncedOp)}
+                    user={user}
                   />
                 </div>
               </>

@@ -47,6 +47,7 @@ type NovoPackProps = {
   op: number;
   numeroPecaCaixa: number;
   qttTamanhosAJuntar: number;
+  user: string | undefined;
 };
 
 const NovoPack = ({
@@ -57,7 +58,9 @@ const NovoPack = ({
   op,
   numeroPecaCaixa,
   qttTamanhosAJuntar,
+  user,
 }: NovoPackProps) => {
+  const mostraBotao = user === "Bernardino" || user === "Beatriz";
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -120,8 +123,7 @@ const NovoPack = ({
   );
 
   const onSubmit = (data: PostLoteDto) => {
-    console.log("SUBMIT:", data);
-    mutate(data);
+    if (mostraBotao) mutate(data);
     setDialogOpen(false);
   };
 

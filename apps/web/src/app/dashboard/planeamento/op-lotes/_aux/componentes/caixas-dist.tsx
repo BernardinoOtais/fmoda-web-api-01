@@ -19,12 +19,14 @@ type CaixasDistProps = {
   numeroPecaCaixa: number | "";
   qttTamanhosAJuntar: number | "";
   bostamp: string;
+  user: string | undefined;
 };
 const CaixasDist = ({
   op,
   numeroPecaCaixa,
   qttTamanhosAJuntar,
   bostamp,
+  user,
 }: CaixasDistProps) => {
   const trpc = useTRPC();
 
@@ -61,6 +63,7 @@ const CaixasDist = ({
                     op={op}
                     numeroPecaCaixa={numeroPecaCaixa}
                     qttTamanhosAJuntar={qttTamanhosAJuntar}
+                    user={user}
                   />
                 )}
               </CardTitle>
@@ -75,6 +78,7 @@ const CaixasDist = ({
                     op={op}
                     numeroPecaCaixa={numeroPecaCaixa}
                     qttTamanhosAJuntar={qttTamanhosAJuntar}
+                    user={user}
                   />
                 )}
 

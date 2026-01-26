@@ -15,6 +15,7 @@ type PacksProps = {
   op: number;
   numeroPecaCaixa: number;
   qttTamanhosAJuntar: number;
+  user: string | undefined;
 };
 const Packs = ({
   packs,
@@ -23,10 +24,12 @@ const Packs = ({
   op,
   numeroPecaCaixa,
   qttTamanhosAJuntar,
+  user,
 }: PacksProps) => {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 
+  const mostraBotao = user === "Bernardino" || user === "Beatriz";
   const { mutate } = useMutation(
     trpc.planeamentoLotes.delteOpLotes.mutationOptions({
       onSuccess: async () => {
@@ -53,9 +56,10 @@ const Packs = ({
         const qtt = p.quantidades.reduce((acc, q) => acc + q.qtt, 0);
         return (
           <div key={p.idLote} className="flex flex-col">
-            <Button
-              variant="ghost"
-              className="
+            {mostraBotao && (
+              <Button
+                variant="ghost"
+                className="
                 w-28
                 relative
                 cursor-pointer
@@ -63,14 +67,15 @@ const Packs = ({
                 hover:bg-red-50
                 transition-colors
                 group"
-              onClick={() => mutate({ idLote: p.idLote, bostamp, ref })}
-            >
-              <span className="group-hover:hidden">{`Pack ${id + 1}`}</span>
+                onClick={() => mutate({ idLote: p.idLote, bostamp, ref })}
+              >
+                <span className="group-hover:hidden">{`Pack ${id + 1}`}</span>
 
-              <span className="hidden group-hover:inline text-red-600">
-                {`Apaga Pack ${id + 1}`}
-              </span>
-            </Button>
+                <span className="hidden group-hover:inline text-red-600">
+                  {`Apaga Pack ${id + 1}`}
+                </span>
+              </Button>
+            )}
 
             <span>{`${p.nLotesTotal} Lotes, cada lote ${qtt} peças, total peças = ${qtt * p.nLotesTotal}`}</span>
             {p.nLotesCaixa !== 0 && (

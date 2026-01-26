@@ -3,9 +3,9 @@ import { PAPEL_JOANA } from "@repo/tipos/consts";
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import React, { Suspense } from "react";
 
-import { getQueryClient, trpc } from "@/trpc/server";
 import FaturacaoResumo from "@/components/ui-personalizado/faturacao/faturacao-resumo";
 import FaturacaoPlaneadaResumo from "@/components/ui-personalizado/faturacao-planeada/faturacao-planeada-resumo";
+import { getQueryClient, trpc } from "@/trpc/server";
 
 const Joana = async () => {
   await authorizePapelOrRedirect(PAPEL_JOANA);
@@ -30,7 +30,7 @@ const Joana = async () => {
       dataIni: dataSemanaIni,
       dataFini: dataSemanaFini,
       op: null,
-    })
+    }),
   );
 
   // First day of current month
@@ -44,7 +44,7 @@ const Joana = async () => {
       dataIni: dataMesIni,
       dataFini: dataMesFini,
       fornecedor: null,
-    })
+    }),
   );
 
   let saudacao = "Boa noite, Joana 🌙"; // valor por defeito

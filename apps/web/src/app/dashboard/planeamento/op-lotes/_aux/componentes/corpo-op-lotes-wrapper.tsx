@@ -10,12 +10,14 @@ type CorpoOpLotesWrapperProps = {
   distPorCaixa: DistPorCaixaDto;
   bostamp: string;
   op: number;
+  user: string | undefined;
 };
 
 const CorpoOpLotesWrapper = ({
   distPorCaixa,
   bostamp,
   op,
+  user,
 }: CorpoOpLotesWrapperProps) => {
   const [numeroPecaCaixa, setNumeroPecaCaixa] = useState<number | "">(
     distPorCaixa?.numeroPecaCaixa ?? "",
@@ -46,6 +48,7 @@ const CorpoOpLotesWrapper = ({
         numeroPecaCaixa={numeroPecaCaixa}
         qttTamanhosAJuntar={qttTamanhosAJuntar}
         bostamp={bostamp}
+        user={user}
       />
     </>
   );
