@@ -127,29 +127,46 @@ export enum ErroImportarPedido {
 
 //zod type
 
-const DetalhesPecaSchema = z.discriminatedUnion("tipo", [
-  z.object({
-    tipo: z.literal("simples"),
-    detalhesPeca: z.object({
-      preco: FloatSchema,
-      nPedido: StringComTamanhoSchema(25, 1),
-      modelo: StringComTamanhoSchema(25, 1),
-      descModelo: StringComTamanhoSchema(120, 1),
-      temporada: StringComTamanhoSchema(10, 1),
-      dataEntrega: DateSchema,
-      pedido: ResultadoPedidoSchema,
-    }),
-  }),
-  z.object({
-    tipo: z.literal("parcial"),
-    detalhesPeca: z.object({
-      nPedido: StringComTamanhoSchema(25, 1),
-      modelo: StringComTamanhoSchema(25, 1),
-      descModelo: StringComTamanhoSchema(120, 1),
-      temporada: StringComTamanhoSchema(10, 1),
-      dataEntrega: DateSchema,
-      pedido: ResultadoPedidoSchema,
-      parciais: z.array(DadosParciaisSchema),
-    }),
-  }),
-]);
+//Hm
+
+export enum ErroImportarPedidoHm {
+  ERRO_HM_CABECALHOS_DIFERENTES = "Cabeçalhos diferentes",
+  ERRO_HH_CABECALHO_TEM_QUE_TER_NOVE_LINHAS = "Cabeçalho tem que tem 9 linhas...",
+}
+
+export type TipoCamposDinamicos = Record<string, string>;
+export type Campos = {
+  nome: string;
+  key: string;
+};
+
+export const campoCabecalhoHm: Campos[] = [
+  { nome: "Order No:", key: "orderNo" },
+  { nome: "Product No:", key: "prodNo" },
+  { nome: "PT Prod No:", key: "ptProdNo" },
+  { nome: "Product Name:", key: "prodName" },
+  { nome: "Date of Order:", key: "dateOfOrder" },
+  { nome: "Product Description:", key: "prodDesc" },
+  { nome: "Supplier Code:", key: "supplierCode" },
+  { nome: "Season:", key: "season" },
+  { nome: "Supplier Name:", key: "supplierName" },
+  { nome: "Customs Customer Group:", key: "customsCustomerGroup" },
+  { nome: "Option No:", key: "optionNo" },
+  { nome: "Type of Construction:", key: "typeOfConstroction" },
+  { nome: "Development No:", key: "developmentNo" },
+];
+
+export const campoArticleHm: Campos[] = [
+  { nome: "Article No:", key: "artNo" },
+  { nome: "H&M Colour Code:", key: "hmColourCod" },
+  { nome: "Colour Name:", key: "colourName" },
+  { nome: "Description:", key: "description" },
+  { nome: "PT Article Number:", key: "ptArtNumber" },
+  { nome: "Option No:", key: "optionNo" },
+];
+
+export const campoTotaisAssortments: Campos[] = [
+  { nome: "Quantity:", key: "nPecasSortido" },
+  { nome: "No of Asst:", key: "nSortidos" },
+  { nome: "Pcs:", key: "ttPecas" },
+];

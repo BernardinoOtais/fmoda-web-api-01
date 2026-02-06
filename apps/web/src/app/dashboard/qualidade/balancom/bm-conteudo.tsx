@@ -37,12 +37,12 @@ const BmConteudo = ({
   const { fechado: valorFechado } = dadosIniciais;
 
   const { data } = useSuspenseQuery(
-    trpc.qualidadeBalancoM.getBms.queryOptions(dadosIniciais)
+    trpc.qualidadeBalancoM.getBms.queryOptions(dadosIniciais),
   );
 
   const heroItemCount = 0;
   const totalPages = Math.ceil(
-    (data.tamanhoLista - heroItemCount) / intensPorPagina
+    (data.tamanhoLista - heroItemCount) / intensPorPagina,
   );
 
   const tamanhoLista = data.tamanhoLista;
@@ -108,7 +108,7 @@ const BmConteudo = ({
                           totalQtt: 0,
                           totalPesoBruto: 0,
                           totalPesoLiquido: 0,
-                        }
+                        },
                       );
 
                 const dadosParaConsumos: BmDadosParaConsumo =

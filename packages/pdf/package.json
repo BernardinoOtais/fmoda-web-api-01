@@ -2,7 +2,8 @@
   "name": "@repo/pdf",
   "version": "0.0.0",
   "exports": {
-    ".": "./dist/index.js"
+    "./inditex": "./dist/inditex/index.js",
+    "./hm": "./dist/hm/index.js"
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
@@ -10,8 +11,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "pdf2json": "^3.1.4",
-    "pdfreader": "^3.0.7",
-    "@repo/tipos": "*"
+    "@repo/tipos": "*",
+    "pdf2json": "^4.0.2"
   }
 }

@@ -13,16 +13,17 @@ import {
 } from "@repo/tipos/pdf";
 
 import {
-  parsePdf2Json,
-  transformaTextoEmNumero,
-  extraiTodasEntregasPaciais,
-  extraiPorcoesNaoInclusive,
   extraiPorcoesInclusive,
-  groupItemsByYCoordinate,
+  extraiPorcoesNaoInclusive,
+  extraiTodasEntregasPaciais,
   getValuesBeneathOptimized,
+  groupItemsByYCoordinate,
+  parsePdf2Json,
+  safeDecode,
+  transformaTextoEmNumero,
   trataPedidoPrincipal,
   tratoPedidosParciais,
-} from "./aux";
+} from "../aux/aux";
 
 export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
   const pdfRaw: Pdf2JsonText[] = await parsePdf2Json(buffer);
@@ -30,24 +31,30 @@ export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
   const decoded: PdfText[] = pdfRaw.map((t) => ({
     x: t.x,
     y: t.y,
-    text: decodeURIComponent(t.R.map((r) => r.T ?? "").join(" ")),
+    text: safeDecode(t.R.map((r) => r.T ?? "").join(" ")),
   }));
+
+  //console.log("decoded: ", decoded);
 
   const cabecalhoPedido = extraiPorcoesInclusive(
     decoded,
     NPEDIDO,
-    TOTAL_PEDIDO
+    TOTAL_PEDIDO,
   );
+
+  //console.log("cabecalhoPedido :", cabecalhoPedido);
 
   if (cabecalhoPedido.length === 0)
     return ErroImportarPedido.ERRO_NO_CABECALHO_LISTA_VAZIA;
 
   const cabecalhoDados = getValuesBeneathOptimized(cabecalhoPedido);
 
+  //console.log("cabecalhoDados :", cabecalhoDados);
+
   const pedidoPrincipal = extraiPorcoesNaoInclusive(
     decoded,
     TOTAL_PEDIDO,
-    UNID_LOTE
+    UNID_LOTE,
   );
 
   const pedidoPrincipalAgrupado = groupItemsByYCoordinate(pedidoPrincipal);
@@ -87,7 +94,7 @@ export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
     decoded,
     PEDIDO,
     PRECIO_COSTE,
-    ENTREGAS_PARCIALES
+    ENTREGAS_PARCIALES,
   );
 
   const tamanhoPedidosParciais = entregasParciais.length;

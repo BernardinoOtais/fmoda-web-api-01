@@ -1,5 +1,5 @@
 import { getSessionFromRequestValidaPapeis } from "@repo/authweb/session";
-import { transformaPedidoEmJson } from "@repo/pdf/inditex";
+import { tranformaPedidoHmEmJson } from "@repo/pdf/hm";
 import { PAPEL_ROTA_ADMINISTRADOR } from "@repo/tipos/consts";
 import { NextResponse } from "next/server";
 
@@ -17,15 +17,16 @@ export async function POST(request: Request) {
 
     buffer = Buffer.from(await file.arrayBuffer());
 
-    const transformaPedidoEmJsonRecebido = await transformaPedidoEmJson(buffer);
+    const tranformaPedidoHmEmJsonRecebido =
+      await tranformaPedidoHmEmJson(buffer);
 
-    if (typeof transformaPedidoEmJsonRecebido === "string")
+    if (typeof tranformaPedidoHmEmJsonRecebido === "string")
       return NextResponse.json(
-        { error: transformaPedidoEmJsonRecebido },
+        { error: tranformaPedidoHmEmJsonRecebido },
         { status: 400 },
       );
     return NextResponse.json({
-      encomenda: transformaPedidoEmJsonRecebido,
+      encomenda: tranformaPedidoHmEmJsonRecebido,
     });
   } catch (error) {
     console.error("PDF2JSON parse error:", error);

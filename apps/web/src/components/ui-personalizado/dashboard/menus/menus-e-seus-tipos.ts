@@ -94,8 +94,14 @@ export const MenusExistentes: MenusTodos = {
         subMenu: false,
       },
       {
-        nome: "Imp. PDF",
-        path: "/dashboard/planeamento/pdf",
+        nome: "Imp. PDF Inditex",
+        path: "/dashboard/planeamento/pdf-inditex",
+        icon: GitPullRequestCreate,
+        subMenu: false,
+      },
+      {
+        nome: "Imp. PDF HM",
+        path: "/dashboard/planeamento/pdf-hm",
         icon: GitPullRequestCreate,
         subMenu: false,
       },
@@ -203,20 +209,3 @@ export const MenusExistentes: MenusTodos = {
     ],
   },
 };
-
-/*
-
-      {
-        nome: "N. Planeamento",
-        path: "/dashboard/planeamento?novo=true",
-        icon: PlaneIcon,
-        subMenu: false,
-      },
-      {
-        nome: "Fornecedores",
-        path: "/dashboard/planeamento/fornecedores",
-        icon: PlaneIcon,
-        subMenu: false,
-      },
-      
-*/

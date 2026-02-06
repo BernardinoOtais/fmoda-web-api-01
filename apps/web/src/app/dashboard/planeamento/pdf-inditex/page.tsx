@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,8 +14,8 @@ type PdfParseResult = {
 
 export default function ImportarPdf() {
   const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Mutation to call your Next.js API route
   const { mutate, isPending, isError, data, error } = useMutation<
     PdfParseResult,
     Error,
@@ -32,10 +32,10 @@ export default function ImportarPdf() {
 
       if (!res.ok) {
         const json = await res.json();
-        throw new Error(json.error || "Failed to parse PDF");
+        throw new Error(json.error || "Falha ao importar PDF");
       }
 
-      return res.json() as Promise<PdfParseResult>;
+      return res.json();
     },
   });
 
@@ -44,30 +44,49 @@ export default function ImportarPdf() {
     if (!file) return;
     mutate(file);
   };
-  console.log(JSON.stringify(data, null, 2));
+
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
-      {/* Upload Card */}
       <Card>
         <CardHeader>
           <CardTitle>Upload PDF</CardTitle>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+            {/* Hidden input */}
             <Input
+              ref={fileInputRef}
               type="file"
               accept=".pdf"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              className="hidden"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             />
+
+            {/* Custom trigger */}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              {file ? file.name : "Selecionar PDF"}
+            </Button>
+
+            {/* Submit */}
             <Button type="submit" disabled={!file || isPending}>
-              {isPending ? "Parsing..." : "Upload & Parse PDF"}
+              {isPending ? "Importar..." : "Upload & importar PDF"}
             </Button>
           </form>
+
           {isError && <p className="text-red-500 mt-2">{error?.message}</p>}
         </CardContent>
       </Card>
 
-      <div>{JSON.stringify(data, null, 2)}</div>
+      {data && (
+        <pre className="rounded-md bg-muted p-4 text-sm overflow-auto">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      )}
     </div>
   );
 }

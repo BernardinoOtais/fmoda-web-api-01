@@ -12,6 +12,19 @@ import {
   Tamanhos,
 } from "@repo/tipos/pdf";
 
+export const safeDecode = (text: string): string => {
+  try {
+    return decodeURIComponent(text);
+  } catch {
+    // Try to fix common issues before giving up
+    try {
+      return decodeURIComponent(text.replace(/%(?![0-9A-Fa-f]{2})/g, "%25"));
+    } catch {
+      return text;
+    }
+  }
+};
+
 export async function parsePdf2Json(buffer: Buffer): Promise<Pdf2JsonText[]> {
   const { default: PDFParser } = await import("pdf2json");
   const pdfParser: InstanceType<typeof PDFParser> = new PDFParser();
@@ -45,8 +58,14 @@ export async function parsePdf2Json(buffer: Buffer): Promise<Pdf2JsonText[]> {
     pdfParser.parseBuffer(buffer);
   });
 
-  const resultado = pdfData.Pages.flatMap((page) => page.Texts ?? []);
-
+  const resultado = pdfData.Pages.flatMap((page) =>
+    (page.Texts ?? []).map((text) => ({
+      ...text,
+      R: text.R.map((r) => ({
+        T: safeDecode(r.T),
+      })),
+    })),
+  );
   return resultado;
 }
 
@@ -54,22 +73,22 @@ export const extraiTodasEntregasPaciais = (
   data: PdfText[],
   textoInicial: string,
   textoFinal: string,
-  inicio: string
+  inicio: string,
 ): PdfText[][] => {
   const sections: PdfText[][] = [];
 
   let currentStart = data.findIndex((t) =>
-    t.text.toUpperCase().includes(inicio)
+    t.text.toUpperCase().includes(inicio),
   );
   if (currentStart === -1) return [];
 
   currentStart = data.findIndex(
-    (t, i) => i > currentStart && t.text.toUpperCase().includes(textoInicial)
+    (t, i) => i > currentStart && t.text.toUpperCase().includes(textoInicial),
   );
 
   while (currentStart !== -1) {
     const endIndex = data.findIndex(
-      (t, i) => i > currentStart && t.text.toUpperCase().includes(textoFinal)
+      (t, i) => i > currentStart && t.text.toUpperCase().includes(textoFinal),
     );
     if (endIndex === -1) break;
 
@@ -80,7 +99,7 @@ export const extraiTodasEntregasPaciais = (
     sections.push(section);
 
     currentStart = data.findIndex(
-      (t, i) => i > endIndex && t.text.toUpperCase().includes(textoInicial)
+      (t, i) => i > endIndex && t.text.toUpperCase().includes(textoInicial),
     );
   }
 
@@ -90,15 +109,16 @@ export const extraiTodasEntregasPaciais = (
 export const extraiPorcoesNaoInclusive = (
   data: PdfText[],
   textoInicial: string,
-  textoFinal: string
+  textoFinal: string,
 ): PdfText[] => {
   const startIndex = data.findIndex((t) =>
-    t.text.toUpperCase().includes(textoInicial)
+    t.text.toUpperCase().includes(textoInicial),
   );
   const endIndex = data.findIndex((t) =>
-    t.text.toUpperCase().includes(textoFinal)
+    t.text.toUpperCase().includes(textoFinal),
   );
 
+  //console.log(startIndex, endIndex, textoInicial, textoFinal);
   if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex + 1) {
     return [];
   }
@@ -109,18 +129,18 @@ export const extraiPorcoesInclusive = (
   data: PdfText[],
   textoInicial: string,
   textoFinal: string,
-  contem: boolean = false
+  contem: boolean = false,
 ): PdfText[] => {
   const normalize = (s: string) => s.trim().toUpperCase();
   const contains = (a: string, b: string) => a.includes(b);
   const textoFinalUpper = normalize(textoFinal);
   const startIndex = data.findIndex((t) =>
-    t.text.toUpperCase().includes(textoInicial)
+    t.text.toUpperCase().includes(textoInicial),
   );
   const endIndex = data.findIndex((t) =>
     contem
       ? contains(normalize(t.text), textoFinalUpper)
-      : t.text.toUpperCase().includes(textoFinal)
+      : t.text.toUpperCase().includes(textoFinal),
   );
 
   if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
@@ -129,9 +149,34 @@ export const extraiPorcoesInclusive = (
   return data.slice(startIndex, endIndex + 1);
 };
 
+export const extraiPorcoesNaoInclusiveProcuraSegundoApartirDoPrimeiro = (
+  data: PdfText[],
+  textoInicial: string,
+  textoFinal: string,
+): PdfText[] => {
+  const startIndex = data.findIndex((t) =>
+    t.text.toUpperCase().includes(textoInicial),
+  );
+
+  if (startIndex === -1) return [];
+
+  // search for end AFTER startIndex
+  const relativeEndIndex = data
+    .slice(startIndex + 1)
+    .findIndex((t) => t.text.toUpperCase().includes(textoFinal));
+
+  if (relativeEndIndex === -1) return [];
+
+  const endIndex = startIndex + 1 + relativeEndIndex;
+
+  if (endIndex <= startIndex + 1) return [];
+
+  return data.slice(startIndex + 1, endIndex);
+};
+
 export const groupItemsByYCoordinate = <T extends { y: number }>(
   items: T[],
-  tolerance = 0.2
+  tolerance = 0.2,
 ): Record<number, T[]> => {
   const rowsMap: Record<number, T[]> = {};
 
@@ -154,7 +199,7 @@ export const groupItemsByYCoordinate = <T extends { y: number }>(
 
 export const transformaTextoEmNumero = (
   n?: string,
-  tipo: "int" | "float" = "int"
+  tipo: "int" | "float" = "int",
 ): number | null => {
   if (!n) return null;
   const cleaned = n.replace(/\./g, "").replace(",", ".");
@@ -165,7 +210,7 @@ export const transformaTextoEmNumero = (
 export const trataLinhasQttPorTamanho = (
   tamanhoGradeDeTamanhos: number,
   linha: PdfText[],
-  tamanhos: Tamanhos[]
+  tamanhos: Tamanhos[],
 ) => {
   const qtts: CorQtts[] = new Array(tamanhoGradeDeTamanhos);
   for (let i = 0; i < tamanhoGradeDeTamanhos; i++) {
@@ -180,7 +225,7 @@ export const trataLinhasQttPorTamanho = (
 
 export const getValuesBeneathOptimized = (
   data: PdfText[],
-  tolerance = 0.2
+  tolerance = 0.2,
 ): PedidoResult => {
   const keywords = LISTAVALORES;
   const result = {} as PedidoResult;
@@ -199,7 +244,7 @@ export const getValuesBeneathOptimized = (
     const upperKeyword = keyword.toUpperCase();
 
     const header = data.find((t) =>
-      t.text.toUpperCase().includes(upperKeyword)
+      t.text.toUpperCase().includes(upperKeyword),
     );
 
     if (!header) {
@@ -239,11 +284,12 @@ export const getValuesBeneathOptimized = (
 };
 
 export const trataPedidoPrincipal = (
-  dados: Record<number, PdfText[]>
+  dados: Record<number, PdfText[]>,
 ): ErroImportarPedido | ResultadoPedido => {
   const keys = Object.keys(dados);
   const qttLinhas = keys.length;
 
+  //console.log(dados);
   if (qttLinhas < 3) return ErroImportarPedido.ERRO_TEM_QUE_TER_MAIS_3_LINHAS;
 
   keys.sort((a, b) => Number(a) - Number(b));
@@ -303,13 +349,13 @@ export const trataPedidoPrincipal = (
   const qtts = trataLinhasQttPorTamanho(
     tamanhoGradeDeTamanhos,
     ultimaLinha,
-    tamanhos
+    tamanhos,
   );
 
   if (typeof qtts === "string") return qtts;
 
   const totalTotal = transformaTextoEmNumero(
-    ultimaLinha[ultimaLinha.length - 1]?.text
+    ultimaLinha[ultimaLinha.length - 1]?.text,
   );
 
   if (totalTotal === null) return ErroImportarPedido.ERRO_TOTAL_GERAL_INVALIDO;
@@ -341,7 +387,7 @@ export const tratoPedidosParciais = (dados: Record<number, PdfText[]>) => {
 
   const selectedKeys = keys.slice(3, qttLinhas - 1);
   const result: Record<number, PdfText[]> = Object.fromEntries(
-    selectedKeys.map((k) => [Number(k), dados[Number(k)]])
+    selectedKeys.map((k) => [Number(k), dados[Number(k)]]),
   ) as Record<number, PdfText[]>;
 
   if (!result || result === undefined)
@@ -378,3 +424,77 @@ function parseDDMMYYYY(dateStr: string | undefined): Date | undefined {
 
   return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
 }
+
+//HM
+
+export const extraiPorcoessEntreDuasStrings = (
+  data: PdfText[],
+  textoInicial: string,
+  textoFinal: string,
+): PdfText[][] => {
+  const normalize = (s: string) => s.trim().toUpperCase();
+
+  const inicio = normalize(textoInicial);
+  const fim = normalize(textoFinal);
+
+  const resultado: PdfText[][] = [];
+
+  let i = 0;
+
+  while (i < data.length) {
+    const startItem = data[i];
+    if (!startItem) break;
+
+    // find start
+    if (
+      //!normalize(startItem.text).includes(inicio)
+      normalize(startItem.text) !== inicio
+    ) {
+      i++;
+      continue;
+    }
+
+    const startIndex = i;
+    let endIndex = -1;
+
+    // find end AFTER start
+    for (let j = i; j < data.length; j++) {
+      const item = data[j];
+      if (!item) break;
+
+      const texto = normalize(item.text);
+
+      const match = texto === fim;
+
+      if (match) {
+        endIndex = j;
+        break;
+      }
+    }
+
+    if (endIndex !== -1) {
+      resultado.push(data.slice(startIndex, endIndex + 1));
+      i = endIndex + 1; // move past this block
+    } else {
+      break; // no closing match → stop
+    }
+  }
+
+  return resultado;
+};
+
+export const seTodasIguaisRetornaAPrimeira = (
+  listas: PdfText[][],
+): PdfText[] | null => {
+  if (listas.length === 0 || listas[0] === undefined) return null;
+
+  const base = JSON.stringify(listas[0]);
+
+  for (let i = 1; i < listas.length; i++) {
+    if (JSON.stringify(listas[i]) !== base) {
+      return null;
+    }
+  }
+
+  return listas[0];
+};
