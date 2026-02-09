@@ -93,6 +93,8 @@ export const dadosCorpoHm = (dadosPaises: PdfText[][]) => {
     );
     const assortment = extractSizesAndQuantities(assortmentDados);
 
+    //console.log("assortment :", assortment);
+
     const totaisAssortment = extraiPorcoesInclusive(
       p,
       "Quantity:".toUpperCase(),
@@ -117,6 +119,8 @@ export const dadosCorpoHm = (dadosPaises: PdfText[][]) => {
       );
 
     const singles = extractSizesAndQuantities(singleDados);
+
+    //console.log("singles :", singles);
 
     const totalSingle =
       extraiPorcoesNaoInclusiveProcuraSegundoApartirDoPrimeiro(
@@ -276,6 +280,25 @@ function extractSizesAndQuantities(items: PdfText[]): SizeQuantity[] {
     if (!lines.has(lineY)) lines.set(lineY, []);
     lines.get(lineY)!.push(item);
   });
+  //console.log("items ;", items);
+
+  /*
+[
+  { x: 1.8130000000000002, y: 31.397, text: '92 (92)*' },
+  { x: 9.801, y: 31.397, text: '672' },
+  { x: 1.8130000000000002, y: 32.141, text: '98/104 (98/104)*' },
+  { x: 9.436, y: 32.141, text: '1 608' },
+  { x: 1.8130000000000002, y: 32.884, text: '1' },
+  { x: 2.023, y: 32.884, text: '10/1' },
+  { x: 2.842, y: 32.884, text: '16 (1' },
+  { x: 3.8070000000000004, y: 32.884, text: '10/1' },
+  { x: 4.626, y: 32.884, text: '16)*' },
+  { x: 9.436, y: 32.884, text: '1 741' },
+  { x: 1.8130000000000002, y: 33.628, text: '122/128 (122/128)*' },
+  { x: 9.436, y: 33.628, text: '1 805' },
+  { x: 1.8130000000000002, y: 34.372, text: '134/140 (134/140)*' },
+  
+  */
 
   // Process each line
   return Array.from(lines.values())
@@ -311,6 +334,7 @@ function extractSizesAndQuantities(items: PdfText[]): SizeQuantity[] {
           .slice(splitIndex + 1)
           .map((i) => i.text)
           .join("")
+          .replace(/\s+/g, "") // Remove all spaces
           .trim(),
         10,
       );

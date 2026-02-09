@@ -55,7 +55,7 @@ export const tranformaPedidoHmEmJson = async (buffer: Buffer<ArrayBuffer>) => {
     dadosDestino,
   };
 
-  /*console.log(
+  /*  console.log(
     util.inspect(resultado, {
       depth: null,
       colors: true,

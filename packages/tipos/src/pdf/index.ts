@@ -187,6 +187,7 @@ const SizeQuantitySchema = z.object({
   tam: z.string().min(1),
   qtt: z.number().int().nonnegative(),
 });
+export type SizeQuantityDto = z.infer<typeof SizeQuantitySchema>;
 
 const TotalSchema = z.object({
   total: toInt,

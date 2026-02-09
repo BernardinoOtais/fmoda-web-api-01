@@ -2,7 +2,7 @@
 
 import { EncomendaSchema, EncomendaHMDto } from "@repo/tipos/pdf";
 import { useMutation } from "@tanstack/react-query";
-import { Fragment, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import DadosTabela from "./_aux/dados-table";
 
 const HmImportaPdf = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -121,9 +122,14 @@ const HmImportaPdf = () => {
                       {data.encomenda.linhasCabecalho.prodDesc}
                     </span>
                   </span>
+                  <span>
+                    Destinos:
+                    <span className="font-bold ml-1">
+                      {data.encomenda.dadosDestino.length}
+                    </span>
+                  </span>
                 </div>
-                {data.encomenda.dadosDestino.map((d) => {
-                  console.log(d.assortment.totalAs);
+                {data.encomenda.dadosDestino.map((d, idx) => {
                   return (
                     <Card
                       key={d.destino.dCod}
@@ -133,7 +139,7 @@ const HmImportaPdf = () => {
                         <CardTitle className="text-2xl p-2">
                           <div className="flex flex-row items-center space-x-2 justify-center">
                             <span>
-                              Destino:
+                              {`Destino ${idx + 1}:`}
                               <span className="font-bold ml-1">
                                 {d.destino.destino}
                               </span>
@@ -169,129 +175,27 @@ const HmImportaPdf = () => {
                         </div>
                         <div className="flex flex-col justify-center items-center space-y-2">
                           {d.assortment.totalAs.ttPecas !== 0 && (
-                            <Card className="w-full text-center gap-1 p-1">
-                              <CardContent>
-                                <CardTitle className="font-bold p-2">
-                                  {`${d.assortment.totalAs.nSortidos} Packs com ${d.assortment.totalAs.nPecasSortido} por Pack, Total Peças: ${d.assortment.totalAs.ttPecas}`}
-                                </CardTitle>
-                                <Table className="border border-border rounded-md border-collapse mx-auto">
-                                  <TableHeader className="bg-muted">
-                                    <TableRow>
-                                      {d.assortment.assort.map((p) => (
-                                        <TableHead
-                                          key={p.tam}
-                                          className="border border-border text-center min-w-25 max-w-36 h-7 "
-                                        >
-                                          {p.tam}
-                                        </TableHead>
-                                      ))}
-                                      <TableHead className="border border-border text-center font-semibold min-w-12 max-w-25 h-7 ">
-                                        Total
-                                      </TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  <TableBody>
-                                    <TableRow>
-                                      {d.assortment.assort.map((p) => (
-                                        <TableCell
-                                          key={p.tam}
-                                          className="border border-border text-center min-w-25 max-w-36  h-2 p-0"
-                                        >
-                                          {p.qtt}
-                                        </TableCell>
-                                      ))}
-                                      <TableCell className="border border-border text-center min-w-12 max-w-25 h-2 p-0 font-semibold">
-                                        {d.assortment.totalAs.nPecasSortido}
-                                      </TableCell>
-                                    </TableRow>
-                                  </TableBody>
-                                </Table>
-                              </CardContent>
-                            </Card>
+                            <DadosTabela
+                              titulo={`${d.assortment.totalAs.nSortidos} Packs com ${d.assortment.totalAs.nPecasSortido} peças por Pack, Total Peças: ${d.assortment.totalAs.ttPecas}`}
+                              dados={d.assortment.assort}
+                              total={d.assortment.totalAs.nPecasSortido}
+                            />
                           )}
 
                           {d.single.totalsSingle.total !== 0 && (
-                            <Card className="w-full  text-center gap-1 p-1">
-                              <CardContent>
-                                <CardTitle className="font-bold p-2">
-                                  Single
-                                </CardTitle>
-                                <Table className="border border-border rounded-md border-collapse mx-auto">
-                                  <TableHeader className="bg-muted">
-                                    <TableRow>
-                                      {d.single.dist.map((p) => (
-                                        <TableHead
-                                          key={p.tam}
-                                          className="border border-border text-center min-w-25 max-w-36 h-7 "
-                                        >
-                                          {p.tam}
-                                        </TableHead>
-                                      ))}
-                                      <TableHead className="border border-border text-center font-semibold min-w-12 max-w-25 h-7 ">
-                                        Total
-                                      </TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  <TableBody>
-                                    <TableRow>
-                                      {d.single.dist.map((p) => (
-                                        <TableCell
-                                          key={p.tam}
-                                          className="border border-border text-center min-w-25 max-w-36  h-2 p-0"
-                                        >
-                                          {p.qtt}
-                                        </TableCell>
-                                      ))}
-                                      <TableCell className="border border-border text-center min-w-12 max-w-25 h-2 p-0 font-semibold">
-                                        {d.single.totalsSingle.total}
-                                      </TableCell>
-                                    </TableRow>
-                                  </TableBody>
-                                </Table>
-                              </CardContent>
-                            </Card>
+                            <DadosTabela
+                              titulo="Singles"
+                              dados={d.single.dist}
+                              total={d.single.totalsSingle.total}
+                            />
                           )}
                           {d.single.totalsSingle.total !== 0 &&
                             d.assortment.totalAs.ttPecas !== 0 && (
-                              <Card className="w-full  text-center gap-1 p-1">
-                                <CardContent>
-                                  <CardTitle className="font-bold p-2">
-                                    Total
-                                  </CardTitle>
-                                  <Table className="border border-border rounded-md border-collapse mx-auto">
-                                    <TableHeader className="bg-muted">
-                                      <TableRow>
-                                        {d.total.dist.map((p) => (
-                                          <TableHead
-                                            key={p.tam}
-                                            className="border border-border text-center min-w-25 max-w-36 h-7 "
-                                          >
-                                            {p.tam}
-                                          </TableHead>
-                                        ))}
-                                        <TableHead className="border border-border text-center font-semibold min-w-12 max-w-25 h-7 ">
-                                          Total
-                                        </TableHead>
-                                      </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                      <TableRow>
-                                        {d.total.dist.map((p) => (
-                                          <TableCell
-                                            key={p.tam}
-                                            className="border border-border text-center min-w-25 max-w-36  h-2 p-0"
-                                          >
-                                            {p.qtt}
-                                          </TableCell>
-                                        ))}
-                                        <TableCell className="border border-border text-center min-w-12 max-w-25 h-2 p-0 font-semibold">
-                                          {d.total.total.total}
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableBody>
-                                  </Table>
-                                </CardContent>
-                              </Card>
+                              <DadosTabela
+                                titulo="Total"
+                                dados={d.total.dist}
+                                total={d.total.total.total}
+                              />
                             )}
                         </div>
                       </CardContent>
@@ -308,11 +212,3 @@ const HmImportaPdf = () => {
 };
 
 export default HmImportaPdf;
-
-/*
-                <pre className="rounded-md bg-muted p-4 text-sm overflow-auto w-full">
-                  {JSON.stringify(data, null, 2)}
-                </pre>
-
-
-*/
