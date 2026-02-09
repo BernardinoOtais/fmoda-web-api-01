@@ -134,7 +134,7 @@ export enum ErroImportarPedidoHm {
   ERRO_HH_CABECALHO_TEM_QUE_TER_NOVE_LINHAS = "Cabeçalho tem que tem 9 linhas...",
 }
 
-export type TipoCamposDinamicos = Record<string, string>;
+export type TipoCamposDinamicos = Record<string, string | number>;
 export type Campos = {
   nome: string;
   key: string;
@@ -170,3 +170,108 @@ export const campoTotaisAssortments: Campos[] = [
   { nome: "No of Asst:", key: "nSortidos" },
   { nome: "Pcs:", key: "ttPecas" },
 ];
+
+export const campoTotalTotal: Campos[] = [{ nome: "Quantity:", key: "total" }];
+
+/* ---------- Shared primitives ---------- */
+
+const toInt = z.preprocess((val) => {
+  if (typeof val === "string") {
+    const cleaned = val.replace(/\s+/g, "");
+    return cleaned;
+  }
+  return val;
+}, z.coerce.number().int());
+
+const SizeQuantitySchema = z.object({
+  tam: z.string().min(1),
+  qtt: z.number().int().nonnegative(),
+});
+
+const TotalSchema = z.object({
+  total: toInt,
+});
+
+/* ---------- Header ---------- */
+
+export const LinhasCabecalhoSchema = z.object({
+  orderNo: z.string().min(1),
+  prodNo: z.string().min(1),
+  ptProdNo: z.string().min(1),
+  prodName: z.string().min(1),
+  dateOfOrder: z.string().min(1), // can be refined to date later
+  prodDesc: z.string().min(1),
+  supplierCode: z.string().min(1),
+  season: z.string().min(1),
+  supplierName: z.string().min(1),
+  customsCustomerGroup: z.string().min(1),
+  optionNo: z.string().min(1),
+  typeOfConstroction: z.string().min(1),
+  developmentNo: z.string().min(1),
+});
+
+/* ---------- Destino ---------- */
+
+const DestinoSchema = z.object({
+  destino: z.string().min(1),
+  dCod: z.string().min(1),
+});
+
+/* ---------- Artigo ---------- */
+
+const ArtigoSchema = z.object({
+  artNo: z.string().min(1),
+  hmColourCod: z.string().min(1),
+  colourName: z.string().min(1),
+  description: z.string().min(1),
+  ptArtNumber: z.string().min(1),
+  optionNo: z.string().min(1),
+});
+
+/* ---------- Assortment ---------- */
+
+export const TotalAsSchema = z.object({
+  nPecasSortido: toInt,
+  nSortidos: toInt,
+  ttPecas: toInt,
+});
+
+const AssortmentSchema = z.object({
+  assort: z.array(SizeQuantitySchema),
+  totalAs: TotalAsSchema,
+});
+
+/* ---------- Single ---------- */
+
+const SingleSchema = z.object({
+  dist: z.array(SizeQuantitySchema),
+  totalsSingle: TotalSchema,
+});
+
+/* ---------- Total ---------- */
+
+const TotalDistSchema = z.object({
+  dist: z.array(SizeQuantitySchema),
+  total: TotalSchema,
+});
+
+/* ---------- Encomenda Item ---------- */
+
+export const DadosDestinoItemSchema = z.object({
+  destino: DestinoSchema,
+  arttigo: ArtigoSchema,
+  assortment: AssortmentSchema,
+  single: SingleSchema,
+  total: TotalDistSchema,
+});
+
+/* ---------- Root ---------- */
+
+export const EncomendaSchema = z.object({
+  encomenda: z.object({
+    linhasCabecalho: LinhasCabecalhoSchema,
+    dadosDestino: z.array(DadosDestinoItemSchema),
+  }),
+});
+
+export type EncomendaHMDto = z.infer<typeof EncomendaSchema>;

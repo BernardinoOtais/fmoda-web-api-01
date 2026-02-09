@@ -1,3 +1,5 @@
+//import util from "util";
+
 import {
   campoCabecalhoHm,
   ErroImportarPedidoHm,
@@ -47,8 +49,18 @@ export const tranformaPedidoHmEmJson = async (buffer: Buffer<ArrayBuffer>) => {
   );
 
   const dadosDestino = dadosCorpoHm(corposPagina);
-  return {
+
+  const resultado = {
     linhasCabecalho: dadosC,
     dadosDestino,
   };
+
+  /*console.log(
+    util.inspect(resultado, {
+      depth: null,
+      colors: true,
+      maxArrayLength: null,
+    }),
+  );*/
+  return resultado;
 };

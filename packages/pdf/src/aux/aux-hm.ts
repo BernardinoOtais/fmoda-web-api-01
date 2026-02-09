@@ -5,6 +5,7 @@ import {
   TipoCamposDinamicos,
   campoArticleHm,
   campoTotaisAssortments,
+  campoTotalTotal,
 } from "@repo/tipos/pdf";
 
 import {
@@ -31,8 +32,29 @@ type Returno = {
   };
   single: {
     dist: SizeQuantity[];
+    totalsSingle: object;
+  };
+  total: {
+    dist: SizeQuantity[];
+    total: object;
   };
 }[];
+
+export const seTodasIguaisRetornaAPrimeira = (
+  listas: PdfText[][],
+): PdfText[] | null => {
+  if (listas.length === 0 || listas[0] === undefined) return null;
+
+  const base = JSON.stringify(listas[0]);
+
+  for (let i = 1; i < listas.length; i++) {
+    if (JSON.stringify(listas[i]) !== base) {
+      return null;
+    }
+  }
+
+  return listas[0];
+};
 
 export const dadosCorpoHm = (dadosPaises: PdfText[][]) => {
   const retorno: Returno = [];
@@ -59,6 +81,8 @@ export const dadosCorpoHm = (dadosPaises: PdfText[][]) => {
       campoArticleHm,
       false,
     );
+
+    //console.log(dadosArticleObrject);
 
     const paisParaPost = parseDestinoECodigo(paisTexto);
 
@@ -92,8 +116,41 @@ export const dadosCorpoHm = (dadosPaises: PdfText[][]) => {
         "Quantity:".toUpperCase(),
       );
 
-    // console.log(p);
     const singles = extractSizesAndQuantities(singleDados);
+
+    const totalSingle =
+      extraiPorcoesNaoInclusiveProcuraSegundoApartirDoPrimeiro(
+        p,
+        "Solid".toUpperCase(),
+        "otal".toUpperCase(),
+      );
+
+    const tamanho = totalSingle.length;
+    const qttSingles = safeNumber(totalSingle[tamanho - 2]?.text);
+
+    const totalDados = extraiPorcoesNaoInclusiveProcuraSegundoApartirDoPrimeiro(
+      p,
+      "otal".toUpperCase(),
+      "Quantity:".toUpperCase(),
+    );
+    const total = extractSizesAndQuantities(totalDados);
+
+    const totalTotal = extraiPorcoesNaoInclusiveProcuraSegundoApartirDoPrimeiro(
+      p,
+      "otal".toUpperCase(),
+      "* Sizes in brackets indicate Standard, first row in Size Label (Corresponding Sizes)".toUpperCase(),
+    );
+
+    const linhasTotalTotal = groupItemsByYCoordinate(totalTotal);
+
+    const sizeTotalTotal = Object.entries(linhasTotalTotal).length;
+
+    const totalTotalToatl = dadosDoCabecalhoHm(
+      linhasTotalTotal,
+      sizeTotalTotal,
+      campoTotalTotal,
+      false,
+    );
 
     retorno.push({
       destino: paisParaPost,
@@ -101,9 +158,15 @@ export const dadosCorpoHm = (dadosPaises: PdfText[][]) => {
       assortment: { assort: assortment, totalAs: totalAs },
       single: {
         dist: singles,
+        totalsSingle: {
+          total: qttSingles,
+        },
+      },
+      total: {
+        dist: total,
+        total: totalTotalToatl,
       },
     });
-    break;
   }
   return retorno;
 };
@@ -256,3 +319,8 @@ function extractSizesAndQuantities(items: PdfText[]): SizeQuantity[] {
     })
     .filter((item): item is SizeQuantity => item !== null);
 }
+
+const safeNumber = (v?: string) => {
+  if (!v) return 0;
+  return Number(v.replace(/[\s,]+/g, ""));
+};
