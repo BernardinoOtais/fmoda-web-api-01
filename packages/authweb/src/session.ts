@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 
 import { auth } from "./auth";
 
-export const getSession = async () =>
+const getSession = async () =>
   auth.api.getSession({
     headers: await headers(),
   });
@@ -14,8 +14,7 @@ export const getSessionFromRequest = async (request: Request) => {
   });
 };
 
-export const getSessionFromRequestSoComACabeca = async (headers: Headers) => {
-  console.log("Header recebido :    ", { headers });
+const getSessionFromRequestSoComACabeca = async (headers: Headers) => {
   return await auth.api.getSession({ headers });
 };
 
@@ -28,7 +27,7 @@ export async function logoutAction() {
 
 export const getSessionFromRequestValidaPapeis = async (
   request: Request,
-  papeisRecebidos: string[]
+  papeisRecebidos: string[],
 ) => {
   const session = await auth.api.getSession({
     headers: request.headers,
@@ -48,11 +47,11 @@ export const getSessionFromRequestValidaPapeis = async (
 
   if (!hasRole) {
     throw new Error(
-      "Forbidden: User does not have permission to access this resource"
+      "Forbidden: User does not have permission to access this resource",
     );
   }
 
   return session;
 };
 
-export { getSessionCookie };
+export { getSessionCookie, getSession, getSessionFromRequestSoComACabeca };

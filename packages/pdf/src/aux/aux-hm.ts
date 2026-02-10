@@ -18,6 +18,7 @@ import {
 type SizeQuantity = {
   tam: string;
   qtt: number;
+  ordem: number;
 };
 
 type Returno = {
@@ -282,27 +283,9 @@ function extractSizesAndQuantities(items: PdfText[]): SizeQuantity[] {
   });
   //console.log("items ;", items);
 
-  /*
-[
-  { x: 1.8130000000000002, y: 31.397, text: '92 (92)*' },
-  { x: 9.801, y: 31.397, text: '672' },
-  { x: 1.8130000000000002, y: 32.141, text: '98/104 (98/104)*' },
-  { x: 9.436, y: 32.141, text: '1 608' },
-  { x: 1.8130000000000002, y: 32.884, text: '1' },
-  { x: 2.023, y: 32.884, text: '10/1' },
-  { x: 2.842, y: 32.884, text: '16 (1' },
-  { x: 3.8070000000000004, y: 32.884, text: '10/1' },
-  { x: 4.626, y: 32.884, text: '16)*' },
-  { x: 9.436, y: 32.884, text: '1 741' },
-  { x: 1.8130000000000002, y: 33.628, text: '122/128 (122/128)*' },
-  { x: 9.436, y: 33.628, text: '1 805' },
-  { x: 1.8130000000000002, y: 34.372, text: '134/140 (134/140)*' },
-  
-  */
-
   // Process each line
   return Array.from(lines.values())
-    .map((lineItems) => {
+    .map((lineItems, idx) => {
       const sorted = lineItems.sort((a, b) => a.x - b.x);
 
       if (sorted.length < 2) return null; // Need at least 2 items
@@ -339,7 +322,7 @@ function extractSizesAndQuantities(items: PdfText[]): SizeQuantity[] {
         10,
       );
 
-      return tam && !isNaN(qtt) ? { tam, qtt } : null;
+      return tam && !isNaN(qtt) ? { tam, qtt, ordem: idx } : null;
     })
     .filter((item): item is SizeQuantity => item !== null);
 }

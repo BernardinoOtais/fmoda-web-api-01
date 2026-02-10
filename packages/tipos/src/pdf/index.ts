@@ -68,6 +68,7 @@ export const ResultadoPedidoSchema = z.object({
   }),
 });
 
+//Nao sei se e para eliminar
 export const DadosParciaisSchema = z.object({
   pedido: StringComTamanhoSchema(25, 1),
   nParcial: NumeroInteiroMaiorQueZero,
@@ -75,6 +76,15 @@ export const DadosParciaisSchema = z.object({
   precoParcial: FloatSchema,
   parcial: z.array(ResultadoPedidoSchema),
 });
+
+export const DadosParciaisGetSchema = z.object({
+  pedido: StringComTamanhoSchema(25, 1),
+  nParcial: NumeroInteiroMaiorQueZero,
+  dataParcial: DateSchema,
+  precoParcial: FloatSchema,
+  parcial: ResultadoPedidoSchema,
+});
+
 // Infer TypeScript types from schemas
 export type CorQtts = z.infer<typeof CorQttsSchema>;
 export type QttPorCor = z.infer<typeof QttPorCorSchema>;
@@ -125,6 +135,27 @@ export enum ErroImportarPedido {
   ERRO_NO_PARCIAL_TEM_QUE_EXISTIR_PELO_MENOS_UMA_ENTREGA = "No parcial tem que existir pelo menos uma entrega",
 }
 
+export const EncomendaInditexSchema = z.object({
+  encomenda: z.object({
+    detalhesPeca: z.object({
+      nPedido: StringComTamanhoSchema(25, 1),
+      modelo: StringComTamanhoSchema(15, 1),
+      descModelo: StringComTamanhoSchema(60, 1),
+      temporada: StringComTamanhoSchema(15, 1),
+      dataEntrega: DateSchema.nullable(),
+      pedido: z.object({
+        pedidoCores: z.array(QttPorCorSchema),
+        total: z.object({
+          qtts: z.array(CorQttsSchema),
+          total: NumeroInteiroMaiorQueZero,
+        }),
+      }),
+      parciais: z.array(DadosParciaisGetSchema).optional(),
+    }),
+  }),
+});
+
+export type EncomendaInditexDto = z.infer<typeof EncomendaInditexSchema>;
 //zod type
 
 //Hm

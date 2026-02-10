@@ -1,8 +1,8 @@
-import { getSessionCookie } from "@repo/authweb/session";
+import { getSessionFromRequestSoComACabeca } from "@repo/authweb/session";
 import { NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(
-  req: NextRequest
+  req: NextRequest,
 ): Promise<NextResponse> {
   const { pathname } = req.nextUrl;
 
@@ -14,16 +14,17 @@ export default async function middleware(
     return NextResponse.next();
   }
 
-  const sessionCookie = getSessionCookie(req);
+  const session = await getSessionFromRequestSoComACabeca(req.headers);
+
   const isLoginPath = pathname.startsWith("/auth/login");
 
-  if (sessionCookie && isLoginPath) {
+  if (session && isLoginPath) {
     //console.log("proxy 02");
     //console.log("proxy 02");
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  if (!sessionCookie && !isLoginPath) {
+  if (!session && !isLoginPath) {
     //console.log("proxy 03");
     return redirectToLoginWithCallback(req);
   }

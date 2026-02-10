@@ -77,6 +77,7 @@ export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
     if (precoFinal === null)
       return ErroImportarPedido.ERRO_TEM_QUE_TER_PRECO_ENTREGA_UNICA_E_TRANSFORMAVEL;
 
+    const data = parseDDMMYYYY(cabecalhoDados.dataEntrega);
     return {
       detalhesPeca: {
         preco: precoFinal,
@@ -84,7 +85,7 @@ export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
         modelo: cabecalhoDados.Modelo,
         descModelo: cabecalhoDados.DescModelo,
         temporada: cabecalhoDados.Temporada,
-        dataEntrega: cabecalhoDados.dataEntrega,
+        dataEntrega: data,
         pedido: encomenda,
       },
     };
@@ -126,7 +127,7 @@ export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
 
   if (results.length === 0)
     return ErroImportarPedido.ERRO_NO_PARCIAL_TEM_QUE_EXISTIR_PELO_MENOS_UMA_ENTREGA;
-
+  console.log(cabecalhoDados.dataEntrega);
   return {
     detalhesPeca: {
       nPedido: cabecalhoDados.Pedido,
@@ -139,3 +140,19 @@ export const transformaPedidoEmJson = async (buffer: Buffer<ArrayBuffer>) => {
     },
   };
 };
+
+export function parseDDMMYYYY(value: string | Date): string | Date {
+  if (value instanceof Date) return value;
+
+  if (!value.includes("/")) return value;
+
+  const [dd, mm, yyyy] = value.split("/").map(Number);
+
+  if (!dd || !mm || !yyyy) return value;
+
+  const date = new Date(yyyy, mm - 1, dd);
+
+  if (isNaN(date.getTime())) return value;
+
+  return date;
+}
