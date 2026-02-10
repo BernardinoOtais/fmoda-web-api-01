@@ -30,7 +30,7 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
     trpc.joanaEstampadosEBordados.getEstampadosEBordados.queryOptions({
       op: opValue,
       veEscondidas,
-    })
+    }),
   );
 
   const { mutate: escondeOuMostra } = useMutation(
@@ -41,13 +41,13 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
             trpc.joanaEstampadosEBordados.getEstampadosEBordados.queryOptions({
               op: opValue,
               veEscondidas,
-            })
+            }),
           );
           const previousData = queryClient.getQueryData(
             trpc.joanaEstampadosEBordados.getEstampadosEBordados.queryKey({
               op: opValue,
               veEscondidas,
-            })
+            }),
           );
 
           queryClient.setQueryData(
@@ -58,13 +58,15 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
             (old) => {
               if (!old) return old;
               return old.filter((o) => o.bostamp !== valor.bostamp);
-            }
+            },
           );
           return { previousData };
         },
         onSuccess: () => {
           toast.success(
-            veEscondidas ? "Visível com sucesso..." : "Escondida com sucesso..."
+            veEscondidas
+              ? "Visível com sucesso..."
+              : "Escondida com sucesso...",
           );
         },
         onError: (_error, _updatedEnvio, context) => {
@@ -81,11 +83,11 @@ const EstampadosEBordados = ({ veEscondidas }: EstampadosEBordadosProps) => {
                 op: opValue,
                 veEscondidas,
               }),
-              context.previousData
+              context.previousData,
             );
         },
-      }
-    )
+      },
+    ),
   );
 
   const [filtered, setFiltered] = useState(data);

@@ -51,4 +51,9 @@ export type PartesDto = z.infer<typeof PartesSchema>;
 
 export const OpSchema = z.object({
   op: z.number().nullable(),
+  veEscondidas: z.boolean().nullable(),
+});
+
+export const EscondeMostraSchema = z.object({
+  bostamp: ChavePhcSchema,
 });

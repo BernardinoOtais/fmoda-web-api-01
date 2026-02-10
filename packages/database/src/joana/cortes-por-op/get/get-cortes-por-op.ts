@@ -6,10 +6,11 @@ import {
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
 export const getCortesPorOpDb = async (
-  op: number | null
+  op: number | null,
+  veEscondidas: boolean | null,
 ): Promise<FornecedoresCortesDto> => {
   const dados = await prismaQualidade.$queryRaw<FornecedoresCortesDto[]>`
-    exec FMO_PHC..fm_web_joana_get_CortesOp ${op}
+    exec FMO_PHC..fm_web_joana_get_CortesOp ${op}, ${veEscondidas}
   `;
 
   //console.log(dados);
