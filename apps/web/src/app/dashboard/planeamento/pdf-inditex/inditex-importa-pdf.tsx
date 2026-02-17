@@ -1,10 +1,13 @@
 "use client";
 import { EncomendaInditexDto, EncomendaInditexSchema } from "@repo/tipos/pdf";
 import { useMutation } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import React from "react";
 
+import DadosTabela from "../_aux/dados-table";
+
 import { Button } from "@/components/ui/button";
+import { Card, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 const InditexImportaPdf = () => {
@@ -96,7 +99,7 @@ const InditexImportaPdf = () => {
               </div>
             )}
             {!isPending && !isError && data && (
-              <div className="flex flex-col items-center justify-center space-y-2">
+              <div className="flex flex-col items-center justify-center space-y-4">
                 <div className="flex flex-row items-center space-x-2">
                   <span>
                     Pedido:
@@ -110,13 +113,13 @@ const InditexImportaPdf = () => {
                       {data.encomenda.detalhesPeca.modelo}
                     </span>
                   </span>
-                  <span>
-                    Desc:
-                    <span className="font-bold ml-1">
-                      {data.encomenda.detalhesPeca.descModelo}
-                    </span>
-                  </span>
                 </div>
+                <span>
+                  Desc:
+                  <span className="font-bold ml-1">
+                    {data.encomenda.detalhesPeca.descModelo}
+                  </span>
+                </span>
                 <div className="flex flex-row items-center space-x-2">
                   <span>
                     Temporada:
@@ -136,12 +139,72 @@ const InditexImportaPdf = () => {
                     </span>
                   )}
                 </div>
+                {data?.encomenda?.detalhesPeca?.pedido?.pedidoCores?.length !=
+                  1 && (
+                  <Card className="w-full max-w-4xl md:max-w-5xl lg:max-w-7xl mx-auto p-2 hover:bg-muted">
+                    <DadosTabela
+                      titulo={"Total"}
+                      dados={data.encomenda.detalhesPeca.pedido.total.qtts}
+                      total={data.encomenda.detalhesPeca.pedido.total.total}
+                    />
+                  </Card>
+                )}
+
+                {data?.encomenda?.detalhesPeca?.pedido?.pedidoCores?.length >
+                  0 && (
+                  <Card className="w-full  text-center gap-1 p-1 hover:bg-muted">
+                    <CardTitle className="font-bold ">Cores</CardTitle>
+                    {data.encomenda.detalhesPeca.pedido.pedidoCores.map((p) => (
+                      <Fragment key={p.cor}>
+                        <DadosTabela
+                          titulo={p.cor}
+                          dados={p.qtts}
+                          total={p.total}
+                        />
+                      </Fragment>
+                    ))}
+                  </Card>
+                )}
+
+                {data?.encomenda?.detalhesPeca?.parciais &&
+                  data.encomenda.detalhesPeca.parciais.length > 0 && (
+                    <Card className="w-full text-center gap-1 p-1 hover:bg-muted">
+                      <CardTitle className="font-bold">Parciais</CardTitle>
+
+                      {data.encomenda.detalhesPeca.parciais.map((p) => (
+                        <Fragment key={p.nParcial}>
+                          <div className="flex flex-row items-center space-x-2 justify-center">
+                            <span>
+                              Pedido:
+                              <span className="font-bold ml-1">{p.pedido}</span>
+                            </span>
+                            <span>
+                              Data:
+                              <span className="font-bold ml-1">
+                                {new Date(p.dataParcial).toLocaleDateString(
+                                  "pt-PT",
+                                )}
+                              </span>
+                            </span>
+                          </div>
+
+                          {p.parcial.pedidoCores.map((cor) => (
+                            <DadosTabela
+                              key={cor.cor}
+                              titulo={cor.cor}
+                              dados={cor.qtts}
+                              total={cor.total}
+                            />
+                          ))}
+                        </Fragment>
+                      ))}
+                    </Card>
+                  )}
               </div>
             )}
           </div>
         </div>
       </main>
-      {/*     <pre>{JSON.stringify(data, null, 2)}</pre>*/}
     </>
   );
 };

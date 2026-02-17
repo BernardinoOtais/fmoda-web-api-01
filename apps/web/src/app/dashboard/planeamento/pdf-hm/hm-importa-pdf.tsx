@@ -4,12 +4,11 @@ import { EncomendaSchema, EncomendaHMDto } from "@repo/tipos/pdf";
 import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 
-import DadosTabela from "./_aux/dados-table";
+import DadosTabela from "../_aux/dados-table";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
 
 const HmImportaPdf = () => {
   const [file, setFile] = useState<File | null>(null);
