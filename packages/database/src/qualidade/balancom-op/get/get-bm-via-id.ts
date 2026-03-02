@@ -8,7 +8,9 @@ export const getBmDataViaIdBd = async (idBm: string) => {
     include: {
       BmOpsPorMalha: {
         include: {
-          BmMovimentosLotes: true,
+          BmMovimentosLotes: {
+            orderBy: { dataobra: "asc" },
+          },
         },
       },
       BmMalhasFio: {

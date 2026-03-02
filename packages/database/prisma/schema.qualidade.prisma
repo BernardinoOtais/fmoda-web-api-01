@@ -49,6 +49,8 @@ model BmMalhas {
   subGrupo             String             @qualidadeDb.VarChar(3)
   qtdePedida           Decimal            @qualidadeDb.Decimal(14, 4)
   qtdeEntrada          Decimal            @qualidadeDb.Decimal(14, 4)
+  qttEntrou            Decimal            @qualidadeDb.Decimal(14, 4)
+  qttSaiu              Decimal            @qualidadeDb.Decimal(14, 4)
   qtdeEntradaSeUnidade Decimal?           @qualidadeDb.Decimal(14, 4)
   defeitosStock        Decimal            @qualidadeDb.Decimal(14, 4)
   sobras               Decimal            @qualidadeDb.Decimal(14, 4)
@@ -93,6 +95,8 @@ model BmMalhasFioMovimentos {
   idMovimento        String           @qualidadeDb.Char(25)
   nMovimento         Int
   nome               String           @qualidadeDb.Char(55)
+  dataobra           DateTime         @qualidadeDb.DateTime
+  obranome           String           @qualidadeDb.VarChar(20)
   idTipo             Decimal          @qualidadeDb.Decimal(3, 0)
   tipo               String           @qualidadeDb.VarChar(50)
   qtt                Decimal          @qualidadeDb.Decimal(14, 4)
@@ -165,6 +169,8 @@ model BmMovimentosLotes {
   idMovimento        String        @qualidadeDb.Char(25)
   nMovimento         Int
   nome               String        @qualidadeDb.Char(55)
+  dataobra           DateTime      @qualidadeDb.DateTime
+  obranome           String        @qualidadeDb.VarChar(20)
   idTipo             Decimal       @qualidadeDb.Decimal(3, 0)
   tipo               String        @qualidadeDb.VarChar(50)
   qtt                Decimal       @qualidadeDb.Decimal(14, 4)

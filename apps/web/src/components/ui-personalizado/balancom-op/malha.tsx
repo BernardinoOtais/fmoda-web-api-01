@@ -1,6 +1,6 @@
 "use client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 
 import BotaoApagaMalha from "./inputs-e-botoes-das-malhas/botao-apaga-malha";
 import InputDefeitos from "./inputs-e-botoes-das-malhas/input-defeitos";
@@ -23,6 +23,7 @@ import { useTRPC } from "@/trpc/client";
 type MalhaProps = { idBm: string; op: number };
 
 const Malha = ({ idBm, op }: MalhaProps) => {
+  const [openRow, setOpenRow] = useState<string | null>(null);
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
     trpc.qualidade_balancom_op.getBmDataViaId.queryOptions(idBm),
@@ -46,11 +47,13 @@ const Malha = ({ idBm, op }: MalhaProps) => {
             item.defeitosStock)
       );
     }, 0) ?? 0;
+  //  <pre>{JSON.stringify(malhas, null, 2)}</pre> 14, 9, 118,16
   return (
     <>
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
         Malhas
       </h3>
+
       <div>
         <Table className="max-w-4xl mx-auto ">
           <TableHeader className="bg-accent">
@@ -61,6 +64,7 @@ const Malha = ({ idBm, op }: MalhaProps) => {
               </TableHead>
               <TableHead className="border text-center">Qtde Pedida</TableHead>
               <TableHead className="border text-center">Qtde Entrada</TableHead>
+              <TableHead className="border text-center">Qtde Saída</TableHead>
               <TableHead className="border text-center">Lote</TableHead>
               <TableHead className="border text-center">Qtde Sobras</TableHead>
               <TableHead className="border text-center">
@@ -117,56 +121,107 @@ const Malha = ({ idBm, op }: MalhaProps) => {
               }
 
               return (
-                <TableRow
-                  key={malha.ref}
-                  className="!border-0 border-none !p-0 bg-transparent"
-                >
-                  <TableCell className="border text-center">
-                    {malha.malha}
-                  </TableCell>
-                  <TableCell className="border text-center">
-                    {fornecedoresPedidos(dadosFornecedoresPedidos)}
-                  </TableCell>
-                  <TableCell className="border text-center">
-                    {malha.unidade === "Un" ? (
-                      <InputQuantidadeSeUnidade
+                <Fragment key={malha.ref}>
+                  {openRow === malha.ref &&
+                    malha.BmOpsPorMalha?.map((op) =>
+                      op.BmMovimentosLotes?.filter(
+                        (l) =>
+                          l.idTipo === 14 ||
+                          l.idTipo === 9 ||
+                          l.idTipo === 118 ||
+                          l.idTipo === 16,
+                      ).map((lote) => (
+                        <TableRow
+                          key={`${op.op}-${lote.idBmMovimentosLote}`}
+                          className="!border-0 border-none !p-0 bg-transparent"
+                        >
+                          <TableCell className="border text-center" colSpan={1}>
+                            {lote.tipo}
+                          </TableCell>
+                          <TableCell className="border text-center" colSpan={1}>
+                            {lote.obranome === ""
+                              ? lote.nMovimento
+                              : lote.obranome}
+                          </TableCell>
+                          <TableCell
+                            className="border text-center"
+                            colSpan={1}
+                          ></TableCell>
+                          <TableCell className="border text-center" colSpan={1}>
+                            {lote.qtt > 0 ? lote.qtt : ""}
+                          </TableCell>
+                          <TableCell className="border text-center" colSpan={1}>
+                            {lote.qtt < 0 ? lote.qtt : ""}
+                          </TableCell>
+                          <TableCell
+                            className="border text-center"
+                            colSpan={4}
+                          ></TableCell>
+                        </TableRow>
+                      )),
+                    )}
+                  <TableRow className="!border-0 border-none !p-0 bg-transparent">
+                    <TableCell
+                      className="border text-center cursor-pointer hover:bg-muted transition-colors"
+                      onClick={() =>
+                        setOpenRow((prev) =>
+                          prev === malha.ref ? null : malha.ref,
+                        )
+                      }
+                    >
+                      {malha.malha}
+                    </TableCell>
+                    <TableCell className="border text-center">
+                      {fornecedoresPedidos(dadosFornecedoresPedidos)}
+                    </TableCell>
+                    <TableCell className="border text-center">
+                      {malha.unidade === "Un" ? (
+                        <InputQuantidadeSeUnidade
+                          idBm={idBm}
+                          ref={malha.ref}
+                          qtdeEntradaSeUnidade={malha.qtdeEntradaSeUnidade ?? 0}
+                        />
+                      ) : (
+                        malha.qtdePedida.toString()
+                      )}
+                    </TableCell>
+                    <TableCell className="border text-center">
+                      {malha.qttEntrou.toString()}
+                    </TableCell>
+                    <TableCell className="border text-center">
+                      {malha.qttSaiu.toString()}
+                    </TableCell>
+                    <TableCell className="border text-center">
+                      <InputLotes
                         idBm={idBm}
                         ref={malha.ref}
-                        qtdeEntradaSeUnidade={malha.qtdeEntradaSeUnidade ?? 0}
+                        lote={malha.lote}
                       />
-                    ) : (
-                      malha.qtdePedida.toString()
-                    )}
-                  </TableCell>
-                  <TableCell className="border text-center">
-                    {malha.qtdeEntrada.toString()}
-                  </TableCell>
-                  <TableCell className="border text-center">
-                    <InputLotes idBm={idBm} ref={malha.ref} lote={malha.lote} />
-                  </TableCell>
-                  <TableCell className="border text-center">
-                    {malha.sobras.toString()}
-                  </TableCell>
-                  <TableCell className="border text-center">
-                    <InputDefeitos
-                      idBm={idBm}
-                      ref={malha.ref}
-                      defeitosStock={malha.defeitosStock}
-                    />
-                  </TableCell>
-                  <TableCell className="border text-center">
-                    {formatNCasasDecimais(qtdeTotalLinha, 3)}
-                  </TableCell>
-                  {mostraBotaoApagaMalhaEmenosDeOitoPercentagem && (
-                    <TableCell className="border text-center">
-                      <BotaoApagaMalha idBm={idBm} ref={malha.ref} op={op} />
                     </TableCell>
-                  )}
-                </TableRow>
+                    <TableCell className="border text-center">
+                      {malha.sobras.toString()}
+                    </TableCell>
+                    <TableCell className="border text-center">
+                      <InputDefeitos
+                        idBm={idBm}
+                        ref={malha.ref}
+                        defeitosStock={malha.defeitosStock}
+                      />
+                    </TableCell>
+                    <TableCell className="border text-center">
+                      {formatNCasasDecimais(qtdeTotalLinha, 3)}
+                    </TableCell>
+                    {mostraBotaoApagaMalhaEmenosDeOitoPercentagem && (
+                      <TableCell className="border text-center">
+                        <BotaoApagaMalha idBm={idBm} ref={malha.ref} op={op} />
+                      </TableCell>
+                    )}
+                  </TableRow>
+                </Fragment>
               );
             })}
             <TableRow>
-              <TableCell className="border text-left" colSpan={7}>
+              <TableCell className="border text-left" colSpan={8}>
                 Total
               </TableCell>
               <TableCell className="border text-center">

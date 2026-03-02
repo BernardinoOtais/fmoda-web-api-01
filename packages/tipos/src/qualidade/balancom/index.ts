@@ -74,6 +74,13 @@ const BmMovimentosLotesSchema = z.object({
   idMovimento: StringComTamanhoSchema(25),
   nMovimento: InteiroNaoNegativoSchema,
   nome: StringComTamanhoSchema(55, 1),
+  dataobra: z.coerce.date({
+    error: (issue) =>
+      issue.input === undefined
+        ? "Tem que inserrir números..."
+        : "Formato errado...",
+  }),
+  obranome: StringComTamanhoSchema(20),
   idTipo: Numero,
   tipo: StringComTamanhoSchema(50, 1),
   qtt: Numero,
@@ -96,6 +103,8 @@ export const BmMalhasSchema = z.object({
   subGrupo: StringComTamanhoSchema(3),
   qtdePedida: Numero,
   qtdeEntrada: Numero,
+  qttEntrou: Numero,
+  qttSaiu: Numero,
   qtdeEntradaSeUnidade: Numero.optional(),
   defeitosStock: Numero,
   sobras: Numero,
@@ -215,7 +224,7 @@ export const listaOpsSchema = z.array(
   z.object({
     op: Numero,
     qtt: Numero,
-  })
+  }),
 );
 
 export const DeleteApagaMalhaSchema = z.object({
