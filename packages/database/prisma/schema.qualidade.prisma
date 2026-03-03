@@ -74,6 +74,8 @@ model BmMalhasFio {
   subGrupo         String             @qualidadeDb.VarChar(3)
   qtdePedida       Decimal            @qualidadeDb.Decimal(14, 4)
   qtdeEntrada      Decimal            @qualidadeDb.Decimal(14, 4)
+  qttEntrou        Decimal            @qualidadeDb.Decimal(14, 4)
+  qttSaiu          Decimal            @qualidadeDb.Decimal(14, 4)
   defeitosStock    Decimal            @qualidadeDb.Decimal(14, 4)
   sobras           Decimal            @qualidadeDb.Decimal(14, 4)
   unidade          String             @qualidadeDb.VarChar(4)

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
 import {
   InteiroNaoNegativoSchema,
@@ -33,6 +33,13 @@ export const BmMalhasFioMovimentosSchema = z.object({
   idMovimento: StringComTamanhoSchema(25),
   nMovimento: z.number().int(),
   nome: StringComTamanhoSchema(55, 1),
+  dataobra: z.coerce.date({
+    error: (issue) =>
+      issue.input === undefined
+        ? "Tem que inserrir números..."
+        : "Formato errado...",
+  }),
+  obranome: StringComTamanhoSchema(20),
   idTipo: Numero,
   tipo: StringComTamanhoSchema(50, 1),
   qtt: Numero,
@@ -57,6 +64,8 @@ export const BmMalhasFioSchema = z.object({
   subGrupo: StringComTamanhoSchema(3),
   qtdePedida: Numero,
   qtdeEntrada: Numero,
+  qttEntrou: Numero,
+  qttSaiu: Numero,
   defeitosStock: Numero,
   sobras: Numero,
   unidade: StringComTamanhoSchema(4),

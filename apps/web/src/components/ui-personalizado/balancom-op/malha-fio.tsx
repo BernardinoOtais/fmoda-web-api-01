@@ -1,5 +1,6 @@
 import { BmMalhasFio } from "@repo/tipos/qualidade_balancom";
-import React from "react";
+import { ChevronDown } from "lucide-react";
+import React, { Fragment, useState } from "react";
 import { z } from "zod";
 
 import InputDefeitosFio from "./inputs-e-botoes-das-malhas/input-defeitos-fio";
@@ -21,6 +22,7 @@ type MalhaFioProps = {
   op: number;
 };
 const MalhaFio = ({ fio, idBm, op }: MalhaFioProps) => {
+  const [openRow, setOpenRow] = useState<string | null>(null);
   //console.log("Fio : ", JSON.stringify(fio, null, 2));
   const totalMalha =
     fio?.reduce((total, item) => {
@@ -37,6 +39,7 @@ const MalhaFio = ({ fio, idBm, op }: MalhaFioProps) => {
           </TableHead>
           <TableHead className="border text-center">Qtde Pedida</TableHead>
           <TableHead className="border text-center">Qtde Entrada</TableHead>
+          <TableHead className="border text-center">Qtde Saída</TableHead>
           <TableHead className="border text-center">Lote</TableHead>
           <TableHead className="border text-center">Qtde Sobras</TableHead>
           <TableHead className="border text-center">Qtde Defeitos</TableHead>
@@ -60,47 +63,104 @@ const MalhaFio = ({ fio, idBm, op }: MalhaFioProps) => {
                 tipo: lote.tipo,
                 qtt: lote.qtt,
                 lote: lote.lote,
-              }))
+              })),
             ) || [];
 
           const qtdeTotalLinha =
             fioR.qtdeEntrada - fioR.sobras - fioR.defeitosStock;
           return (
-            <TableRow key={fioR.refOrigem}>
-              <TableCell className="border text-center">{fioR.fio}</TableCell>
-              <TableCell className="border text-center">
-                {fornecedoresPedidos(dadosFornecedoresPedidos)}
-              </TableCell>
-              <TableCell className="border text-center">
-                {fioR.qtdePedida}
-              </TableCell>
-              <TableCell className="border text-center">
-                {fioR.qtdeEntrada}
-              </TableCell>
-              <TableCell className="border text-center">
-                <InputLotesFio
-                  op={op}
-                  idBm={idBm}
-                  ref={fioR.ref}
-                  refOrigem={fioR.refOrigem}
-                  texto={fioR.lote}
-                />
-              </TableCell>
-              <TableCell className="border text-center">
-                {fioR.sobras}
-              </TableCell>
-              <TableCell className="border text-center">
-                <InputDefeitosFio
-                  idBm={idBm}
-                  ref={fioR.ref}
-                  refOrigem={fioR.refOrigem}
-                  defeitosStock={fioR.defeitosStock}
-                />
-              </TableCell>
-              <TableCell className="border text-center">
-                {formatNCasasDecimais(qtdeTotalLinha, 3)}
-              </TableCell>
-            </TableRow>
+            <Fragment key={fioR.refOrigem}>
+              {openRow === fioR.refOrigem &&
+                fioR.BmOpsPorMalhaFio?.map((op) =>
+                  op.BmMalhasFioMovimentos?.filter(
+                    (l) =>
+                      l.idTipo === 14 ||
+                      l.idTipo === 9 ||
+                      l.idTipo === 118 ||
+                      l.idTipo === 16,
+                  ).map((lote) => (
+                    <TableRow
+                      key={`${op.op}-${lote.idBmMovimentosLote}`}
+                      className="!border-0 border-none !p-0 bg-transparent"
+                    >
+                      <TableCell className="border text-center" colSpan={1}>
+                        {lote.tipo}
+                      </TableCell>
+                      <TableCell className="border text-center" colSpan={1}>
+                        {lote.obranome === "" ? lote.nMovimento : lote.obranome}
+                      </TableCell>
+                      <TableCell
+                        className="border text-center"
+                        colSpan={1}
+                      ></TableCell>
+                      <TableCell className="border text-center" colSpan={1}>
+                        {lote.qtt > 0 ? lote.qtt : ""}
+                      </TableCell>
+                      <TableCell className="border text-center" colSpan={1}>
+                        {lote.qtt < 0 ? lote.qtt : ""}
+                      </TableCell>
+                      <TableCell
+                        className="border text-center"
+                        colSpan={4}
+                      ></TableCell>
+                    </TableRow>
+                  )),
+                )}
+              <TableRow>
+                <TableCell
+                  className="border text-center cursor-pointer hover:bg-muted transition-colors"
+                  onClick={() =>
+                    setOpenRow((prev) =>
+                      prev === fioR.refOrigem ? null : fioR.refOrigem,
+                    )
+                  }
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        openRow === fioR.refOrigem ? "rotate-180" : ""
+                      }`}
+                    />
+                    <span className="text-right">{fioR.fio}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="border text-center">
+                  {fornecedoresPedidos(dadosFornecedoresPedidos)}
+                </TableCell>
+                <TableCell className="border text-center">
+                  {fioR.qtdePedida}
+                </TableCell>
+                <TableCell className="border text-center">
+                  {fioR.qttEntrou}
+                </TableCell>
+                <TableCell className="border text-center">
+                  {fioR.qttSaiu}
+                </TableCell>
+                <TableCell className="border text-center">
+                  <InputLotesFio
+                    op={op}
+                    idBm={idBm}
+                    ref={fioR.ref}
+                    refOrigem={fioR.refOrigem}
+                    texto={fioR.lote}
+                  />
+                </TableCell>
+                <TableCell className="border text-center">
+                  {fioR.sobras}
+                </TableCell>
+                <TableCell className="border text-center">
+                  <InputDefeitosFio
+                    idBm={idBm}
+                    ref={fioR.ref}
+                    refOrigem={fioR.refOrigem}
+                    defeitosStock={fioR.defeitosStock}
+                  />
+                </TableCell>
+                <TableCell className="border text-center">
+                  {formatNCasasDecimais(qtdeTotalLinha, 3)}
+                </TableCell>
+              </TableRow>
+            </Fragment>
           );
         })}
         <TableRow>
@@ -135,7 +195,7 @@ const fornecedoresPedidos = (
         lote: string;
       }
     | undefined
-  )[]
+  )[],
 ) => {
   type Result = {
     [key: string]: number[];

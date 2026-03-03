@@ -1,5 +1,6 @@
 "use client";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { ChevronDown } from "lucide-react";
 import React, { Fragment, useState } from "react";
 
 import BotaoApagaMalha from "./inputs-e-botoes-das-malhas/botao-apaga-malha";
@@ -47,7 +48,7 @@ const Malha = ({ idBm, op }: MalhaProps) => {
             item.defeitosStock)
       );
     }, 0) ?? 0;
-  //  <pre>{JSON.stringify(malhas, null, 2)}</pre> 14, 9, 118,16
+  //  <pre>{JSON.stringify(malhas, null, 2)}</pre> 14, 9, 118,16. 3709 para
   return (
     <>
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
@@ -107,12 +108,12 @@ const Malha = ({ idBm, op }: MalhaProps) => {
                 return (
                   <Fragment key={malha.ref}>
                     <TableRow className="">
-                      <TableCell colSpan={8} className="text-center border">
+                      <TableCell colSpan={9} className="text-center border">
                         {malha.malha}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={8} className="border">
+                      <TableCell colSpan={9} className="border">
                         <MalhaFio fio={malha.BmMalhasFio} idBm={idBm} op={op} />
                       </TableCell>
                     </TableRow>
@@ -169,7 +170,14 @@ const Malha = ({ idBm, op }: MalhaProps) => {
                         )
                       }
                     >
-                      {malha.malha}
+                      <div className="flex items-center justify-between w-full">
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform duration-200 ${
+                            openRow === malha.malha ? "rotate-180" : ""
+                          }`}
+                        />
+                        <span className="text-right">{malha.malha}</span>
+                      </div>
                     </TableCell>
                     <TableCell className="border text-center">
                       {fornecedoresPedidos(dadosFornecedoresPedidos)}

@@ -44,7 +44,7 @@ export const fornecedoresPedidos = (
     }
   });
 
-  console.log("pedidosCompra :", pedidosCompra);
+  // console.log("pedidosCompra :", pedidosCompra);
   return (
     <div className="flex flex-col">
       {Object.entries(result).map(([nome, nCompras]) => (
