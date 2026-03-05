@@ -122,7 +122,10 @@ const NaoRegularizadoConteudo = () => {
                   </TableHeader>
                   <TableBody>
                     {naoRegularizado?.map((d, idx) => (
-                      <TableRow key={`${d.intid}-${idx}`}>
+                      <TableRow
+                        key={`${d.intid}-${idx}`}
+                        className={cn({ "bg-accent": d.cPagamento === "T" })}
+                      >
                         {d.cPagamento !== "T" && (
                           <>
                             <TableCell className="border border-border  h-2 px-1 py-0">
@@ -149,15 +152,6 @@ const NaoRegularizadoConteudo = () => {
                             <TableCell
                               className={cn(
                                 "border border-border h-2 px-1 py-0 text-right",
-                                {
-                                  "bg-destructive":
-                                    naoRegularizado[idx + 1]
-                                      ?.idadeVencimento !== undefined &&
-                                    d.idadeVencimento !== undefined &&
-                                    naoRegularizado[idx + 1]!.idadeVencimento <
-                                      0 &&
-                                    d.idadeVencimento > 0,
-                                },
                               )}
                             >
                               {formatMoneyPT(d.valorAcumulado)}
@@ -168,7 +162,7 @@ const NaoRegularizadoConteudo = () => {
                             <TableCell
                               className={cn(
                                 "border border-border  h-2 px-1 py-0 text-center",
-                                { "text-destructive": d.idadeVencimento < 0 },
+                                { "text-destructive": d.idadeVencimento > 0 },
                               )}
                             >
                               {d.idadeVencimento}
@@ -187,13 +181,23 @@ const NaoRegularizadoConteudo = () => {
                             <TableCell className="border border-border  h-2 px-1 py-0 text-center">
                               {d.dataven.toLocaleDateString("pt-PT")}
                             </TableCell>
-                            <TableCell
-                              className="border border-border  h-2 px-1 py-0"
-                              colSpan={1}
-                            ></TableCell>
+
                             <TableCell className="border border-border  h-2 px-1 py-0 text-right">
                               {formatMoneyPT(d.valorAcumulado)}
                             </TableCell>
+                            <TableCell
+                              className={cn(
+                                "border border-border h-2 px-1 py-0 text-right",
+                              )}
+                            >
+                              {formatMoneyPT(
+                                naoRegularizado[idx - 1]?.valorAcumulado || 0,
+                              )}
+                            </TableCell>
+                            <TableCell
+                              className="border border-border  h-2 px-1 py-0"
+                              colSpan={3}
+                            ></TableCell>
                           </>
                         )}
                       </TableRow>
