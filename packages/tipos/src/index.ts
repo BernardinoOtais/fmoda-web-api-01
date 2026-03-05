@@ -25,6 +25,12 @@ export const AutocompleteStringSchema = z.object({
   value: ChavePhcSchema,
   label: StringComTamanhoSchema(60, 1),
 });
+
+export const AutocompleteFornecedorStringSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+});
+
 export type AutocompleteStringDto = z.infer<typeof AutocompleteStringSchema>;
 
 export type AutocompleteDto = {

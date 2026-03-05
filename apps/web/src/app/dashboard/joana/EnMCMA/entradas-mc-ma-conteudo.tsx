@@ -27,6 +27,7 @@ const EntradasMCMAConteudo = ({ veEscondidas }: EntradasMCMAConteudoProps) => {
       veEscondidas,
     }),
   );
+
   const { mutate: escondeOuMostra } = useMutation(
     trpc.joanaEntradasMcMa.patchPostInsertEscondeBordadosEstampados.mutationOptions(
       {

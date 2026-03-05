@@ -188,6 +188,16 @@ export const MenusExistentes: MenusTodos = {
         path: "/dashboard/joana/faturasPlan",
         subMenu: false,
       },
+      {
+        nome: "Não Regularizado",
+        path: "/dashboard/joana/naoRegularizado",
+        subMenu: false,
+      },
+      {
+        nome: "Conta Corrente",
+        path: "/dashboard/joana/contaCorrente",
+        subMenu: false,
+      },
     ],
   },
   Fernanda: {

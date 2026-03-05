@@ -10,6 +10,7 @@ import { joanaEnviosAMarrocos } from "@/modules/server/joana/envios-marrocos";
 import { joanaEstampadosEBordados } from "@/modules/server/joana/est-e-borda";
 import { joanaFaturacao } from "@/modules/server/joana/faturacao";
 import { joanaFaturacaoPlaneada } from "@/modules/server/joana/faturas-planeadas";
+import { joanaNaoRegularizado } from "@/modules/server/joana/nao-regularizado";
 import { planeamento } from "@/modules/server/planeamento";
 import { planeamentoLotes } from "@/modules/server/planeamento/lotes";
 import { qualidade_balancom_op_composicao } from "@/modules/server/qualidade/balanco-op-composicao";
@@ -49,6 +50,7 @@ export const appRouter = createTRPCRouter({
   joanaFaturacaoPlaneada,
 
   joanaEnviosAMarrocos,
+  joanaNaoRegularizado,
 
   rfid,
 });
