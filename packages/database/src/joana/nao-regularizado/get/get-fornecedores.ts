@@ -12,7 +12,7 @@ export const getFornecedoresDb = async (): Promise<
   AutocompleteStringDto[] | null
 > => {
   const dados = await prismaQualidade.$queryRaw<[]>`
-    exec FMO_PHC..fm_web_get_fornecedores 
+    exec FMO_PHC..fm_web_get_fornecedores_nao_regularizado 
   `;
 
   ///console.log(dados);
