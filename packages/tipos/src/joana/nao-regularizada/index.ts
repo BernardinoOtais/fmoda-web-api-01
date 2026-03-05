@@ -11,6 +11,7 @@ export const NoSchema = z.string();
 
 export const NaoRegularizadoSchema = z.array(
   z.object({
+    cPagamento: z.string(),
     tipoDoc: z.string(),
     nDOc: z.string(),
     ultdoc: z.string(),

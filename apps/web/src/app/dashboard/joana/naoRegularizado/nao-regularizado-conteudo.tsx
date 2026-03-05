@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table";
 import { AutoCompleteFormFieldString } from "@/components/ui-personalizado/meus-components/AutoCompleteFormFieldString";
 import { formatMoneyPT } from "@/lib/my-utils";
+import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 
 const NaoRegularizadoConteudo = () => {
@@ -75,10 +76,13 @@ const NaoRegularizadoConteudo = () => {
       </header>
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
-          <div className="flex w-full flex-col items-center gap-1 overflow-auto">
-            <>
-              {naoRegularizado && (
-                <Table className="w-fit border border-border rounded-md border-collapse mx-auto mt-2">
+          <div className="flex w-full flex-col items-center gap-1 overflow-auto ">
+            {naoRegularizado && (
+              <>
+                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
+                  {naoRegularizado[0]?.cPagamento}
+                </h3>
+                <Table className="w-fit border border-border rounded-md border-collapse mx-auto my-0">
                   <TableHeader className="bg-muted ">
                     <TableRow>
                       <TableHead className="text-center font-semibold border border-border h-7">
@@ -117,8 +121,8 @@ const NaoRegularizadoConteudo = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {naoRegularizado?.map((d) => (
-                      <TableRow key={d.intid}>
+                    {naoRegularizado?.map((d, idx) => (
+                      <TableRow key={`${d.intid}-${idx}`}>
                         <TableCell className="border border-border  h-2 px-1 py-0">
                           {d.tipoDoc}
                         </TableCell>
@@ -140,7 +144,19 @@ const NaoRegularizadoConteudo = () => {
                         <TableCell className="border border-border  h-2 px-1 py-0 text-right">
                           {formatMoneyPT(d.valor)}
                         </TableCell>
-                        <TableCell className="border border-border  h-2 px-1 py-0 text-right">
+                        <TableCell
+                          className={cn(
+                            "border border-border h-2 px-1 py-0 text-right",
+                            {
+                              "bg-destructive":
+                                naoRegularizado[idx + 1]?.idadeVencimento !==
+                                  undefined &&
+                                d.idadeVencimento !== undefined &&
+                                naoRegularizado[idx + 1]!.idadeVencimento < 0 &&
+                                d.idadeVencimento > 0,
+                            },
+                          )}
+                        >
                           {formatMoneyPT(d.valorAcumulado)}
                         </TableCell>
                         <TableCell className="border border-border  h-2 px-1 py-0 text-center">
@@ -156,8 +172,8 @@ const NaoRegularizadoConteudo = () => {
                     ))}
                   </TableBody>
                 </Table>
-              )}
-            </>
+              </>
+            )}
           </div>
         </div>
       </main>
