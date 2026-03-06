@@ -56,7 +56,7 @@ const NaoRegularizadoConteudo = () => {
       <header>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex  flex-row space-x-3 justify-center"
+          className="flex  flex-col space-x-3 justify-center lg:flex-row"
         >
           <Form {...form}>
             <AutoCompleteFormFieldString
@@ -92,12 +92,6 @@ const NaoRegularizadoConteudo = () => {
                         NDoc
                       </TableHead>
                       <TableHead className="text-center font-semibold border border-border h-7">
-                        UDoc
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        Data Doc
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
                         Data Compra
                       </TableHead>
                       <TableHead className="text-center font-semibold border border-border h-7">
@@ -109,14 +103,11 @@ const NaoRegularizadoConteudo = () => {
                       <TableHead className="text-center font-semibold border border-border h-7">
                         Valor Acc
                       </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
+                      <TableHead className="text-center font-semibold border border-border h-7 hidden lg:table-cell">
                         Idade
                       </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
+                      <TableHead className="text-center font-semibold border border-border h-7 hidden lg:table-cell">
                         Idade venc.
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        Id
                       </TableHead>
                     </TableRow>
                   </TableHeader>
@@ -134,12 +125,7 @@ const NaoRegularizadoConteudo = () => {
                             <TableCell className="border border-border  h-2 px-1 py-0 text-center">
                               {d.nDOc}
                             </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0">
-                              {d.ultdoc}
-                            </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
-                              {d.docdata.toLocaleDateString("pt-PT")}
-                            </TableCell>
+
                             <TableCell className="border border-border  h-2 px-1 py-0 text-center">
                               {d.datalc.toLocaleDateString("pt-PT")}
                             </TableCell>
@@ -156,19 +142,16 @@ const NaoRegularizadoConteudo = () => {
                             >
                               {formatMoneyPT(d.valorAcumulado)}
                             </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
+                            <TableCell className="border border-border  h-2 px-1 py-0 text-center hidden lg:table-cell">
                               {d.idadeEmissao}
                             </TableCell>
                             <TableCell
                               className={cn(
-                                "border border-border  h-2 px-1 py-0 text-center",
+                                "border border-border  h-2 px-1 py-0 text-center hidden lg:table-cell",
                                 { "text-destructive": d.idadeVencimento > 0 },
                               )}
                             >
                               {d.idadeVencimento}
-                            </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
-                              {d.intid}
                             </TableCell>
                           </>
                         )}
@@ -176,18 +159,18 @@ const NaoRegularizadoConteudo = () => {
                           <>
                             <TableCell
                               className="border border-border  h-2 px-1 py-0"
-                              colSpan={5}
+                              colSpan={3}
                             ></TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
+                            <TableCell className="border border-border  h-2 px-1 py-0 text-center font-semibold">
                               {d.dataven.toLocaleDateString("pt-PT")}
                             </TableCell>
 
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-right">
+                            <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
                               {formatMoneyPT(d.valorAcumulado)}
                             </TableCell>
                             <TableCell
                               className={cn(
-                                "border border-border h-2 px-1 py-0 text-right",
+                                "border border-border h-2 px-1 py-0 text-right font-semibold",
                               )}
                             >
                               {formatMoneyPT(
@@ -195,8 +178,8 @@ const NaoRegularizadoConteudo = () => {
                               )}
                             </TableCell>
                             <TableCell
-                              className="border border-border  h-2 px-1 py-0"
-                              colSpan={3}
+                              className="border border-border  h-2 px-1 py-0 hidden lg:table-cell"
+                              colSpan={2}
                             ></TableCell>
                           </>
                         )}
