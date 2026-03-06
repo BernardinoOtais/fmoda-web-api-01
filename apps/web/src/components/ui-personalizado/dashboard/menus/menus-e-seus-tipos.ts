@@ -216,6 +216,11 @@ export const MenusExistentes: MenusTodos = {
         path: "/dashboard/fernanda/faturasPlan",
         subMenu: false,
       },
+      {
+        nome: "Não Regularizado",
+        path: "/dashboard/joana/naoRegularizado",
+        subMenu: false,
+      },
     ],
   },
 };
