@@ -32,7 +32,7 @@ type RowWithTotal = { total: number };
 function computeRowSpans<TData>(
   data: TData[],
   columnId: keyof TData,
-  parentColumnId?: keyof TData
+  parentColumnId?: keyof TData,
 ): Record<number, number> {
   const spans: Record<number, number> = {};
   //console.log("dados a tratar : ", data);
@@ -103,7 +103,7 @@ const DataTable = <TData, TValue>({
   }
 
   const getTotalIndexes = (
-    spans: Record<number, number> | undefined
+    spans: Record<number, number> | undefined,
   ): number[] => {
     if (!spans) return [];
 
@@ -122,7 +122,7 @@ const DataTable = <TData, TValue>({
 
   const getGroupStart = (
     spans: Record<number, number> | undefined,
-    endIndex: number
+    endIndex: number,
   ) => {
     if (!spans) return null;
 
@@ -144,7 +144,7 @@ const DataTable = <TData, TValue>({
 
   //console.log(listaIndexTotaisLista);
   return (
-    <Table className="w-full border border-border rounded-md border-collapse ">
+    <Table className="w-fit border border-border rounded-md border-collapse mx-auto">
       {/* Header */}
       <TableHeader className="bg-muted">
         {table.getHeaderGroups().map((headerGroup) => (
@@ -158,7 +158,7 @@ const DataTable = <TData, TValue>({
                   ? null
                   : flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
               </TableHead>
             ))}
@@ -189,7 +189,7 @@ const DataTable = <TData, TValue>({
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     );
@@ -197,7 +197,7 @@ const DataTable = <TData, TValue>({
 
                   const value = flexRender(
                     cell.column.columnDef.cell,
-                    cell.getContext()
+                    cell.getContext(),
                   );
 
                   const formatted =
@@ -237,7 +237,7 @@ const DataTable = <TData, TValue>({
 
                       const sum = (slice as (TData & RowWithTotal)[]).reduce(
                         (acc, row) => acc + row.total,
-                        0
+                        0,
                       );
 
                       return formatMoneyPT(sum);

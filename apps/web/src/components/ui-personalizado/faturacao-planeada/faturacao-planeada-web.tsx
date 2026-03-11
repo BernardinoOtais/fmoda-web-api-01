@@ -29,7 +29,7 @@ const FaturacaoPlaneadaWeb = ({
     dadosPlaneados;
   return (
     <>
-      <Table className=" border border-border rounded-md border-collapse">
+      <Table className=" border border-border rounded-md border-collapse w-fit mx-auto">
         <TableHeader className="bg-muted ">
           <TableRow>
             <TableHead className="text-center font-semibold border border-border h-7">
@@ -164,8 +164,8 @@ const FaturacaoPlaneadaWeb = ({
                             {formatMoneyPT(
                               de.fornecedores.reduce(
                                 (acc, f) => acc + f.valorServico * de.qtt,
-                                0
-                              )
+                                0,
+                              ),
                             )}
                           </TableCell>
                           <TableCell
@@ -180,7 +180,7 @@ const FaturacaoPlaneadaWeb = ({
                               "border text-center h-2 px-1 py-0 w-0",
                               de.nPrecosDif !== 1
                                 ? "border-red-500 bg-red-500 text-white"
-                                : "border-gray-300 dark:border-gray-700"
+                                : "border-gray-300 dark:border-gray-700",
                             )}
                           >
                             {formatMoneyPT(de.u_total)}
@@ -193,7 +193,7 @@ const FaturacaoPlaneadaWeb = ({
                           </TableCell>
                         </>
                       )}
-                    </TableRow>
+                    </TableRow>,
                   );
                   fornecedoresRowAdded = true;
                   semanaRowAdded = true;
@@ -217,7 +217,7 @@ const FaturacaoPlaneadaWeb = ({
                   <TableCell className="border border-border text-right h-2 px-1 py-0 bg-muted font-semibold">
                     {formatMoneyPT(s.valorTotalFatura)}
                   </TableCell>
-                </TableRow>
+                </TableRow>,
               );
             }
 

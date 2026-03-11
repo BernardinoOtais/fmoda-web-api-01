@@ -1,19 +1,19 @@
 import {
-  NaoRegularizadoDto,
-  NaoRegularizadoSchema,
-} from "@repo/tipos/joana/naoregularizada";
+  ContaCorrenteSDto,
+  ContaCorrenteSchema,
+} from "@repo/tipos/joana/contacorrente";
 
 import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
-export const getNaoRegularizadoDb = async (
+export const getContaCorrentDb = async (
   no: string,
-): Promise<NaoRegularizadoDto | null> => {
+): Promise<ContaCorrenteSDto | null> => {
   const dados = await prismaQualidade.$queryRaw<[]>`
-    exec FMO_PHC..fm_web_get_nao_regularizado ${no}
+    exec FMO_PHC..fm_web_get_conta_corrente ${no}
   `;
 
   //console.log(dados);
-  const valores = NaoRegularizadoSchema.safeParse(dados);
+  const valores = ContaCorrenteSchema.safeParse(dados);
 
   if (!valores.success) {
     console.log(valores.error);

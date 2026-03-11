@@ -4,6 +4,7 @@ import { embarques_configorar } from "@/modules/server/embarques/configurar";
 import { embarques_idEnvio } from "@/modules/server/embarques/id-envio";
 import { embarques } from "@/modules/server/embarques/raiz";
 import { fotosGeraisFmoda } from "@/modules/server/fotos/gerais";
+import { joanaContaCorrente } from "@/modules/server/joana/conta-corrente";
 import { joanaCortesPorOp } from "@/modules/server/joana/cortes-por-op";
 import { joanaEntradasMcMa } from "@/modules/server/joana/entradas-mc-ma";
 import { joanaEnviosAMarrocos } from "@/modules/server/joana/envios-marrocos";
@@ -51,6 +52,7 @@ export const appRouter = createTRPCRouter({
 
   joanaEnviosAMarrocos,
   joanaNaoRegularizado,
+  joanaContaCorrente,
 
   rfid,
 });

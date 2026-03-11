@@ -220,7 +220,12 @@ export const MenusExistentes: MenusTodos = {
       },
       {
         nome: "Não Regularizado",
-        path: "/dashboard/joana/naoRegularizado",
+        path: "/dashboard/fernanda/naoRegularizado",
+        subMenu: false,
+      },
+      {
+        nome: "Conta Corrente",
+        path: "/dashboard/fernanda/contaCorrente",
         subMenu: false,
       },
     ],

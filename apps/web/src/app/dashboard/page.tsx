@@ -8,7 +8,7 @@ const DashBoard = async () => {
   const user = session?.user?.name;
   if (user && nomes.includes(session.user.name.toLowerCase())) {
     return user === "Bernardino"
-      ? redirect("/dashboard/joana")
+      ? redirect("/dashboard/mario")
       : redirect(`/dashboard/${user.toLowerCase()}`);
   }
   return <div>Dashboard</div>;
