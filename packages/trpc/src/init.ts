@@ -61,7 +61,8 @@ export const roleProtectedProcedure = (requiredPapel: string) =>
 
     if (
       !session.papeis.includes(requiredPapel) &&
-      !session.papeis.includes("Fernanda")
+      !session.papeis.includes("Fernanda") &&
+      !session.papeis.includes("Mário")
     ) {
       const duration = Date.now() - start;
 

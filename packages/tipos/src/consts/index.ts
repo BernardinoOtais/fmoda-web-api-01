@@ -13,6 +13,7 @@ import {
   PAPEL_JOANA,
   PAPEL_RFID,
   PAPEL_FERNANDA,
+  PAPEL_MARIO,
 } from "./papeis-utilizador";
 import { PermiteSubcontainer } from "./permite-sub-container";
 
@@ -28,6 +29,7 @@ export {
   PAPEL_JOANA,
   PAPEL_RFID,
   PAPEL_FERNANDA,
+  PAPEL_MARIO,
 };
 
 export type { Container, TodosOsContainers };
