@@ -1,5 +1,5 @@
 import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
-import { PAPEL_JOANA } from "@repo/tipos/consts";
+import { PAPEL_MARIO } from "@repo/tipos/consts";
 import { dehydrate, HydrationBoundary } from "@repo/trpc";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -10,7 +10,7 @@ import LoadingState from "@/components/ui-personalizado/states/loading-state";
 import { getQueryClient, trpc } from "@/trpc/server";
 
 const FaturasPlaneadas = async () => {
-  await authorizePapelOrRedirect(PAPEL_JOANA);
+  await authorizePapelOrRedirect(PAPEL_MARIO);
   const queryClient = getQueryClient();
   const today = new Date();
 
@@ -25,7 +25,7 @@ const FaturasPlaneadas = async () => {
       dataIni,
       dataFini,
       fornecedor: null,
-    })
+    }),
   );
 
   return (
