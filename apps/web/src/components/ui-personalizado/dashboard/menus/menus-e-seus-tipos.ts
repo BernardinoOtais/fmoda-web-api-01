@@ -10,8 +10,8 @@ import {
   Bug,
   ChessQueen,
   Boxes,
+  Currency,
 } from "lucide-react";
-import { boolean } from "zod";
 
 type IconType = React.FC<React.SVGProps<SVGSVGElement>>;
 
@@ -41,6 +41,7 @@ export type MenusTodos = {
   Cp: Menu;
   Joana: Menu;
   Fernanda: Menu;
+  Mário: Menu;
 };
 
 export const IconsMenus = {
@@ -54,6 +55,7 @@ export const IconsMenus = {
   joana: Bug,
   fernanda: ChessQueen,
   hm: Boxes,
+  Mário: Currency,
 };
 
 export const MenusExistentes: MenusTodos = {
@@ -219,6 +221,34 @@ export const MenusExistentes: MenusTodos = {
       {
         nome: "Não Regularizado",
         path: "/dashboard/joana/naoRegularizado",
+        subMenu: false,
+      },
+    ],
+  },
+  Mário: {
+    nome: "Mário",
+    path: "/dashboard/mario",
+    icon: IconsMenus.Mário,
+    subMenu: true,
+    subMenuItems: [
+      {
+        nome: "Faturação",
+        path: "/dashboard/mario/faturas",
+        subMenu: false,
+      },
+      {
+        nome: "Faturação Planeada",
+        path: "/dashboard/mario/faturasPlan",
+        subMenu: false,
+      },
+      {
+        nome: "Não Regularizado",
+        path: "/dashboard/mario/naoRegularizado",
+        subMenu: false,
+      },
+      {
+        nome: "Conta Corrente",
+        path: "/dashboard/mario/contaCorrente",
         subMenu: false,
       },
     ],
