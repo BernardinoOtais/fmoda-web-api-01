@@ -2,7 +2,7 @@ import { getSession } from "@repo/authweb/session";
 import { redirect } from "next/navigation";
 import React from "react";
 
-const nomes = ["joana", "fernanda", "bernardino"];
+const nomes = ["joana", "fernanda", "bernardino", "mario"];
 const DashBoard = async () => {
   const session = await getSession();
   const user = session?.user?.name;
