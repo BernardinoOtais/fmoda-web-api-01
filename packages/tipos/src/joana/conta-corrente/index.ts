@@ -22,3 +22,15 @@ export const ContaCorrenteSchema = z.array(
   }),
 );
 export type ContaCorrenteSDto = z.infer<typeof ContaCorrenteSchema>;
+
+export const ContaCorrenteTodosFornecedoresSchema = z.array(
+  z.object({
+    nome: z.string(),
+    credito: z.coerce.number(),
+    debito: z.coerce.number(),
+    total: z.coerce.number(),
+  }),
+);
+export type ContaCorrenteTodosFornecedoresDto = z.infer<
+  typeof ContaCorrenteTodosFornecedoresSchema
+>;

@@ -1,6 +1,7 @@
 import {
   getFornecedoresDb,
   getContaCorrentDb,
+  getContasCorrentesDb,
 } from "@repo/db/joana/contacorrente";
 import { PAPEL_JOANA } from "@repo/tipos/consts";
 import { NoSchema } from "@repo/tipos/joana/contacorrente";
@@ -36,4 +37,15 @@ export const joanaContaCorrente = createTRPCRouter({
         });
       }
     }),
+  getContasCorrentes: roleProtectedProcedure(PAPEL_ROTA).query(async () => {
+    try {
+      return await getContasCorrentesDb();
+    } catch (err) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Erro receber dados",
+        cause: err, // optional, for logging/debugging
+      });
+    }
+  }),
 });

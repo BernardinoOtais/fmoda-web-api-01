@@ -1,44 +1,72 @@
 import { authorizePapelOrRedirect } from "@repo/authweb/autorizado";
 import { PAPEL_JOANA } from "@repo/tipos/consts";
-import { dehydrate, HydrationBoundary } from "@repo/trpc";
-import React, { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import Link from "next/link";
+import { Suspense } from "react";
 
-import ContaCorrenteConteudo from "./conta-corrente-conteudo";
+import ContaCorrentePorFornecedor from "./conta-corrente-por-fornecedor";
+import ContasCorrentes from "./contas-correntes";
 
-import ErrorState from "@/components/ui-personalizado/states/error-state";
-import LoadingState from "@/components/ui-personalizado/states/loading-state";
-import { getQueryClient, trpc } from "@/trpc/server";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const ContaCorrente = async () => {
-  await authorizePapelOrRedirect(PAPEL_JOANA);
-  const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.joanaContaCorrente.getFonecedores.queryOptions(),
-  );
+const dados = [
+  {
+    chave: "contaCorrente",
+    nome: "Conta Corrente",
+    desc: "Aqui pode ver a conta Corrente de um fornecedor",
+  },
+  {
+    chave: "contasCorrentes",
+    nome: "Contas Correntes de Fornecedores",
+    desc: "Aqui pode ver a conta Corrente de todos fornecedor",
+  },
+];
+
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+const ContaCorrente = ({ searchParams }: PageProps) => {
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense
-        fallback={
-          <LoadingState
-            title="A carregar Fornecedores.."
-            description="Pode demorar alguns segundos.."
-          />
-        }
-      >
-        <ErrorBoundary
-          fallback={
-            <ErrorState
-              title="Erro!!"
-              description="Não foi possível carregar as Fornecedores..."
-            />
-          }
-        >
-          <ContaCorrenteConteudo />
-        </ErrorBoundary>
-      </Suspense>
-    </HydrationBoundary>
+    <Suspense>
+      <ContaCorrenteLoader searchParams={searchParams} />
+    </Suspense>
   );
 };
 
 export default ContaCorrente;
+
+const ContaCorrenteLoader = async ({ searchParams }: PageProps) => {
+  await authorizePapelOrRedirect(PAPEL_JOANA);
+
+  const { tab } = await searchParams;
+  const tabParam = Array.isArray(tab) ? tab[0] : tab || "criaConta";
+  const tabRecebida = dados.some((dado) => dado.chave === tabParam)
+    ? tabParam
+    : "contaCorrente";
+
+  const renderContent = (tab: string) => {
+    switch (tab) {
+      case "contaCorrente":
+        return <ContaCorrentePorFornecedor />;
+      case "contasCorrentes":
+        return <ContasCorrentes />;
+      default:
+        return <div>⚠ Selecione uma opção válida.</div>;
+    }
+  };
+
+  return (
+    <>
+      <Tabs value={tabRecebida} className=" mx-auto">
+        <TabsList className="grid w-full grid-cols-2">
+          {dados.map((dado) => (
+            <TabsTrigger key={dado.chave} value={dado.chave} asChild>
+              <Link href={`?tab=${dado.chave}`}>{dado.nome}</Link>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      {renderContent(tabRecebida ?? "contaCorrente")}
+    </>
+  );
+};

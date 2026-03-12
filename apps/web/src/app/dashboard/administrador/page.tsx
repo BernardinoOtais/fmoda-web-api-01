@@ -38,7 +38,7 @@ type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-const Administrador = async ({ searchParams }: PageProps) => (
+const Administrador = ({ searchParams }: PageProps) => (
   <Suspense>
     <AdminidtradorLoader searchParams={searchParams} />
   </Suspense>
