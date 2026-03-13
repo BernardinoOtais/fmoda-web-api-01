@@ -48,14 +48,13 @@ const ContaCorrenteConteudo = () => {
     setFornecedor(data.value);
   };
 
-  //console.log(contaCorrente);
   if (!data) return <div>erro..</div>;
   return (
     <>
       <header>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex  flex-col space-x-3 justify-center lg:flex-row"
+          className="flex  flex-col lg:space-x-3 lg:space-y-0 space-y-1 justify-center items-center lg:flex-row m-1"
         >
           <Form {...form}>
             <AutoCompleteFormFieldString
@@ -67,7 +66,7 @@ const ContaCorrenteConteudo = () => {
               mostraErro={false}
               disable={false}
             />
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="w-fit">
               {isSubmitting ? "..." : "Pesquisa"}
             </Button>
           </Form>
@@ -75,101 +74,99 @@ const ContaCorrenteConteudo = () => {
       </header>
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
-          <div className="flex w-full flex-col items-center gap-1 overflow-auto ">
+          <div className="flex w-full flex-col items-center gap-1 ">
             {contaCorrente && (
-              <>
-                <Table className="w-fit border border-border rounded-md border-collapse mx-auto my-2">
-                  <TableHeader className="bg-muted ">
-                    <TableRow>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        D.Compra
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        D.Doc
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        D.Vence
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        Tipo
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        Ndoc
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7">
-                        Debito
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7 hidden lg:table-cell">
-                        Crédito
-                      </TableHead>
-                      <TableHead className="text-center font-semibold border border-border h-7 hidden lg:table-cell">
-                        Acc
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {contaCorrente.map((c, idx) => (
-                      <Fragment key={idx}>
-                        {!c.dataCompra && !c.dataDoc && !c.dataVen ? (
-                          <TableRow>
-                            <TableCell
-                              className="border border-border  h-2 px-1 py-0 text-right font-semibold"
-                              colSpan={5}
-                            >
-                              Total :
-                            </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
-                              {formatMoneyPT(c.edeb)}
-                            </TableCell>
+              <Table className="w-fit border border-border rounded-md border-collapse mx-auto my-0">
+                <TableHeader className="bg-muted ">
+                  <TableRow>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      D.Compra
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      D.Doc
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      D.Vence
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      Tipo
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      Ndoc
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      Crédito
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      Débito
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      Saldo
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {contaCorrente.map((c, idx) => (
+                    <Fragment key={idx}>
+                      {!c.dataCompra && !c.dataDoc && !c.dataVen ? (
+                        <TableRow>
+                          <TableCell
+                            className="border border-border  h-2 px-1 py-0 text-right font-semibold"
+                            colSpan={5}
+                          >
+                            Total :
+                          </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
+                            {formatMoneyPT(c.edeb)}
+                          </TableCell>
 
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
-                              {formatMoneyPT(c.ecred)}
-                            </TableCell>
-                            <TableCell
-                              className="border border-border  h-2 px-1 py-0"
-                              colSpan={1}
-                            ></TableCell>
-                          </TableRow>
-                        ) : (
-                          <TableRow>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
-                              {!c.dataCompra ||
-                              c.dataCompra.getTime() ===
-                                new Date("1900-01-01").getTime()
-                                ? "..."
-                                : c.dataCompra.toLocaleDateString("pt-PT")}{" "}
-                            </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
-                              {c.dataDoc?.toLocaleDateString("pt-PT")}
-                            </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
-                              {c.dataVen?.toLocaleDateString("pt-PT")}
-                            </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0">
-                              {c.doc}
-                            </TableCell>
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-center">
-                              {c.nDoc}
-                            </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
+                            {formatMoneyPT(c.ecred)}
+                          </TableCell>
 
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
-                              {formatMoneyPT(c.edeb)}
-                            </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
+                            {formatMoneyPT(c.valorAcumulado)}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        <TableRow>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-center">
+                            {!c.dataCompra ||
+                            c.dataCompra.getTime() ===
+                              new Date("1900-01-01").getTime()
+                              ? "..."
+                              : c.dataCompra.toLocaleDateString("pt-PT")}{" "}
+                          </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-center">
+                            {c.dataDoc?.toLocaleDateString("pt-PT")}
+                          </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-center">
+                            {c.dataVen?.toLocaleDateString("pt-PT")}
+                          </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0">
+                            {c.doc}
+                          </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-center">
+                            {c.nDoc}
+                          </TableCell>
 
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
-                              {formatMoneyPT(c.ecred)}
-                            </TableCell>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
+                            {formatMoneyPT(c.ecred)}
+                          </TableCell>
 
-                            <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
-                              {formatMoneyPT(c.valorAcumulado || 0)}
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </Fragment>
-                    ))}
-                  </TableBody>
-                </Table>
-              </>
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
+                            {formatMoneyPT(c.edeb)}
+                          </TableCell>
+
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
+                            {formatMoneyPT(c.valorAcumulado || 0)}
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </Fragment>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </div>
         </div>
