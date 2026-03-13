@@ -18,7 +18,7 @@ export const ContaCorrenteSchema = z.array(
     nDoc: z.string().nullable(),
     edeb: z.coerce.number(),
     ecred: z.coerce.number(),
-    valorAcumulado: z.coerce.number().nullable(),
+    valorAcumulado: z.coerce.number(),
   }),
 );
 export type ContaCorrenteSDto = z.infer<typeof ContaCorrenteSchema>;

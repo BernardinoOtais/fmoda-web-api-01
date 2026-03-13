@@ -12,12 +12,10 @@ const dados = [
   {
     chave: "contaCorrente",
     nome: "Conta Corrente",
-    desc: "Aqui pode ver a conta Corrente de um fornecedor",
   },
   {
     chave: "contasCorrentes",
-    nome: "Contas Correntes de Fornecedores",
-    desc: "Aqui pode ver a conta Corrente de todos fornecedor",
+    nome: "Contas Correntes",
   },
 ];
 
@@ -57,7 +55,7 @@ const ContaCorrenteLoader = async ({ searchParams }: PageProps) => {
 
   return (
     <>
-      <Tabs value={tabRecebida} className=" mx-auto">
+      <Tabs value={tabRecebida} className="mx-auto">
         <TabsList className="grid w-full grid-cols-2">
           {dados.map((dado) => (
             <TabsTrigger key={dado.chave} value={dado.chave} asChild>

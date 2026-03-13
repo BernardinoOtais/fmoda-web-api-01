@@ -95,13 +95,13 @@ const ContaCorrenteConteudo = () => {
                       Ndoc
                     </TableHead>
                     <TableHead className="text-center font-semibold border border-border h-7">
-                      Debito
-                    </TableHead>
-                    <TableHead className="text-center font-semibold border border-border h-7">
                       Crédito
                     </TableHead>
                     <TableHead className="text-center font-semibold border border-border h-7">
-                      Acc
+                      Débito
+                    </TableHead>
+                    <TableHead className="text-center font-semibold border border-border h-7">
+                      Saldo
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -123,10 +123,10 @@ const ContaCorrenteConteudo = () => {
                           <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
                             {formatMoneyPT(c.ecred)}
                           </TableCell>
-                          <TableCell
-                            className="border border-border  h-2 px-1 py-0"
-                            colSpan={1}
-                          ></TableCell>
+
+                          <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
+                            {formatMoneyPT(c.valorAcumulado)}
+                          </TableCell>
                         </TableRow>
                       ) : (
                         <TableRow>
@@ -151,11 +151,11 @@ const ContaCorrenteConteudo = () => {
                           </TableCell>
 
                           <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
-                            {formatMoneyPT(c.edeb)}
+                            {formatMoneyPT(c.ecred)}
                           </TableCell>
 
                           <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
-                            {formatMoneyPT(c.ecred)}
+                            {formatMoneyPT(c.edeb)}
                           </TableCell>
 
                           <TableCell className="border border-border  h-2 px-1 py-0 text-right font-semibold">
