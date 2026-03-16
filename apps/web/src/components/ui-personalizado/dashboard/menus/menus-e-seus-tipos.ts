@@ -200,6 +200,11 @@ export const MenusExistentes: MenusTodos = {
         path: "/dashboard/joana/contaCorrente",
         subMenu: false,
       },
+      {
+        nome: "Op's",
+        path: "/dashboard/joana/Ops",
+        subMenu: false,
+      },
     ],
   },
   Fernanda: {

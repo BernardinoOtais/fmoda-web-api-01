@@ -34,6 +34,7 @@
     "./joana/enviosmarrocos": "./dist/joana/envios-marrocos/index.js",
     "./joana/naoregularizada": "./dist/joana/nao-regularizada/index.js",
     "./joana/contacorrente": "./dist/joana/conta-corrente/index.js",
+    "./joana/ops": "./dist/joana/ops/index.js",
     "./rfid": "./dist/rfid/index.js"
   },
   "scripts": {

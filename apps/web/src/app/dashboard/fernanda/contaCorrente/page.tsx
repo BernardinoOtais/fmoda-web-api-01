@@ -37,7 +37,7 @@ const ContaCorrenteLoader = async ({ searchParams }: PageProps) => {
   await authorizePapelOrRedirect(PAPEL_JOANA);
 
   const { tab } = await searchParams;
-  const tabParam = Array.isArray(tab) ? tab[0] : tab || "criaConta";
+  const tabParam = Array.isArray(tab) ? tab[0] : tab || "contaCorrente";
   const tabRecebida = dados.some((dado) => dado.chave === tabParam)
     ? tabParam
     : "contaCorrente";
