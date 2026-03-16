@@ -233,6 +233,12 @@ export const MenusExistentes: MenusTodos = {
         path: "/dashboard/fernanda/contaCorrente",
         subMenu: false,
       },
+
+      {
+        nome: "Op's",
+        path: "/dashboard/fernanda/Ops",
+        subMenu: false,
+      },
     ],
   },
   Mário: {
@@ -259,6 +265,12 @@ export const MenusExistentes: MenusTodos = {
       {
         nome: "Conta Corrente",
         path: "/dashboard/mario/contaCorrente",
+        subMenu: false,
+      },
+
+      {
+        nome: "Op's",
+        path: "/dashboard/mario/Ops",
         subMenu: false,
       },
     ],

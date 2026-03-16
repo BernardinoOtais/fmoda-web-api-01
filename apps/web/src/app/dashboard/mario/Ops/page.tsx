@@ -19,7 +19,7 @@ import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-cl
 import useDebounce from "@/hooks/use-debounce";
 import { formatMoneyPT } from "@/lib/my-utils";
 import { useTRPC } from "@/trpc/client";
-import TabelaTamanhosQtt from "../_joana-aux/componentes/tabela-tamanhos-qtt";
+import TabelaTamanhosQtt from "../../joana/_joana-aux/componentes/tabela-tamanhos-qtt";
 
 const Ops = () => {
   const trpc = useTRPC();
