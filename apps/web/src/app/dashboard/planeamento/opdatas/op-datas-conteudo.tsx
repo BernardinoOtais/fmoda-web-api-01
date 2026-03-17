@@ -1,11 +1,12 @@
 "use client";
 import { OPschema } from "@repo/tipos/qualidade_balancom";
 import { useQuery } from "@repo/trpc";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 
 import DatasQtt from "./_datas-e-qtt/datas-qtt";
 import MutateFornecedoresValores from "./_fornecedores-valores/mutate-fornecedores-valores";
 import MutateObs from "./mutate-obs";
+import TabelaTamanhosQtt from "../op-lotes/_aux/componentes/tabela-tamanhos-qtt";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import FotoClient from "@/components/ui-personalizado/fotos/foto-client";
 import useDebounce from "@/hooks/use-debounce";
+import { formatMoneyPT } from "@/lib/my-utils";
 import { useTRPC } from "@/trpc/client";
 
 const OpDatasConteudo = () => {
@@ -96,32 +98,32 @@ const OpDatasConteudo = () => {
                       </span>
                     </div>
                     <Table className="">
-                      <TableHeader className="bg-accent">
+                      <TableHeader className="bg-muted">
                         <TableRow className="!border-0 border-none">
                           {d.quantidades.map((q) => (
                             <TableHead
                               key={q.tam}
-                              className="border text-center"
+                              className="border border-border text-center min-w-12 max-w-25 h-7 "
                             >
                               {q.tam}
                             </TableHead>
                           ))}
-                          <TableHead className="border text-center font-semibold">
+                          <TableHead className="border text-center font-semibold h-7 ">
                             Total
                           </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody className="text-xs">
-                        <TableRow className="!border-0 border-none !p-0 bg-transparent">
+                        <TableRow className="!border-0 border-none !p-0 bg-transparent h-7">
                           {d.quantidades.map((qq) => (
                             <TableCell
                               key={qq.tam}
-                              className="border text-center w-16"
+                              className="border text-center w-16  h-7 "
                             >
                               {qq.qtt}
                             </TableCell>
                           ))}
-                          <TableCell className="border text-center w-16 font-semibold">
+                          <TableCell className="border text-center w-16 font-semibold  h-7 ">
                             {d.quantidades.reduce(
                               (sum, item) => sum + item.qtt,
                               0,
@@ -132,6 +134,42 @@ const OpDatasConteudo = () => {
                     </Table>
                   </div>
                 ))}
+                {data[0].faturas && (
+                  <div className="flex flex-col w-full mx-auto items-center">
+                    <span className="scroll-m-20 text-2xl font-semibold tracking-tight mx-auto">
+                      Faturado
+                    </span>
+
+                    {data[0].faturas.map((p, idx) => (
+                      <Fragment key={idx}>
+                        <div className="flex flex-row space-x-2">
+                          <span className="cursor-pointer">
+                            {`${p.nmdoc}: `}
+                            <span className="font-bold">{p.fno}</span>
+                          </span>
+
+                          <span className="cursor-pointer">
+                            Data:{" "}
+                            <span className="font-bold">
+                              {p.fdata.toLocaleDateString("pt-PT")}
+                            </span>
+                          </span>
+
+                          {false && (
+                            <span className="cursor-pointer">
+                              Valor:{" "}
+                              <span className="font-bold">
+                                {formatMoneyPT(p.valor)}
+                              </span>
+                            </span>
+                          )}
+                        </div>
+
+                        <TabelaTamanhosQtt dados={p.detalheFaturado} />
+                      </Fragment>
+                    ))}
+                  </div>
+                )}
 
                 <div className="flex flex-col lg:flex-row  items-end justify-center">
                   <div className="p-1">

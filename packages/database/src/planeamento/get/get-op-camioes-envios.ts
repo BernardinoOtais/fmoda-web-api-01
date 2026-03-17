@@ -4,6 +4,48 @@ import { prismaQualidade } from "@/prisma-servicos/qualidade/qualidade";
 
 export const getOpCamioesEnviosDb = async (op: number) => {
   const resultado = await prismaQualidade.$queryRaw`
+
+IF OBJECT_ID('tempdb..#OpCamioesEnviosDbFaturas') IS NOT NULL
+DROP TABLE #OpCamioesEnviosDbFaturas
+
+select 
+	boEnc.bostamp,
+	ft.fno,
+	ft.nmdoc,
+	ft.fdata,
+	fi.ref,
+	fi.tam,
+	qttFaturada = sum(case
+		when ft.nmdoc = 'Credit Note' then  -fi.qtt
+		when ft.nmdoc = 'Credit Note NLS' then  0
+		when ft.nmdoc = 'Nota de Crédito' then  -fi.qtt
+		when ft.nmdoc = 'Nota de Débito NLS' then  0
+		else fi.qtt end),
+	valor = sum(fi.etiliquido)
+	into #OpCamioesEnviosDbFaturas
+from 
+	FMO_PHC..ft
+join 
+	FMO_PHC..fi  on ft.ftstamp = fi.ftstamp
+left 
+	join FMO_PHC..fi aux on aux.fistamp = fi.ofistamp
+left 
+	join FMO_PHC..bi biEnc on biEnc.bistamp = case when fi.ofistamp = '' then fi.bistamp else aux.bistamp end
+left 
+	join FMO_PHC..bo boEnc on boEnc.bostamp = biEnc.bostamp
+where 
+	ft.ndoc not in (7,10,12,15,20) and 
+	fi.ref !='' and 
+	fi.ref like 'pa%' and 
+	boEnc.obrano = ${op}
+group by
+	boEnc.bostamp,
+	ft.fno,
+	ft.nmdoc,
+	ft.fdata,
+	fi.ref,
+	fi.tam
+
 SELECT 
     stamp = bo.bostamp,
     op = bo.obrano,
@@ -20,7 +62,8 @@ SELECT
     envios = ISNULL(envios.envios, '[]'),
     fornecedorValor = ISNULL(fornecedorValor.fornecedorValor, '[]'),
 	dCamioes = ISNULL(dCamioes.dCamioes,'[]'),
-    dFaturas = ISNULL(dFaturas.dFaturas,'[]')
+    dFaturas = ISNULL(dFaturas.dFaturas,'[]'),
+	faturas = ISNULL(faturas.faturas,'[]')
 FROM 
     FMO_PHC..bo
     INNER JOIN FMO_PHC..bo2 ON bo.bostamp = bo2.bo2stamp
@@ -149,8 +192,55 @@ FROM
 			FOR JSON PATH
 		)
 	)dFaturas
+	OUTER APPLY(
+		SELECT faturas = (
+            select 
+				f.fdata,
+				f.fno,
+				f.nmdoc,
+				f.ref,
+				detalheFaturado = isnull((
+					select
+						tam = SUBSTRING(TRIM(sgt.tam), 0, CHARINDEX(' - ', sgt.tam)), 
+						ordem = sgt.pos,
+						qtt =sum(isnull(fd.qttFaturada,0))
+					from 
+						FMO_PHC..sgt
+					left join
+						#OpCamioesEnviosDbFaturas fd on sgt.tam = fd.tam and sgt.ref = fd.ref
+					where 
+						f.ref = sgt.ref and 
+						f.fdata = fd.fdata and 
+						f.fno = fd.fno and
+						f.nmdoc = fd.nmdoc 
+					group by
+						SUBSTRING(TRIM(sgt.tam), 0, CHARINDEX(' - ', sgt.tam)), 
+						sgt.pos
+					order by 
+						sgt.pos
+					for json path
+				),'[]'),
+				qttFaturada = sum(f.qttFaturada),
+				valor = sum(f.valor)
+			from 
+				#OpCamioesEnviosDbFaturas f
+			group by
+				f.fdata,
+				f.fno,
+				f.nmdoc,
+				f.ref
+			order by
+				f.fdata,
+				f.fno,
+				f.nmdoc,
+				f.ref
+			for json path
+		)
+	)faturas
 WHERE 
     bo.ndos = 1 
     AND bo.obrano = ${op}`;
+
+  // console.log(resultado);
   return OpCamioesEnviosArraySchema.parse(resultado);
 };

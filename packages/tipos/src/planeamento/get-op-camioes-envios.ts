@@ -6,7 +6,7 @@ import {
   NumeroInteiroMaiorQueZero,
   StringComTamanhoSchema,
 } from "@/comuns";
-import { DateSchema, NumeroOuZero } from "@/index";
+import { DateSchema, NumeroOuZero, safeJsonArray } from "@/index";
 
 // Subschemas
 const QuantidadeSchema = z.object({
@@ -34,6 +34,12 @@ export const FornecedorValorSchema = z.object({
   valorServico: FloatZeroSchema,
 });
 
+const TamanhoOrdemQttSchema = z.object({
+  tam: StringComTamanhoSchema(10, 1),
+  ordem: z.coerce.number(),
+  qtt: z.coerce.number(),
+});
+
 export const DataQttSchema = z.object({
   idDataQtt: NumeroInteiroMaiorQueZero,
   bostamp: ChavePhcSchema,
@@ -42,6 +48,16 @@ export const DataQttSchema = z.object({
 });
 
 export const FornecedorSchema = StringComTamanhoSchema(200, 0).optional();
+
+const FaturadoSchema = z.object({
+  fdata: z.coerce.date(),
+  fno: z.coerce.number(),
+  nmdoc: z.string(),
+  ref: z.string(),
+  detalheFaturado: z.array(TamanhoOrdemQttSchema),
+  qttFaturada: z.coerce.number(),
+  valor: z.coerce.number(),
+});
 
 // Root schema
 export const OpCamioesEnviosSchema = z.object({
@@ -115,4 +131,5 @@ export const OpCamioesEnviosSchema = z.object({
       }
     })
     .pipe(z.array(DataQttSchema)),
+  faturas: safeJsonArray(z.array(FaturadoSchema)),
 });

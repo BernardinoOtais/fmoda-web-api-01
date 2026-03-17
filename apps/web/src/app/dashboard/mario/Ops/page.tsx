@@ -4,6 +4,8 @@ import { PesquisaOpsSchema } from "@repo/tipos/joana/ops";
 import { skipToken, useQuery } from "@repo/trpc";
 import React, { Fragment, useState } from "react";
 
+import TabelaTamanhosQtt from "../../joana/_joana-aux/componentes/tabela-tamanhos-qtt";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,7 +21,6 @@ import { LazyFotoClient } from "@/components/ui-personalizado/fotos/lazy-foto-cl
 import useDebounce from "@/hooks/use-debounce";
 import { formatMoneyPT } from "@/lib/my-utils";
 import { useTRPC } from "@/trpc/client";
-import TabelaTamanhosQtt from "../../joana/_joana-aux/componentes/tabela-tamanhos-qtt";
 
 const Ops = () => {
   const trpc = useTRPC();
