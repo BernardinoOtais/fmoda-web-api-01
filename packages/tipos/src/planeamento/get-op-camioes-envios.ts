@@ -50,10 +50,8 @@ export const DataQttSchema = z.object({
 export const FornecedorSchema = StringComTamanhoSchema(200, 0).optional();
 
 const FaturadoSchema = z.object({
-  fdata: z.coerce.date(),
-  fno: z.coerce.number(),
   nmdoc: z.string(),
-  ref: z.string(),
+  fdata: z.coerce.date(),
   detalheFaturado: z.array(TamanhoOrdemQttSchema),
   qttFaturada: z.coerce.number(),
   valor: z.coerce.number(),

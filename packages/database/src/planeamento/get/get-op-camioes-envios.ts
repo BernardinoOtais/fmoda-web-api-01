@@ -9,11 +9,8 @@ IF OBJECT_ID('tempdb..#OpCamioesEnviosDbFaturas') IS NOT NULL
 DROP TABLE #OpCamioesEnviosDbFaturas
 
 select 
-	boEnc.bostamp,
-	ft.fno,
-	ft.nmdoc,
 	ft.fdata,
-	fi.ref,
+	ft.nmdoc,
 	fi.tam,
 	qttFaturada = sum(case
 		when ft.nmdoc = 'Credit Note' then  -fi.qtt
@@ -39,11 +36,9 @@ where
 	fi.ref like 'pa%' and 
 	boEnc.obrano = ${op}
 group by
-	boEnc.bostamp,
-	ft.fno,
+	ft.fdata,
 	ft.nmdoc,
 	ft.fdata,
-	fi.ref,
 	fi.tam
 
 SELECT 
@@ -196,28 +191,35 @@ FROM
 		SELECT faturas = (
             select 
 				f.fdata,
-				f.fno,
 				f.nmdoc,
-				f.ref,
 				detalheFaturado = isnull((
 					select
 						tam = SUBSTRING(TRIM(sgt.tam), 0, CHARINDEX(' - ', sgt.tam)), 
-						ordem = sgt.pos,
+						ordem = sgt.ordem,
 						qtt =sum(isnull(fd.qttFaturada,0))
 					from 
-						FMO_PHC..sgt
+						(
+						select 
+							li.tam,
+							ordem = min(sgt.pos)
+						from
+							FMO_PHC..sgt
+						join 
+							FMO_PHC..bi li on sgt.ref = li.ref and li.tam = sgt.tam
+						where 
+							li.ndos = 1 and li.obrano = ${op}
+						group by
+							li.tam
+						) sgt 
 					left join
-						#OpCamioesEnviosDbFaturas fd on sgt.tam = fd.tam and sgt.ref = fd.ref
+						#OpCamioesEnviosDbFaturas fd on sgt.tam = fd.tam
 					where 
-						f.ref = sgt.ref and 
-						f.fdata = fd.fdata and 
-						f.fno = fd.fno and
-						f.nmdoc = fd.nmdoc 
+						f.nmdoc = fd.nmdoc and f.fdata = fd.fdata
 					group by
 						SUBSTRING(TRIM(sgt.tam), 0, CHARINDEX(' - ', sgt.tam)), 
-						sgt.pos
+						sgt.ordem
 					order by 
-						sgt.pos
+						sgt.ordem
 					for json path
 				),'[]'),
 				qttFaturada = sum(f.qttFaturada),
@@ -226,14 +228,9 @@ FROM
 				#OpCamioesEnviosDbFaturas f
 			group by
 				f.fdata,
-				f.fno,
-				f.nmdoc,
-				f.ref
+				f.nmdoc
 			order by
-				f.fdata,
-				f.fno,
-				f.nmdoc,
-				f.ref
+				f.fdata
 			for json path
 		)
 	)faturas

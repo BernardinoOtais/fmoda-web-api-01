@@ -143,18 +143,12 @@ const OpDatasConteudo = () => {
                     {data[0].faturas.map((p, idx) => (
                       <Fragment key={idx}>
                         <div className="flex flex-row space-x-2">
-                          <span className="cursor-pointer">
-                            {`${p.nmdoc}: `}
-                            <span className="font-bold">{p.fno}</span>
-                          </span>
-
-                          <span className="cursor-pointer">
-                            Data:{" "}
+                          <span className=" cursor-pointer">
+                            {`${p.nmdoc} : `}
                             <span className="font-bold">
                               {p.fdata.toLocaleDateString("pt-PT")}
                             </span>
                           </span>
-
                           {false && (
                             <span className="cursor-pointer">
                               Valor:{" "}
