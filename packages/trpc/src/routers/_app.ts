@@ -18,6 +18,7 @@ import { planeamentoLotes } from "@/modules/server/planeamento/lotes";
 import { qualidade_balancom_op_composicao } from "@/modules/server/qualidade/balanco-op-composicao";
 import { qualidade_balancom } from "@/modules/server/qualidade/balancom";
 import { qualidade_balancom_op } from "@/modules/server/qualidade/balancom-op";
+import { faturasComnposicaoPbEPl } from "@/modules/server/qualidade/faturascp";
 import { rfid } from "@/modules/server/rfid";
 
 export const appRouter = createTRPCRouter({
@@ -34,6 +35,7 @@ export const appRouter = createTRPCRouter({
   qualidade_balancom_op,
 
   qualidade_balancom_op_composicao,
+  faturasComnposicaoPbEPl,
 
   planeamento,
 

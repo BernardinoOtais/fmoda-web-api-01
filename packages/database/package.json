@@ -12,6 +12,7 @@
     "./qualidade_balancom": "./dist/qualidade/balancom/index.js",
     "./qualidade_balancom_op": "./dist/qualidade/balancom-op/index.js",
     "./qualidade_balancom_op_composicao": "./dist/qualidade/balanco-op-composicao/index.js",
+    "./qualidade/faturascp": "./dist/qualidade/faturascp/index.js",
     "./android/auth": "./dist/android/auth/index.js",
     "./android/marrocos/envios": "./dist/android/marrocos/envios/index.js",
     "./android/marrocos/envios/fim": "./dist/android/marrocos/envios/fim/index.js",

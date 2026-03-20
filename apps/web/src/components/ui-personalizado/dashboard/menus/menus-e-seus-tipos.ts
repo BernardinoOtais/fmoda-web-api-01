@@ -71,8 +71,8 @@ export const MenusExistentes: MenusTodos = {
         subMenu: false,
       },
       {
-        nome: "Tc...",
-        path: "/dashboard/qualidade/tc",
+        nome: "Faturas Comp. e Peso",
+        path: "/dashboard/qualidade/faturascp",
         subMenu: false,
       },
     ],

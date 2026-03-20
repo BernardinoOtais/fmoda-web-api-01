@@ -7,6 +7,7 @@
     "./embarques_configurar": "./dist/embarques/configurar/index.js",
     "./qualidade_balancom": "./dist/qualidade/balancom/index.js",
     "./qualidade_balancom_composicao": "./dist/qualidade/balancom/composicao/index.js",
+    "./qualidade/faturascp": "./dist/qualidade/faturascp/index.js",
     "./consts": "./dist/consts/index.js",
     "./comuns": "./dist/index.js",
     "./foto": "./dist/foto/index.js",
